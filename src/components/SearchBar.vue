@@ -46,3 +46,16 @@ export default {
 }
 </script>
 
+
+<style scoped>
+.v-text-field{
+  color: #8efd00;
+  align-content: center;
+
+  margin-right : 10px;
+  margin-left : 10px;
+  padding-left: 10em;
+  padding-right:10em;
+}
+</style>
+

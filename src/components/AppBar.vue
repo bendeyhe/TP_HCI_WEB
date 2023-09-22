@@ -5,7 +5,7 @@
         <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
          -->
 
-        <v-app-bar-title>TooBig</v-app-bar-title>
+        <v-app-bar-title><h2>TooBig</h2></v-app-bar-title>
 
         <SearchBar/>
         <v-btn>Crear Rutina</v-btn>
@@ -32,12 +32,14 @@
   background-color: secondary;
 }*/
 
-.v-app-bar-title{
+h2{
   font-family: Montserrat, sans-serif;
   font-weight: bolder;
   font-size: 200%;
   color: #000000;
   background-color: #8efd00;
+  padding:20px;
+  display: inline-block;
 }
 </style>
 
