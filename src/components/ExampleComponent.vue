@@ -1,5 +1,5 @@
 <template>
-
+    <h1> Example View</h1>
 </template>
 
 <script setup>
