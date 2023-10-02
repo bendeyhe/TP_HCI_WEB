@@ -1,28 +1,26 @@
 <template>
+    <v-app-bar scroll-behavior="elevate" class="bg-secondary">
 
-      <v-app-bar scroll-behavior="elevate" class="bg-secondary">
-        <!--
-        <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-         -->
-
-        <v-app-bar-title><h2>TooBig</h2></v-app-bar-title>
+        <RouterLink to="/">
+            <v-app-bar-title><h2>TooBig</h2></v-app-bar-title>
+        </RouterLink>
 
         <SearchBar/>
-        <v-btn>Crear Rutina</v-btn>
-        <v-btn prepend-icon="mdi-account-circle"> Mi Perfil </v-btn>
-      </v-app-bar>
 
-      <v-navigation-drawer
-        v-model="drawer"
-        temporary
-      >
-        <!--  -->
-      </v-navigation-drawer>
+        <RouterLink to="/create-routine">
+            <v-btn>Crear Rutina</v-btn>
+        </RouterLink>
 
+        <RouterLink to="/my-profile">
+            <v-btn prepend-icon="mdi-account-circle"> Mi Perfil </v-btn>
+        </RouterLink>
+
+    </v-app-bar>
 </template>
 
 <script setup>
   import SearchBar from "@/components/SearchBar.vue";
+  import { RouterLink } from 'vue-router';
 </script>
 
 <style scoped>
@@ -41,13 +39,11 @@ h2{
   padding:20px;
   display: inline-block;
 }
-</style>
 
-
-<style scoped>
 .v-btn{
   color: #8efd00;
   margin-right : 10px;
   margin-left : 10px;
 }
 </style>
+

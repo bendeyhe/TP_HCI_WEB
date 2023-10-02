@@ -1,27 +1,45 @@
 import{createRouter, createWebHistory} from 'vue-router'
-import ExampleComponent from '@/components/ExampleComponent.vue'
+/* aca importar para carga estática*/
+import HomeView from '@/views/HomeView.vue'
+
 
 const routes = [
 
     {
-        path: '/example',
-        component: ExampleComponent
+        path: '/',
+        name: 'Home',
+        component: HomeView
     },
 
     {
-        path: '/',
-        component: () => import('@/layouts/default/Default.vue'),
-        children: [
-            {
-                
-            }
-        ]
+        path: '/example',
+        name: 'example',
+        component: () => import('@/components/ExampleComponent.vue')
+      /* de esta manera se carga dinámicamente, bajo demanda */
+    },
+
+    {
+      path: '/my-profile',
+      name: 'my-profile',
+      component: () => import('@/views/MyProfile.vue')
+    },
+
+    {
+      path: '/create-routine',
+      name: 'create-routine',
+      component: () => import('@/views/CreateRoutine.vue')
+    },
+
+    {
+        path: '/:pathMatch(.*)*',
+        name: 'not-found',
+        component: () => import('@/views/NotFound.vue')
     }
 ]
 
 
 const router = createRouter({
-    history: createWebHistory(process.env.BASE_URL),
+    history: createWebHistory(import.meta.env.BASE_URL),
     routes,
 })
 
