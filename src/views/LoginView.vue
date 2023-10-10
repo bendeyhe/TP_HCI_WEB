@@ -24,7 +24,7 @@ const router = useRouter()
 function login(){
     //autenticar usuario con Pinia
     storage.user = username
-    const redirectUrl = route.query.redirect || '/'
-    router.push(redirectUrl)
+    const redirectUrl = route.query.redirect || '/' // si redirect es un path "/login" puede que les funcione directo el push()
+    router.push({path: redirectUrl})
 }
 </script>
