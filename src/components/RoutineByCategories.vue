@@ -1,4 +1,5 @@
 <template>
+    <!--
     <v-sheet class="mx-auto" elevation="8">
         <h2>{{ nombreRutina }}</h2>
         <v-slide-group
@@ -25,11 +26,45 @@
             </v-sheet>
         </v-expand-transition>
     </v-sheet>
+    -->
+
+
+    <div>
+        <h2>{{ nombreRutina }}</h2>
+        <img v-if="loading" :src="getImageUrl('loader.gif')" alt="Loading..."/>
+        <ul v-else>
+            <li v-for="routine in routineStore.routines" :key="routine.id">
+                {{ routine.name }}
+            </li>
+            <!-- todo Ver más detalles
+             armar bien la tarjeta de la rutina y
+              hacer que se pueda desplazar hacia la derecha-->
+        </ul>
+    </div>
+
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onBeforeMount } from 'vue';
+import { useRoutineStore } from '@/stores/routineStore.js';
 import ImageWithFavIcon from '@/components/ImageWithFavIcon.vue';
+
+const loading = ref(false)
+const routineStore = useRoutineStore()
+
+
+function getImageUrl(name){
+    return new URL(`../assets/${name}`, import.meta.url).href
+}
+
+onBeforeMount(() => {
+    loading.value = true
+    routineStore.fetchRoutines()
+    routineStore.fetchRoutines()
+    loading.value = false
+    })
+
+
 
 const model = ref(null);
 </script>
@@ -44,3 +79,14 @@ export default {
     },
 };
 </script>
+
+<style scoped>
+ul {
+    list-style: none;
+}
+
+li{
+    display: inline-block;
+    margin-right: 10px;
+}
+</style>

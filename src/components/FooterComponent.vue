@@ -1,6 +1,3 @@
-<script setup>
-
-</script>
 
 <template>
     <v-footer>
@@ -12,12 +9,26 @@
                 <span class="white--text">CANDISANO - DEYHERALDE - MUTZ - VES LOSADA</span>
             </v-col>
             <v-col class="text-right" cols="12" sm="4">
-                <span class="white--text">ITBA</span>
+                <span class="white--text">
+                    <img :src="getImageUrl('itba-logo.jpg')" alt="ITBA"/>
+                    <!--
+                    -->
+                </span>
             </v-col>
         </v-row>
     </v-footer>
 </template>
 
-<style scoped>
+<script setup>
+function getImageUrl(name){
+    return new URL(`../assets/${name}`, import.meta.url).href
+}
+</script>
 
+
+<style scoped>
+img{
+    width: 120px;
+    height: 50px;
+}
 </style>

@@ -8,7 +8,7 @@ const routes = [
 
     {
         path: '/',
-        name: 'Home',
+        name: 'home',
         meta: { requiresAuth: false },
         component: HomeView
     },
@@ -39,6 +39,23 @@ const routes = [
         name: 'login',
         meta: { requiresAuth: false },
         component: () => import('@/views/LoginView.vue')
+    },
+    {
+        path: "/routine-details/:slug",
+        name: "routine-details",
+        component: () => import("@/views/RoutineDetails.vue"),
+        props: true,
+        beforeEnter: (to, from, next) => {
+            const exists = storage.routines.find(
+                (routine) => routines.slug === to.params.slug
+            )
+
+            if(exists){
+                next();
+            } else{
+                next({name: "not-found"})
+            }
+        }
     },
 
     {

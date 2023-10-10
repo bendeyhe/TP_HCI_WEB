@@ -1,4 +1,5 @@
 <template>
+    <GoBack/>
     <div>
         <h1> Login </h1>
         <div>
@@ -15,7 +16,8 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router'
-import storage from '../storage/storage.js' //esto hay que cambiarlo cuando tengamos Pinia
+import storage from '../storage/storage.js'
+import GoBack from "@/components/GoBack.vue"; //esto hay que cambiarlo cuando tengamos Pinia
 
 const username = ref(null)
 const password = ref(null)
