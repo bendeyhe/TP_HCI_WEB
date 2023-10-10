@@ -18,6 +18,16 @@
             ></v-text-field>
 
             <v-text-field
+            v-model="email"
+            :readonly="loading"
+            :rules="[required]"
+            class="mb-2"
+            clearable
+            label="Email"
+            placeholder="Repita su e-mail"
+            ></v-text-field>
+
+            <v-text-field
             v-model="password"
             :readonly="loading"
             :rules="[required]"
@@ -34,24 +44,18 @@
             size="large"
             type="submit"
             variant="elevated"
-            @click="login"
             >
-            Iniciar Sesión
+            Crear cuenta
             </v-btn>
-            
-            <RouterLink to="/create-account">
-                <p>Crear cuenta</p>
-            </RouterLink>
             
         </v-form>
         </v-card>
     </v-sheet>
 </template>
 
-
 <script setup>
 import { ref } from 'vue';
-import { useRouter, useRoute, RouterLink } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import storage from '../storage/storage.js'
 import GoBack from "@/components/GoBack.vue"; //esto hay que cambiarlo cuando tengamos Pinia
 import AppBar from '@/components/AppBar.vue'
@@ -60,12 +64,6 @@ const username = ref(null)
 const password = ref(null)
 const route = useRoute()
 const router = useRouter()
-function login(){
-    //autenticar usuario con Pinia
-    storage.user = username
-    const redirectUrl = route.query.redirect || '/' // si redirect es un path "/login" puede que les funcione directo el push()
-    router.push({path: redirectUrl})
-}
 </script>
 
 <style scoped>
@@ -80,8 +78,4 @@ function login(){
     padding-top: 5%;
 }
 
-p{
-    text-align: center;
-    padding-top: 5%;
-}
 </style>

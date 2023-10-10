@@ -34,12 +34,21 @@ const routes = [
         meta: { requiresAuth: true },
         component: () => import('@/views/CreateRoutine.vue')
     },
+
     {
         path: '/login',
         name: 'login',
         meta: { requiresAuth: false },
         component: () => import('@/views/LoginView.vue')
     },
+
+    {
+        path: '/create-account',
+        name: 'create-account',
+        meta: {requiresAuth: false},
+        component: () => import('@/views/CreateAccount.vue')
+    },
+
     {
         path: "/routine-details/:slug",
         name: "routine-details",
