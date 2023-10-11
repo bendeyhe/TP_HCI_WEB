@@ -1,6 +1,5 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import { routine1, routine2, routine3, routine4, routine5 } from '../assets'
 
 export const useRoutineStore = defineStore('routine', () => {
     const routines = ref([])
