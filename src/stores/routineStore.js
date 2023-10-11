@@ -1,5 +1,6 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
+import { routine1, routine2, routine3, routine4, routine5 } from '../assets'
 
 export const useRoutineStore = defineStore('routine', () => {
     const routines = ref([])
@@ -10,9 +11,11 @@ export const useRoutineStore = defineStore('routine', () => {
 
     function fetchRoutines(){
         setRoutines([
-            {id: 1, name: 'Routine 1'},
-            {id: 2, name: 'Routine 2'},
-            {id: 3, name: 'Routine 3'},
+            {id: 1, name: 'Routine 1', creator: 'Jorge Almiron', description: 'Una rutina re dificil', img:'routine1.jpg'},
+            {id: 2, name: 'Routine 2', creator: 'Jorge Almiron', description: 'Una rutina re intensa', img:'routine2.jpg'},
+            {id: 3, name: 'Routine 3', creator: 'Jorge Almiron', description: 'Una rutina para fortalecer los músculos', img:'routine3.jpg'},
+            {id: 4, name: 'Routine 4', creator: 'Jorge Almiron', description: 'asdasdadsaaaddadsasddas', img:'routine4.jpg'},
+            {id: 5, name: 'Routine 5', creator: 'Jorge Almiron', description: 'asdaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', img:'routine5.jpg'},
         ])
     }
 
