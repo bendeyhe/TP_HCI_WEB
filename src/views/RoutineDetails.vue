@@ -1,6 +1,6 @@
 <template>
     <AppBar/>
-    <v-card class="mx" color="grey">
+    <v-card color="grey" class="fondo">
         <v-container fluid>
             <v-row dense>
                 <v-row
@@ -12,12 +12,11 @@
                         <v-row>
                             <h1 class="titulo">HOLA</h1>
                         </v-row>
-                        <v-row padding-bottom:20px>
+                        <v-row>
                             <v-card width="100%">
                                 <v-img
                                     :src="cards[0].src"
                                     class="align-end"
-                                    gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
                                     height="250px"
                                     cover
                                 >
@@ -25,7 +24,6 @@
                                 </v-img>
 
                                 <v-card-actions>
-                                    <v-spacer></v-spacer>
 
                                     <v-btn size="small" color="surface-variant" variant="text" icon="mdi-heart"></v-btn>
 
@@ -39,7 +37,17 @@
                         </v-row>
                     </v-col>
                     <v-col>
-                        <h1 class="titulo">prueba</h1>
+                        <v-row><v-icon icon="mdi-account"></v-icon> • Creador: </v-row>
+                        <v-row><v-icon icon="mdi-star"></v-icon> • Puntuación: </v-row>
+                        <v-row><v-icon icon="mdi-alarm"></v-icon> • Duración: </v-row>
+                        <v-row><v-icon icon="mdi-dumbell"></v-icon> • Equipamiento necesario: </v-row>
+                        <v-row><v-icon icon="mdi-chart-line"></v-icon> • Dificultad: </v-row>
+                        <v-row>
+                            <v-btn class="comenzar"> Comenzar  </v-btn>
+                        </v-row>
+
+
+
                     </v-col>
                 </v-row>
 
@@ -47,15 +55,19 @@
             </v-row>
         </v-container>
     </v-card>
+
+<RoutineByCategories nombreRutina="category1"/>
 </template>
 
 
 <script>
 import AppBar from "@/components/AppBar.vue";
 import {RouterLink} from "vue-router";
+import RoutineByCategories from "@/components/RoutineByCategories.vue";
+
 
 export default {
-    components: {RouterLink, AppBar},
+    components: {RoutineByCategories, RouterLink, AppBar},
     data: () => ({
         cards: [
             {title: 'Routine 1', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', flex: 12},
@@ -74,8 +86,15 @@ export default {
     padding: 20px;
     display: inline-block;
 }
-.carta {
-    padding-left: 20px;
+.fondo {
+    padding-bottom: 50px;
+}
+
+.comenzar{
+    color: #8efd00;
+    background-color: #000000;
+    margin-right : 10px;
+    margin-left : 10px;
 }
 
 </style>
