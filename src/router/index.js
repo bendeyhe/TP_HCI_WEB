@@ -50,11 +50,13 @@ const routes = [
     },
 
     {
-        path: "/routine-details/:slug",
+        path: "/routine-details",
+        //path: "/routine-details/:slug", todo: asi es como tiene que quedar
         name: "routine-details",
-        component: () => import("@/views/RoutineDetails.vue"),
-        props: true,
-        beforeEnter: (to, from, next) => {
+        meta: {requiresAuth: false},
+        component: () => import("@/views/RoutineDetails.vue")
+        //props: true,
+        /*beforeEnter: (to, from, next) => {
             const exists = storage.routines.find(
                 (routine) => routines.slug === to.params.slug
             )
@@ -63,8 +65,8 @@ const routes = [
                 next();
             } else{
                 next({name: "not-found"})
-            }
-        }
+            }//todo: asi es como tiene que quedar
+        }*/
     },
 
     {
