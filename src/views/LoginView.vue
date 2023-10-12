@@ -1,51 +1,85 @@
 <template>
     <AppBar/>
 
-    <v-sheet rounded>
-        <v-card class="mx-auto px-6 py-8" max-width="344">
-        <v-form
-            v-model="form"
-            @submit.prevent="onSubmit"
+    <div class="login-box">
+        <!--
+        <v-img
+            class="mx-auto my-6"
+            max-width="228"
+            src="https://cdn.vuetifyjs.com/docs/images/logos/vuetify-logo-v3-slim-text-light.svg"
+        ></v-img>
+        -->
+        <v-card
+            class="mx-auto pa-12 pb-8"
+            elevation="8"
+            max-width="448"
+            rounded="lg"
         >
-            <v-text-field
-            v-model="email"
-            :readonly="loading"
-            :rules="[required]"
-            class="mb-2"
-            clearable
-            label="Email"
-            placeholder="Ingrese su e-mail"
-            ></v-text-field>
+            <div class="text-subtitle-1 text-medium-emphasis">Usuario</div>
 
             <v-text-field
-            v-model="password"
-            :readonly="loading"
-            :rules="[required]"
-            clearable
-            label="Contraseña"
-            placeholder="Ingrese su contraseña"
+                density="compact"
+                placeholder="Ingresá tu Usuario"
+                prepend-inner-icon="mdi-account-outline"
+                variant="outlined"
             ></v-text-field>
 
-            <br>
+            <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
+                Contraseña
+
+                <a
+                    href="#"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                >
+                    ¿Olvidó su contraseña?</a>
+            </div>
+
+            <v-text-field
+                :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
+                :type="visible ? 'text' : 'password'"
+                density="compact"
+                placeholder="Ingresá tu contraseña"
+                prepend-inner-icon="mdi-lock-outline"
+                variant="outlined"
+                @click:append-inner="visible = !visible"
+            ></v-text-field>
+
+            <v-card
+                class="mb-12"
+                color="surface-variant"
+                variant="tonal"
+            >
+                <v-card-text class="text-medium-emphasis text-caption">
+                    Warning: After 3 consecutive failed login attempts, you account will be temporarily locked for three hours. If you must login now, you can also click "Forgot login password?" below to reset the login password.
+                </v-card-text>
+            </v-card>
 
             <v-btn
-            :loading="loading"
-            block
-            size="large"
-            type="submit"
-            variant="elevated"
-            @click="login"
+                block
+                class="mb-8"
+                size="large"
+                variant="tonal"
+                @click="login"
             >
-            Iniciar Sesión
+                Iniciar Sesión
             </v-btn>
-            
             <RouterLink to="/create-account">
-                <p>Crear cuenta</p>
+                <v-card-text class="text-center">
+                    <a
+                        href="#"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                    >
+
+                        Crear cuenta <v-icon icon="mdi-chevron-right"></v-icon>
+                    </a>
+                </v-card-text>
             </RouterLink>
-            
-        </v-form>
         </v-card>
-    </v-sheet>
+    </div>
+
+
 </template>
 
 
@@ -66,8 +100,17 @@ function login(){
     const redirectUrl = route.query.redirect || '/' // si redirect es un path "/login" puede que les funcione directo el push()
     router.push({path: redirectUrl})
 }
+
 </script>
 
+
+<script>
+export default {
+    data: () => ({
+        visible: false,
+    }),
+}
+</script>
 <style scoped>
 .v-btn{
     color: #8efd00;
@@ -76,7 +119,7 @@ function login(){
     margin-left : 10px;
 }
 
-.v-sheet{
+.login-box{
     padding-top: 5%;
 }
 
