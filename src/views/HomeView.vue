@@ -21,8 +21,8 @@
         </v-carousel>
 
 
-        <v-main class="bg-grey-lighten-2">
-
+        <v-main>
+            <!--todo quizas aca esta bueno hacer un v-for?-->
             <RoutineByCategories :nombreRutina="category1"/>
             <RoutineByCategories :nombreRutina="category2"/>
             <RoutineByCategories :nombreRutina="category3"/>
@@ -30,7 +30,7 @@
 
         </v-main>
     </v-app>
-    <footer-component></footer-component>
+    <footer-component/>
 </template>
 
 <script setup>
