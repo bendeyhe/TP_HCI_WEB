@@ -22,11 +22,11 @@
                 placeholder="Ingresá tu Usuario"
                 prepend-inner-icon="mdi-account-outline"
                 variant="outlined"
+                v-model="username"
             ></v-text-field>
 
             <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
                 Contraseña
-
                 <a
                     href="#"
                     rel="noopener noreferrer"
@@ -42,6 +42,7 @@
                 placeholder="Ingresá tu contraseña"
                 prepend-inner-icon="mdi-lock-outline"
                 variant="outlined"
+                v-model="password"
                 @click:append-inner="visible = !visible"
             ></v-text-field>
 
@@ -51,7 +52,9 @@
                 variant="tonal"
             >
                 <v-card-text class="text-medium-emphasis text-caption">
-                    Warning: After 3 consecutive failed login attempts, you account will be temporarily locked for three hours. If you must login now, you can also click "Forgot login password?" below to reset the login password.
+                    Warning: After 3 consecutive failed login attempts, you account will be temporarily locked for three
+                    hours. If you must login now, you can also click "Forgot login password?" below to reset the login
+                    password.
                 </v-card-text>
             </v-card>
 
@@ -72,7 +75,8 @@
                         target="_blank"
                     >
 
-                        Crear cuenta <v-icon icon="mdi-chevron-right"></v-icon>
+                        Crear cuenta
+                        <v-icon icon="mdi-chevron-right"></v-icon>
                     </a>
                 </v-card-text>
             </RouterLink>
@@ -84,23 +88,31 @@
 
 
 <script setup>
-import { ref } from 'vue';
-import { useRouter, useRoute, RouterLink } from 'vue-router'
-import storage from '../storage/storage.js'
-import GoBack from "@/components/GoBack.vue"; //esto hay que cambiarlo cuando tengamos Pinia
+import {ref} from 'vue';
+import {useRouter, useRoute, RouterLink} from 'vue-router'
+import {useLoginStore} from '@/stores/loginStore.js';
 import AppBar from '@/components/AppBar.vue'
+import storage from "@/storage/storage";
 
-const username = ref(null)
-const password = ref(null)
+const loginStore = useLoginStore()
+
+const username = ref('')
+const password = ref('')
 const route = useRoute()
 const router = useRouter()
-function login(){
-    //autenticar usuario con Pinia
-    storage.user = username
-    const redirectUrl = route.query.redirect || '/' // si redirect es un path "/login" puede que les funcione directo el push()
-    router.push({path: redirectUrl})
-}
 
+async function login() {
+    const result = await loginStore.login(username.value, password.value);
+    if (result.error) {
+        console.error('Error en la autenticación:', result.error);
+    } else {
+        console.log('Usuario autenticado:', result);
+        storage.user = username.value
+        storage.token = result.token
+        const redirectUrl = route.query.redirect || '/' // si redirect es un path "/login" puede que les funcione directo el push()
+        await router.push({path: redirectUrl})
+    }
+}
 </script>
 
 
@@ -111,19 +123,20 @@ export default {
     }),
 }
 </script>
+
 <style scoped>
-.v-btn{
+.v-btn {
     color: #8efd00;
     background-color: #000000;
-    margin-right : 10px;
-    margin-left : 10px;
+    margin-right: 10px;
+    margin-left: 10px;
 }
 
-.login-box{
+.login-box {
     padding-top: 5%;
 }
 
-p{
+p {
     text-align: center;
     padding-top: 5%;
 }
