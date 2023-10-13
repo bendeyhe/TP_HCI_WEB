@@ -1,6 +1,6 @@
 <template>
     <AppBar/>
-
+    <h1>Inicio de Sesión</h1>
     <div class="login-box">
         <!--
         <v-img
@@ -125,6 +125,11 @@ export default {
 
 p{
     text-align: center;
-    padding-top: 5%;
+    padding-top: 25px;
+}
+
+h1{
+    text-align: center;
+    padding-top:25px;
 }
 </style>

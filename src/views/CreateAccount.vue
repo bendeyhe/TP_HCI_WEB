@@ -1,6 +1,6 @@
 <template>
     <AppBar/>
-
+    <h1>Crear Cuenta</h1>
     <v-row justify="center">
         <v-col
             cols="12"
@@ -161,6 +161,12 @@ const router = useRouter()
     color: #000000;
     margin-right : 10px;
     margin-left : 10px;
+}
+
+h1{
+    text-align: center;
+    padding-top:25px;
+    padding-bottom: 25px;
 }
 </style>
 

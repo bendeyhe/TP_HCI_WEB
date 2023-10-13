@@ -14,7 +14,7 @@ export const useRoutineStore = defineStore('routine', () => {
             {id: 2, name: 'Routine 2', creator: 'Jorge Almiron', description: 'Una rutina re intensa', img:'routine2.jpg'},
             {id: 3, name: 'Routine 3', creator: 'Jorge Almiron', description: 'Una rutina para fortalecer los músculos', img:'routine3.jpg'},
             {id: 4, name: 'Routine 4', creator: 'Jorge Almiron', description: 'asdasdadsaaaddadsasddas', img:'routine4.jpg'},
-            {id: 5, name: 'Routine 5', creator: 'Jorge Almiron', description: 'asdaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', img:'routine5.jpg'},
+            {id: 5, name: 'Routine 5', creator: 'Jorge Almiron', description: 'asdaaaaaaaaaaaaaaaasdaaaaaaaaaaaaaaaaaaasdaaaaaaaaaaaaaaaaaaasdaaaaaaaaaaaaaaaaaaasdaaaaaaaaaaaaaaaaaaasdaaaaaaaaaaaaaaaaaaasdaaaaaaaaaaaaaaaaaaasdaaaaaaaaaaaaaaaaaaasdaaaaaaaaaaaaaaaaaaasdaaaaaaaaaaaaaaaaaaasdaaaaaaaaaaaaaaaaaaasdaaaaaaaaaaaaaaaaaaasdaaaaaaaaaaaaaaaaaaasdaaaaaaaaaaaaaaaaaaasdaaaaaaaaaaaaaaaaaaasdaaaaaaaaaaaaaaaaaaasdaaaaaaaaaaaaaaaaaaasdaaaaaaaaaaaaaaaasdaaaaaaaaaaaaaaa', img:'routine5.jpg'},
         ])
     }
 

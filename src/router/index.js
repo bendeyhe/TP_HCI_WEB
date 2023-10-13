@@ -53,7 +53,7 @@ const routes = [
         path: "/routine-details",
         //path: "/routine-details/:slug", todo: asi es como tiene que quedar
         name: "routine-details",
-        meta: {requiresAuth: false},
+        meta: {requiresAuth: true},
         component: () => import("@/views/RoutineDetails.vue")
         //props: true,
         /*beforeEnter: (to, from, next) => {

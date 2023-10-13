@@ -1,6 +1,6 @@
 <template>
     <v-sheet class="mx-auto" elevation="8">
-        <h2 class="titulo">{{ nombreRutina }}</h2>
+        <h1 class="titulo">{{ nombreRutina }}</h1>
         <v-slide-group
             v-model="model"
             class="pa-4"
@@ -25,7 +25,8 @@
                 <v-card
                     :loading="loading"
                     class="mx-auto my-12"
-                    max-width="374"
+                    width="280"
+                    height="400"
                 >
                     <template v-slot:loader="{ isActive }">
                         <v-progress-linear
@@ -35,9 +36,11 @@
                         ></v-progress-linear>
                     </template>
 
-
-                    <img :src="getImageUrl( 'routine1.jpg' )" alt="Foto de la Rutina" height="250"/>
-                    <!-- todo aca queria poner {{ routine.img  }} pero no funciona... ¿como se hace?-->
+                    <div class="cont">
+                        <img class="image" :src="getImageUrl( 'routine1.jpg' )" alt="Foto de la Rutina" height="250"/>
+                        <!-- todo aca queria poner {{ routine.img  }} pero no funciona... ¿como se hace?-->
+                        <v-btn class="heart" :icon="isSelected ? 'mdi-heart' : 'mdi-heart-outline'"></v-btn>
+                    </div>
                     <v-card-item>
                         <v-card-title>{{ routine.name }}</v-card-title>
 
@@ -72,52 +75,25 @@
                             </div>
                         </v-row>
 
-                        <div class="my-4 text-subtitle-1">
+                        <div class="my-4 text-subtitle-1" >
                             <v-icon icon="mdi-account"></v-icon>
                             • {{ routine.creator }}
                         </div>
 
-                        <div>{{ routine.description }}</div>
+                        <div class="overflow">{{ routine.description }}</div>
                     </v-card-text>
+                <div class="detail">
+                        <v-divider></v-divider>
+                        <v-card-actions>
+                            <RouterLink to="/routine-details">
 
-                    <v-divider class="mx-4 mb-1"></v-divider>
-                    <!--
-                        <v-card-title>Tonight's availability</v-card-title>
-
-                        <div class="px-4">
-                          <v-chip-group v-model="selection">
-                            <v-chip>5:30PM</v-chip>
-
-                            <v-chip>7:30PM</v-chip>
-
-                            <v-chip>8:00PM</v-chip>
-
-                            <v-chip>9:00PM</v-chip>
-                          </v-chip-group>
-                        </div>
-                    -->
-                    <v-card-actions>
-                        <RouterLink to="/routine-details">
-
-                            <v-btn>
-                                Ver Detalle
-                            </v-btn>
-                        </RouterLink>
-                    </v-card-actions>
-                </v-card>
-                <!--       <div class="d-flex fill-height align-center justify-center">
-                   <v-scale-transition>
-                     <v-icon
-                       v-if="isSelected"
-                       color="white"
-                       size="48"
-                       icon="mdi-close-circle-outline"
-                     ></v-icon>
-                   </v-scale-transition>
-                 </div>
-
-                       </v-card>        -->
-                <v-btn :icon="isSelected ? 'mdi-heart' : 'mdi-heart-outline'"></v-btn>
+                                <v-btn>
+                                    Ver Detalle
+                                </v-btn>
+                            </RouterLink>
+                        </v-card-actions>
+                </div>
+                    </v-card>
             </v-slide-group-item>
         </v-slide-group>
 
@@ -165,4 +141,45 @@ export default {
     padding-top: 20px;
     padding-left: 20px;
 }
+
+.cont{
+    position:relative;
+    width: 100%;
+ }
+
+ .image{
+    width: 100%;
+    height: auto;
+ }
+
+ .heart{
+     position: absolute;
+     top: 15%;
+     left: 85%;
+     transform: translate(-50%, -50%);
+     -ms-transform: translate(-50%, -50%);
+     color: #000000;
+     padding: 12px 24px;
+     border: none;
+     cursor: pointer;
+ }
+
+
+ .detail{
+     width: 100%;
+     position: absolute;
+     bottom: 1%;
+ }
+
+ .v-btn{
+     color: #000000;
+ }
+
+ .overflow{
+     overflow: hidden;
+     text-overflow: ellipsis;
+     display: -webkit-box;
+     -webkit-line-clamp: 3; /* number of lines to show */
+     -webkit-box-orient: vertical;
+ }
 </style>
