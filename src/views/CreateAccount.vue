@@ -12,7 +12,7 @@
                 <v-card-text>
                     <v-text-field
                         ref="name"
-                        v-model="name"
+                        v-model="username"
                         :rules="[() => !!name || 'Campo requerido']"
                         :error-messages="errorMessages"
                         label="Nombre"
@@ -26,8 +26,24 @@
                         label="Apellido"
                         required
                     ></v-text-field>
+                    <v-text-field
+                        ref="email"
+                        v-model="mail"
+                        :rules="[() => !!email || 'Campo requerido']"
+                        :error-messages="errorMessages"
+                        label="Mail"
+                        required
+                    ></v-text-field>
+                    <v-text-field
+                        ref="pwd"
+                        v-model="password"
+                        :rules="[() => !!pwd || 'Campo requerido']"
+                        :error-messages="errorMessages"
+                        label="Contraseña"
+                        required
+                    ></v-text-field>
 
-
+                    <!--
                     <div>
                         <v-menu
                             v-model="menu"
@@ -54,17 +70,17 @@
                             ></v-date-picker>
                         </v-menu>
                     </div>
-
+                    -->
 
 
                     <v-text-field
                         ref="address"
                         v-model="address"
                         :rules="[
-              () => !!address || 'Campo requerido',
-              () => !!address && address.length <= 25 || 'Address must be less than 25 characters',
-              addressCheck
-            ]"
+                            () => !!address || 'Campo requerido',
+                            () => !!address && address.length <= 25 || 'Address must be less than 25 characters',
+                            addressCheck
+                            ]"
                         label="Dirección"
                         counter="25"
                         required
@@ -95,7 +111,7 @@
                 </v-card-text>
                 <v-divider class="mt-12"></v-divider>
                 <v-card-actions>
-                    <v-btn class="cancel" variant="text" >
+                    <v-btn class="cancel" variant="text">
                         Cancelar
                     </v-btn>
                     <v-spacer></v-spacer>
@@ -110,9 +126,9 @@
                                 v-bind="attrs"
                                 @click="resetForm"
                                 v-on="on"
-                                >
+                            >
                                 <v-icon>mdi-refresh</v-icon>
-                                </v-btn>
+                            </v-btn>
 
                             <span>Refresh form</span>
                         </v-tooltip>
@@ -132,35 +148,56 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { useRouter, useRoute } from 'vue-router'
+import {ref} from 'vue';
+import {useRouter, useRoute} from 'vue-router'
 import storage from '../storage/storage.js'
 import GoBack from "@/components/GoBack.vue"; //esto hay que cambiarlo cuando tengamos Pinia
 import AppBar from '@/components/AppBar.vue'
-import { VDatePicker } from 'vuetify/labs/VDatePicker'
+import {VDatePicker} from 'vuetify/labs/VDatePicker'
+import {useLoginStore} from "@/stores/loginStore";
 
-const username = ref(null)
-const password = ref(null)
+const loginStore = useLoginStore()
+
 const route = useRoute()
 const router = useRouter()
+
+const username = ref('')
+const password = ref('')
+const mail = ref('')
+
+/*
+async function register() {
+    const result = await loginStore.register(username.value, password.value, mail.value);
+    if (result.error) {
+        console.error('Error al crear usuario:', result.error);
+    } else {
+        console.log('Usuario creado:', result);
+        storage.user = username.value
+        storage.token = result.token
+        const redirectUrl = route.query.redirect || '/' // si redirect es un path "/login" puede que les funcione directo el push()
+        await router.push({path: redirectUrl})
+    }
+}
+ */
+
 </script>
 
 <style scoped>
-.registrarse{
+.registrarse {
     color: #8efd00;
     background-color: #000000;
-    margin-right : 10px;
-    margin-left : 10px;
+    margin-right: 10px;
+    margin-left: 10px;
 }
 
-.v-sheet{
+.v-sheet {
     padding-top: 5%;
 }
 
-.cancel{
+.cancel {
     color: #000000;
-    margin-right : 10px;
-    margin-left : 10px;
+    margin-right: 10px;
+    margin-left: 10px;
 }
 
 h1{
@@ -171,65 +208,70 @@ h1{
 </style>
 
 <script>
- export default {
-     data: () => ({
-     countries: ['Afghanistan', 'Albania', 'Algeria', 'Andorra', 'Angola', 'Anguilla', 'Antigua &amp; Barbuda', 'Argentina', 'Armenia', 'Aruba', 'Australia', 'Austria', 'Azerbaijan', 'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus', 'Belgium', 'Belize', 'Benin', 'Bermuda', 'Bhutan', 'Bolivia', 'Bosnia &amp; Herzegovina', 'Botswana', 'Brazil', 'British Virgin Islands', 'Brunei', 'Bulgaria', 'Burkina Faso', 'Burundi', 'Cambodia', 'Cameroon', 'Cape Verde', 'Cayman Islands', 'Chad', 'Chile', 'China', 'Colombia', 'Congo', 'Cook Islands', 'Costa Rica', 'Cote D Ivoire', 'Croatia', 'Cruise Ship', 'Cuba', 'Cyprus', 'Czech Republic', 'Denmark', 'Djibouti', 'Dominica', 'Dominican Republic', 'Ecuador', 'Egypt', 'El Salvador', 'Equatorial Guinea', 'Estonia', 'Ethiopia', 'Falkland Islands', 'Faroe Islands', 'Fiji', 'Finland', 'France', 'French Polynesia', 'French West Indies', 'Gabon', 'Gambia', 'Georgia', 'Germany', 'Ghana', 'Gibraltar', 'Greece', 'Greenland', 'Grenada', 'Guam', 'Guatemala', 'Guernsey', 'Guinea', 'Guinea Bissau', 'Guyana', 'Haiti', 'Honduras', 'Hong Kong', 'Hungary', 'Iceland', 'India', 'Indonesia', 'Iran', 'Iraq', 'Ireland', 'Isle of Man', 'Israel', 'Italy', 'Jamaica', 'Japan', 'Jersey', 'Jordan', 'Kazakhstan', 'Kenya', 'Kuwait', 'Kyrgyz Republic', 'Laos', 'Latvia', 'Lebanon', 'Lesotho', 'Liberia', 'Libya', 'Liechtenstein', 'Lithuania', 'Luxembourg', 'Macau', 'Macedonia', 'Madagascar', 'Malawi', 'Malaysia', 'Maldives', 'Mali', 'Malta', 'Mauritania', 'Mauritius', 'Mexico', 'Moldova', 'Monaco', 'Mongolia', 'Montenegro', 'Montserrat', 'Morocco', 'Mozambique', 'Namibia', 'Nepal', 'Netherlands', 'Netherlands Antilles', 'New Caledonia', 'New Zealand', 'Nicaragua', 'Niger', 'Nigeria', 'Norway', 'Oman', 'Pakistan', 'Palestine', 'Panama', 'Papua New Guinea', 'Paraguay', 'Peru', 'Philippines', 'Poland', 'Portugal', 'Puerto Rico', 'Qatar', 'Reunion', 'Romania', 'Russia', 'Rwanda', 'Saint Pierre &amp; Miquelon', 'Samoa', 'San Marino', 'Satellite', 'Saudi Arabia', 'Senegal', 'Serbia', 'Seychelles', 'Sierra Leone', 'Singapore', 'Slovakia', 'Slovenia', 'South Africa', 'South Korea', 'Spain', 'Sri Lanka', 'St Kitts &amp; Nevis', 'St Lucia', 'St Vincent', 'St. Lucia', 'Sudan', 'Suriname', 'Swaziland', 'Sweden', 'Switzerland', 'Syria', 'Taiwan', 'Tajikistan', 'Tanzania', 'Thailand', `Timor L'Este`, 'Togo', 'Tonga', 'Trinidad &amp; Tobago', 'Tunisia', 'Turkey', 'Turkmenistan', 'Turks &amp; Caicos', 'Uganda', 'Ukraine', 'United Arab Emirates', 'United Kingdom', 'United States', 'Uruguay', 'Uzbekistan', 'Venezuela', 'Vietnam', 'Virgin Islands (US)', 'Yemen', 'Zambia', 'Zimbabwe'],
- errorMessages: '',
- name: null,
- address: null,
- city: null,
- state: null,
- zip: null,
- country: null,
- formHasErrors: false,
- }),
+export default {
+    data: () => ({
+        countries: ['Afghanistan', 'Albania', 'Algeria', 'Andorra', 'Angola', 'Anguilla', 'Antigua & Barbuda', 'Argentina', 'Armenia', 'Aruba', 'Australia', 'Austria', 'Azerbaijan', 'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus', 'Belgium', 'Belize', 'Benin', 'Bermuda', 'Bhutan', 'Bolivia', 'Bosnia & Herzegovina', 'Botswana', 'Brazil', 'British Virgin Islands', 'Brunei', 'Bulgaria', 'Burkina Faso', 'Burundi', 'Cambodia', 'Cameroon', 'Cape Verde', 'Cayman Islands', 'Chad', 'Chile', 'China', 'Colombia', 'Congo', 'Cook Islands', 'Costa Rica', 'Cote D Ivoire', 'Croatia', 'Cruise Ship', 'Cuba', 'Cyprus', 'Czech Republic', 'Denmark', 'Djibouti', 'Dominica', 'Dominican Republic', 'Ecuador', 'Egypt', 'El Salvador', 'Equatorial Guinea', 'Estonia', 'Ethiopia', 'Falkland Islands', 'Faroe Islands', 'Fiji', 'Finland', 'France', 'French Polynesia', 'French West Indies', 'Gabon', 'Gambia', 'Georgia', 'Germany', 'Ghana', 'Gibraltar', 'Greece', 'Greenland', 'Grenada', 'Guam', 'Guatemala', 'Guernsey', 'Guinea', 'Guinea Bissau', 'Guyana', 'Haiti', 'Honduras', 'Hong Kong', 'Hungary', 'Iceland', 'India', 'Indonesia', 'Iran', 'Iraq', 'Ireland', 'Isle of Man', 'Israel', 'Italy', 'Jamaica', 'Japan', 'Jersey', 'Jordan', 'Kazakhstan', 'Kenya', 'Kuwait', 'Kyrgyz Republic', 'Laos', 'Latvia', 'Lebanon', 'Lesotho', 'Liberia', 'Libya', 'Liechtenstein', 'Lithuania', 'Luxembourg', 'Macau', 'Macedonia', 'Madagascar', 'Malawi', 'Malaysia', 'Maldives', 'Mali', 'Malta', 'Mauritania', 'Mauritius', 'Mexico', 'Moldova', 'Monaco', 'Mongolia', 'Montenegro', 'Montserrat', 'Morocco', 'Mozambique', 'Namibia', 'Nepal', 'Netherlands', 'Netherlands Antilles', 'New Caledonia', 'New Zealand', 'Nicaragua', 'Niger', 'Nigeria', 'Norway', 'Oman', 'Pakistan', 'Palestine', 'Panama', 'Papua New Guinea', 'Paraguay', 'Peru', 'Philippines', 'Poland', 'Portugal', 'Puerto Rico', 'Qatar', 'Reunion', 'Romania', 'Russia', 'Rwanda', 'Saint Pierre & Miquelon', 'Samoa', 'San Marino', 'Satellite', 'Saudi Arabia', 'Senegal', 'Serbia', 'Seychelles', 'Sierra Leone', 'Singapore', 'Slovakia', 'Slovenia', 'South Africa', 'South Korea', 'Spain', 'Sri Lanka', 'St Kitts & Nevis', 'St Lucia', 'St Vincent', 'St. Lucia', 'Sudan', 'Suriname', 'Swaziland', 'Sweden', 'Switzerland', 'Syria', 'Taiwan', 'Tajikistan', 'Tanzania', 'Thailand', `Timor L'Este`, 'Togo', 'Tonga', 'Trinidad & Tobago', 'Tunisia', 'Turkey', 'Turkmenistan', 'Turks & Caicos', 'Uganda', 'Ukraine', 'United Arab Emirates', 'United Kingdom', 'United States', 'Uruguay', 'Uzbekistan', 'Venezuela', 'Vietnam', 'Virgin Islands (US)', 'Yemen', 'Zambia', 'Zimbabwe'],
+        errorMessages: '',
+        name: null,
+        surname: null,
+        email: null,
+        pwd: null,
+        address: null,
+        city: null,
+        state: null,
+        zip: null,
+        country: null,
+        formHasErrors: false,
+    }),
 
- computed: {
-     form () {
-     return {
-         name: this.name,
-         address: this.address,
-         city: this.city,
-         state: this.state,
-         zip: this.zip,
-         country: this.country,
-     }
- },
- },
+    computed: {
+        form() {
+            return {
+                name: this.name,
+                surname: this.surname,
+                email: this.email,
+                address: this.address,
+                city: this.city,
+                state: this.state,
+                zip: this.zip,
+                country: this.country,
+            }
+        },
+    },
 
- watch: {
-     name () {
-     this.errorMessages = ''
- },
- },
+    watch: {
+        name() {
+            this.errorMessages = ''
+        },
+    },
 
- methods: {
-     addressCheck () {
-     this.errorMessages = this.address && !this.name
- ? `Campo requerido`
- : ''
+    methods: {
+        addressCheck() {
+            this.errorMessages = this.address && !this.name
+                ? `Campo requerido`
+                : ''
 
- return true
- },
- resetForm () {
-     this.errorMessages = []
- this.formHasErrors = false
+            return true
+        },
+        resetForm() {
+            this.errorMessages = []
+            this.formHasErrors = false
 
- Object.keys(this.form).forEach(f => {
-     this.$refs[f].reset()
- })
- },
- submit () {
-     this.formHasErrors = false
+            Object.keys(this.form).forEach(f => {
+                this.$refs[f].reset()
+            })
+        },
+        submit() {
+            this.formHasErrors = false
 
- Object.keys(this.form).forEach(f => {
-     if (!this.form[f]) this.formHasErrors = true
+            Object.keys(this.form).forEach(f => {
+                if (!this.form[f]) this.formHasErrors = true
 
- this.$refs[f].validate(true)
- })
- },
- },
- }
- </script>
+                this.$refs[f].validate(true)
+            })
+        },
+    },
+}
+</script>
 
 
