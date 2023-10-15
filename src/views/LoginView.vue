@@ -90,11 +90,11 @@
 <script setup>
 import {ref} from 'vue';
 import {useRouter, useRoute, RouterLink} from 'vue-router'
-import {useLoginStore} from '@/stores/loginStore.js';
+import {useUserStore} from '@/stores/userStore.js';
 import AppBar from '@/components/AppBar.vue'
 import storage from "@/storage/storage";
 
-const loginStore = useLoginStore()
+const userStore = useUserStore()
 
 const username = ref('')
 const password = ref('')
@@ -102,17 +102,24 @@ const route = useRoute()
 const router = useRouter()
 
 async function login() {
-    const result = await loginStore.login(username.value, password.value);
+    const result = await userStore.login(username.value, password.value);
     if (result.error) {
-        console.error('Error en la autenticación:', result.error);
+        console.error('Error en la autenticación:', result.error); // todo mostrar error en pantalla
     } else {
-        console.log('Usuario autenticado:', result);
-        storage.user = username.value
-        storage.token = result.token
-        const redirectUrl = route.query.redirect || '/' // si redirect es un path "/login" puede que les funcione directo el push()
+        console.log('Usuario autenticado:', result); // todo mostrar mensaje de éxito en pantalla
+        userStore.setToken(result.token)
+        const redirectUrl = route.query.redirect || '/'
         await router.push({path: redirectUrl})
     }
 }
+
+async function logout() {
+    await userStore.logout()
+    storage.user = null
+    storage.token = null
+    await router.push({path: '/login'})
+}
+
 </script>
 
 
@@ -141,8 +148,8 @@ p {
     padding-top: 25px;
 }
 
-h1{
+h1 {
     text-align: center;
-    padding-top:25px;
+    padding-top: 25px;
 }
 </style>

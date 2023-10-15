@@ -154,9 +154,9 @@ import storage from '../storage/storage.js'
 import GoBack from "@/components/GoBack.vue"; //esto hay que cambiarlo cuando tengamos Pinia
 import AppBar from '@/components/AppBar.vue'
 import {VDatePicker} from 'vuetify/labs/VDatePicker'
-import {useLoginStore} from "@/stores/loginStore";
+import {useUserStore} from "@/stores/userStore";
 
-const loginStore = useLoginStore()
+const userStore = useUserStore()
 
 const route = useRoute()
 const router = useRouter()
@@ -165,20 +165,20 @@ const username = ref('')
 const password = ref('')
 const mail = ref('')
 
-/*
 async function register() {
-    const result = await loginStore.register(username.value, password.value, mail.value);
+    const result = await userStore.register(username.value, password.value, mail.value);
     if (result.error) {
-        console.error('Error al crear usuario:', result.error);
+        console.error('Error en el registro:', result.error);
     } else {
-        console.log('Usuario creado:', result);
+        console.log('Usuario registrado:', result);
+        await userStore.sendVerification(mail.value);
         storage.user = username.value
         storage.token = result.token
-        const redirectUrl = route.query.redirect || '/' // si redirect es un path "/login" puede que les funcione directo el push()
+        const redirectUrl = route.query.redirect || '/'
         await router.push({path: redirectUrl})
     }
 }
- */
+
 
 </script>
 
