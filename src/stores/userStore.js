@@ -4,7 +4,7 @@ import storage from "@/storage/storage";
 
 export const useUserStore = defineStore('login', () => {
 
-    const token = "";
+    let token = "";
 
     const apiEndpoints = {
         getUsers: {path: '/users', requiresAuth: true, method: 'GET'},
@@ -78,18 +78,12 @@ export const useUserStore = defineStore('login', () => {
         return await makeApiCall(apiEndpoints.deleteCurrentUser);
     }
 
-    // GETTER FOR TOKEN
-    function getToken(){
-        return this.token;
-    }
-
     // SETTER FOR TOKEN
-    function setToken(token){
-        this.token = token;
+    function setToken(userToken){
+        token = userToken;
     }
 
     return {
-        getToken,
         setToken,
         getUsers,
         getUser,

@@ -10,7 +10,7 @@
         ></v-img>
         -->
         <v-card
-            class="mx-auto pa-12 pb-8"
+            class="mx-auto pt-6 pa-12 pb-8"
             elevation="8"
             max-width="448"
             rounded="lg"
@@ -46,24 +46,24 @@
                 @click:append-inner="visible = !visible"
             ></v-text-field>
 
+            <!--
             <v-card
                 class="mb-12"
                 color="surface-variant"
                 variant="tonal"
             >
                 <v-card-text class="text-medium-emphasis text-caption">
-                    Warning: After 3 consecutive failed login attempts, you account will be temporarily locked for three
-                    hours. If you must login now, you can also click "Forgot login password?" below to reset the login
-                    password.
+                    Si olvidó su contraseña puede recuperarla haciendo click en el enlace de arriba que dice "¿Olvidó su contraseña?".
                 </v-card-text>
             </v-card>
+            -->
 
             <v-btn
                 block
                 class="mb-8"
                 size="large"
                 variant="tonal"
-                @click="login"
+                @click="loginUser"
             >
                 Iniciar Sesión
             </v-btn>
@@ -101,7 +101,7 @@ const password = ref('')
 const route = useRoute()
 const router = useRouter()
 
-async function login() {
+async function loginUser() {
     const result = await userStore.login(username.value, password.value);
     if (result.error) {
         console.error('Error en la autenticación:', result.error); // todo mostrar error en pantalla
@@ -113,7 +113,7 @@ async function login() {
     }
 }
 
-async function logout() {
+async function logoutUser() {
     await userStore.logout()
     storage.user = null
     storage.token = null
@@ -140,7 +140,7 @@ export default {
 }
 
 .login-box {
-    padding-top: 5%;
+    padding-top: 2%;
 }
 
 p {
