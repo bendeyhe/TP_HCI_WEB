@@ -71,5 +71,5 @@
 </template>
 
 <script setup>
-  //
+  //esto hay que borrarlo?
 </script>

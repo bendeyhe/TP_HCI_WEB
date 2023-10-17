@@ -3,6 +3,7 @@
         <h1 class="titulo">{{ nombreRutina }}</h1>
         <v-slide-group
             v-model="model"
+            multiple
             class="pa-4"
             selected-class="bg-primary"
             show-arrows
@@ -27,6 +28,7 @@
                     class="mx-auto my-12"
                     width="280"
                     height="400"
+                    
                 >
                     <template v-slot:loader="{ isActive }">
                         <v-progress-linear
@@ -37,9 +39,9 @@
                     </template>
 
                     <div class="cont">
-                        <img class="image" :src="getImageUrl( 'routine1.jpg' )" alt="Foto de la Rutina" height="250"/>
+                        <img class="image" :src="getImageUrl( routine.img )" alt="Foto de la Rutina" height="250"/>
                         <!-- todo aca queria poner {{ routine.img  }} pero no funciona... ¿como se hace?-->
-                        <v-btn class="heart" :icon="isSelected ? 'mdi-heart' : 'mdi-heart-outline'"></v-btn>
+                        <v-btn class="heart" :icon="isSelected ? 'mdi-heart' : 'mdi-heart-outline'" @click="toggle"></v-btn>
                     </div>
                     <v-card-item>
                         <v-card-title>{{ routine.name }}</v-card-title>
@@ -58,7 +60,7 @@
 
                     <v-card-text>
                         <v-row
-                            align="center"
+                            allign="center"
                             class="mx-0"
                         >
                             <v-rating
@@ -122,13 +124,13 @@ onBeforeMount(() => {
     loading.value = false
 })
 
-const model = ref(null);
+const model = ref([]);
 </script>
 
 <script>
 export default {
     data: () => ({
-        model: null,
+        model: [],
     }),
     props: {
         nombreRutina: String,
