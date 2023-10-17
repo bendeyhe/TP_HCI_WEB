@@ -3,7 +3,8 @@
     <h1>Crear Cuenta</h1>
     <div class="register-box">
         <v-card
-            class="mx-auto pt-6 pa-12 pb-8"
+            class="mx-auto pt-6
+             pa-12 pb-8"
             elevation="8"
             max-width="448"
             rounded="lg"
@@ -136,22 +137,25 @@ const validateForm = () => {
 
 async function register() {
     validateForm();
-    if (formErrors.value.length > 0) {
-        const error = formErrors.value.join('');
-        await showErrorAlert(error);
-    } else {
-        loading.value = true;
-        let result = await userStore.register(username.value, password.value, email.value);
-        if (result.error) {
-            await showErrorAlert('Ocurrió un error al registrar el usuario.');
+    try{
+        if (formErrors.value.length > 0) {
+            const error = formErrors.value.join('');
+            await showErrorAlert(error);
         } else {
-            userStore.setToken(result.token);
-            await showSuccessAlert('Su usuario fue registrado con éxito y en su casilla de email: ' +
-                email.value +
-                ' recibirá un mensaje para verificar su cuenta.');
-            const redirectUrl = route.query.redirect || '/'
-            await router.push({path: redirectUrl})
+            loading.value = true;
+            let result = await userStore.register(username.value, password.value, email.value);
+            if (result.error) {
+                await showErrorAlert('Ocurrió un error al registrar el usuario.');
+            } else {
+                userStore.setToken(result.token);
+                await showSuccessAlert('Su usuario fue registrado con éxito y en su casilla de email: ' +
+                    email.value +
+                    ' recibirá un mensaje para verificar su cuenta.');
+                const redirectUrl = route.query.redirect || '/'
+                await router.push({path: redirectUrl})
+            }
         }
+    } finally {
         loading.value = false;
     }
 }

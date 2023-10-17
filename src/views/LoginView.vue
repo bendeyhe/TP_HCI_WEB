@@ -23,6 +23,7 @@
                 prepend-inner-icon="mdi-account-outline"
                 variant="outlined"
                 v-model="username"
+                :disabled="loading"
             ></v-text-field>
 
             <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
@@ -44,19 +45,21 @@
                 variant="outlined"
                 v-model="password"
                 @click:append-inner="visible = !visible"
+                :disabled="loading"
             ></v-text-field>
 
-            <!--
-            <v-card
-                class="mb-12"
-                color="surface-variant"
-                variant="tonal"
-            >
-                <v-card-text class="text-medium-emphasis text-caption">
-                    Si olvidó su contraseña puede recuperarla haciendo click en el enlace de arriba que dice "¿Olvidó su contraseña?".
-                </v-card-text>
-            </v-card>
-            -->
+            <v-alert
+                v-if="successAlert"
+                color="success"
+                icon="$success"
+                :text=successMessage
+            ></v-alert>
+            <v-alert
+                v-if="errorAlert"
+                color="error"
+                icon="$error"
+                :text=errorMessage
+            ></v-alert>
 
             <v-btn
                 block
@@ -65,7 +68,16 @@
                 variant="tonal"
                 @click="loginUser"
             >
-                Iniciar Sesión
+                <template v-if="loading">
+                    <v-progress-circular
+                        indeterminate
+                        size="20"
+                        color="white"
+                    ></v-progress-circular>
+                </template>
+                <template v-else>
+                    Iniciar Sesión
+                </template>
             </v-btn>
             <RouterLink to="/create-account">
                 <v-card-text class="text-center">
@@ -100,16 +112,41 @@ const username = ref('')
 const password = ref('')
 const route = useRoute()
 const router = useRouter()
+const successAlert = ref(false)
+const errorAlert = ref(false)
+const successMessage = ref('Usuario logueado con éxito')
+const errorMessage = ref('Error al loguear')
+const formErrors = ref([])
+const loading = ref(false);
+
+const validateForm = () => {
+    formErrors.value = [];
+    if (!username.value)
+        formErrors.value.push('El usuario es obligatorio. ');
+    if (!password.value)
+        formErrors.value.push('La contraseña es obligatoria.');
+};
 
 async function loginUser() {
-    const result = await userStore.login(username.value, password.value);
-    if (result.error) {
-        console.error('Error en la autenticación:', result.error); // todo mostrar error en pantalla
-    } else {
-        console.log('Usuario autenticado:', result); // todo mostrar mensaje de éxito en pantalla
-        userStore.setToken(result.token)
-        const redirectUrl = route.query.redirect || '/'
-        await router.push({path: redirectUrl})
+    validateForm();
+    try {
+        if (formErrors.value.length > 0) {
+            const error = formErrors.value.join('');
+            await showErrorAlert(error);
+        } else {
+            loading.value = true;
+            const result = await userStore.login(username.value, password.value);
+            if (result.error) {
+                await showErrorAlert('Error en la autenticación: ' + result.error);
+            } else {
+                await showSuccessAlert('Usuario autenticado con éxito');
+                userStore.setToken(result.token)
+                const redirectUrl = route.query.redirect || '/'
+                await router.push({path: redirectUrl})
+            }
+        }
+    } finally {
+        loading.value = false;
     }
 }
 
@@ -118,6 +155,30 @@ async function logoutUser() {
     storage.user = null
     storage.token = null
     await router.push({path: '/login'})
+}
+
+async function showSuccessAlert(message = 'Usuario registrado con éxito') {
+    successMessage.value = message
+    successAlert.value = true
+
+    await new Promise(resolve => {
+        setTimeout(() => {
+            successAlert.value = false;
+            resolve();
+        }, 3000);
+    });
+}
+
+async function showErrorAlert(message = 'Error el registrar usuario') {
+    errorMessage.value = message
+    errorAlert.value = true
+
+    await new Promise(resolve => {
+        setTimeout(() => {
+            errorAlert.value = false;
+            resolve();
+        }, 5000);
+    });
 }
 
 </script>
@@ -136,7 +197,7 @@ export default {
     color: #8efd00;
     background-color: #000000;
     margin-right: 10px;
-    margin-left: 10px;
+    margin-top: 20px;
 }
 
 .login-box {
