@@ -8,6 +8,8 @@
         single-line
         hide-details
         @click:append-inner="onClick"
+        @keydown.enter="onClick"
+        v-model="searchQuery"
       ></v-text-field>
 </template>
 
@@ -16,13 +18,16 @@ import { ref } from 'vue'
 
 const loaded = ref(false)
 const loading = ref(false)
+const searchQuery = ref('')
 
 function onClick () {
+  if (searchQuery.value.trim() !== ''){
   loading.value = true
   setTimeout(() => {
     loading.value = false
     loaded.value = true
   }, 2000)
+}
 }
 </script>
 
@@ -31,17 +36,20 @@ export default {
   data: () => ({
     loaded: false,
     loading: false,
+    searchQuery: ''
   }),
 
   methods: {
     onClick () {
+      if (searchQuery.value.trim() !== ''){
       this.loading = true
 
       setTimeout(() => {
         this.loading = false
         this.loaded = true
       }, 2000)
-    },
+    }
+  },
   },
 }
 </script>

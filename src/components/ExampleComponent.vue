@@ -1,6 +1,6 @@
 <template>
     <h1> Example View</h1>
-</template>
+</template><!--/*este archivo abria q borrarlo? */-->
 
 <script setup>
 
