@@ -13,8 +13,6 @@
                 v-for="routine in routineStore.routines" :key="routine.id"
                 v-slot="{ isSelected, toggle, selectedClass }"
             >
-
-
                 <!--  <v-card
                   color="grey-lighten-1"
                   :class="['ma-4', selectedClass]"
@@ -37,18 +35,15 @@
                             indeterminate
                         ></v-progress-linear>
                     </template>
-
                     <div class="cont">
-                        <img class="image" :src="getImageUrl( routine.img )" alt="Foto de la Rutina" height="250"/>
+                        <img class="image" :src="getImageUrl( routine.img )" alt="Foto de la Rutina" height="150"/>
                         <!-- todo aca queria poner {{ routine.img  }} pero no funciona... ¿como se hace?-->
                         <v-btn class="heart" :icon="isSelected ? 'mdi-heart' : 'mdi-heart-outline'" @click="toggle"></v-btn>
                     </div>
                     <v-card-item>
                         <v-card-title>{{ routine.name }}</v-card-title>
-
                         <!--<v-card-subtitle>
                           <span class="me-1">Local Favorite</span>
-
                           <v-icon
                             color="error"
                             icon="mdi-fire-circle"
@@ -57,7 +52,6 @@
                         </v-card-subtitle>
                         -->
                     </v-card-item>
-
                     <v-card-text>
                         <v-row
                             allign="center"
@@ -71,31 +65,27 @@
                                 readonly
                                 size="small"
                             ></v-rating>
-
                             <div class="text-grey ms-4">
                                 4.5 (413)
                             </div>
                         </v-row>
-
-                        <div class="my-4 text-subtitle-1" >
+                        <div class="creator my-4 text-subtitle-1" >
                             <v-icon icon="mdi-account"></v-icon>
-                            • {{ routine.creator }}
+                            <div class="creator-text">• {{ routine.creator }}</div>
                         </div>
-
                         <div class="overflow">{{ routine.description }}</div>
                     </v-card-text>
-                <div class="detail">
+                    <div class="detail">
                         <v-divider></v-divider>
                         <v-card-actions>
                             <RouterLink to="/routine-details">
-
                                 <v-btn>
                                     Ver Detalle
                                 </v-btn>
                             </RouterLink>
                         </v-card-actions>
-                </div>
-                    </v-card>
+                    </div>
+                </v-card>
             </v-slide-group-item>
         </v-slide-group>
 
@@ -151,12 +141,11 @@ export default {
 
  .image{
     width: 100%;
-    height: auto;
  }
 
  .heart{
      position: absolute;
-     top: 15%;
+     top: 17%;
      left: 85%;
      transform: translate(-50%, -50%);
      -ms-transform: translate(-50%, -50%);
@@ -180,8 +169,22 @@ export default {
  .overflow{
      overflow: hidden;
      text-overflow: ellipsis;
+     max-width: 700px;
      display: -webkit-box;
      -webkit-line-clamp: 3; /* number of lines to show */
      -webkit-box-orient: vertical;
  }
+
+    .creator{
+        display: flex;
+        align-items: center;
+        margin-top: 10px;
+    }
+
+    .creator-text{
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 200px;
+    }
 </style>

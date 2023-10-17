@@ -10,11 +10,11 @@ export const useRoutineStore = defineStore('routine', () => {
 
     function fetchRoutines(){
         setRoutines([
-            {id: 1, name: 'Routine 1', creator: 'Jorge Almiron', description: 'Una rutina re dificil', img:'routine1.jpg'},
-            {id: 2, name: 'Routine 2', creator: 'Jorge Almiron', description: 'Una rutina re intensa', img:'routine2.jpg'},
-            {id: 3, name: 'Routine 3', creator: 'Jorge Almiron', description: 'Una rutina para fortalecer los músculos', img:'routine3.jpg'},
-            {id: 4, name: 'Routine 4', creator: 'Jorge Almiron', description: 'asdasdadsaaaddadsasddas', img:'routine4.jpg'},
-            {id: 5, name: 'Routine 5', creator: 'Jorge Almiron', description: 'asdaaaaaaaaaaaaaaaasdaaaaaaaaaaaaaaaaaaasdaaaaaaaaaaaaaaaaaaasdaaaaaaaaaaaaaaaaaaasdaaaaaaaaaaaaaaaaaaasdaaaaaaaaaaaaaaaaaaasdaaaaaaaaaaaaaaaaaaasdaaaaaaaaaaaaaaaaaaasdaaaaaaaaaaaaaaaaaaasdaaaaaaaaaaaaaaaaaaasdaaaaaaaaaaaaaaaaaaasdaaaaaaaaaaaaaaaaaaasdaaaaaaaaaaaaaaaaaaasdaaaaaaaaaaaaaaaaaaasdaaaaaaaaaaaaaaaaaaasdaaaaaaaaaaaaaaaaaaasdaaaaaaaaaaaaaaaaaaasdaaaaaaaaaaaaaaaasdaaaaaaaaaaaaaaa', img:'routine5.jpg'},
+            {id: 1, name: 'Rutina de Espalda', creator: 'Jorge Almiron', description: 'Para tener alas en vez de dorsales', img:'routine1.jpg'},
+            {id: 2, name: 'Routina Biceps', creator: 'Nate Deyheralde', description: 'Para poder llevar mas bolsas de supermercado a la vez', img:'routine2.jpg'},
+            {id: 3, name: 'Routina de Piernas', creator: 'Pitufo Mutz', description: 'No vas a poder caminar despues de realizarla!', img:'routine3.jpg'},
+            {id: 4, name: 'Routina aerobica', creator: 'Robert Ves Losada', description: 'Para no cansarte en el partido', img:'routine4.jpg'},
+            {id: 5, name: 'Routina de hombros', creator: 'The Rock Candisano', description: 'Para dejar de estar chico', img:'routine5.jpg'},
         ])
     }
 
