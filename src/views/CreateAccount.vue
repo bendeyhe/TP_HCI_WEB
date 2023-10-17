@@ -127,32 +127,39 @@ const loading = ref(false);
 
 const validateForm = () => {
     formErrors.value = [];
-    if (!username.value)
-        formErrors.value.push('El nombre de usuario es requerido.\n');
-    if (!password.value)
-        formErrors.value.push('La contraseña es requerida.\n');
+    if (!username.value || username.value.length < 4)
+        formErrors.value.push('El nombre de usuario es requerido y debe tener al menos 4 caracteres.\n');
+    if (!password.value || password.value.length < 3)
+        formErrors.value.push('La contraseña es requerida y debe tener al menos 3 caracteres.\n');
     if (!email.value || !/.+@.+\..+/.test(email.value))
         formErrors.value.push('La dirección de correo debe ser válida.\n');
 };
 
 async function register() {
     validateForm();
-    try{
+    let result;
+    try {
         if (formErrors.value.length > 0) {
             const error = formErrors.value.join('');
             await showErrorAlert(error);
         } else {
             loading.value = true;
-            let result = await userStore.register(username.value, password.value, email.value);
-            if (result.error) {
-                await showErrorAlert('Ocurrió un error al registrar el usuario.');
-            } else {
+            result = await userStore.register(username.value, password.value, email.value);
+            if (result.success) {
                 userStore.setToken(result.token);
                 await showSuccessAlert('Su usuario fue registrado con éxito y en su casilla de email: ' +
                     email.value +
                     ' recibirá un mensaje para verificar su cuenta.');
                 const redirectUrl = route.query.redirect || '/'
                 await router.push({path: redirectUrl})
+            } else {
+                loading.value = false;
+                if(result.details[0].includes('username'))
+                    await showErrorAlert('Ya hay un usuario registrado con el nombre: ' + username.value);
+                else if(result.details[0].includes('email'))
+                    await showErrorAlert('Ya hay un usuario registrado con el email: ' + email.value);
+                else
+                    await showErrorAlert('Error en el registro: ' + result.error);
             }
         }
     } finally {

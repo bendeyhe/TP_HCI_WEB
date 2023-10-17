@@ -5,6 +5,7 @@ import storage from "@/storage/storage";
 export const useUserStore = defineStore('login', () => {
 
     let token = "";
+    let user = null;
 
     const apiEndpoints = {
         getUsers: {path: '/users', requiresAuth: true, method: 'GET'},
@@ -21,17 +22,17 @@ export const useUserStore = defineStore('login', () => {
 
     // GET: /users
     async function getUsers() {
-        return await makeApiCall(apiEndpoints.getUsers);
+        return await makeApiCall(apiEndpoints.getUsers, null, token);
     }
 
     // GET: /users/{userId}
     async function getUser(userId) {
-        return await makeApiCall(apiEndpoints.getUser(userId));
+        return await makeApiCall(apiEndpoints.getUser(userId), null, token);
     }
 
     // GET: /users/current
     async function getCurrentUser() {
-        return await makeApiCall(apiEndpoints.getCurrentUser);
+        return await makeApiCall(apiEndpoints.getCurrentUser, null, token);
     }
 
 
@@ -61,7 +62,10 @@ export const useUserStore = defineStore('login', () => {
 
     // POST: /users/logout
     async function logout() {
-        return await makeApiCall(apiEndpoints.logout);
+        const result = await makeApiCall(apiEndpoints.logout, null, token);
+        if (result.success)
+            token = "";
+        return result;
     }
 
     // PUT: /users/current
@@ -70,20 +74,26 @@ export const useUserStore = defineStore('login', () => {
             'firstName': firstName, 'lastName': lastName,
             'gender': gender, 'birthdate': birthdate, 'phone': phone, 'avatarUrl': avatarUrl
         };
-        return await makeApiCall(apiEndpoints.modifyCurrentUser, data);
+        return await makeApiCall(apiEndpoints.modifyCurrentUser, data, token);
     }
 
     // DELETE: /users/current
     async function deleteCurrentUser() {
-        return await makeApiCall(apiEndpoints.deleteCurrentUser);
+        return await makeApiCall(apiEndpoints.deleteCurrentUser, null, token);
+    }
+
+    // GETTER FOR TOKEN
+    function getToken() {
+        return token;
     }
 
     // SETTER FOR TOKEN
-    function setToken(userToken){
+    function setToken(userToken) {
         token = userToken;
     }
 
     return {
+        getToken,
         setToken,
         getUsers,
         getUser,

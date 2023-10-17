@@ -1,17 +1,19 @@
-import storage from "@/storage/storage";
-
+// user de prueba
+// nombre de Usuario: a
+// contraseña: a
+// mail: a@a.com
 // token para autorización:
-// bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsImlhdCI6MTY5NzM5MTU1NjAzOSwiZXhwIjoxNjk3Mzk0MTQ4MDM5fQ.jP9DThwUJWdlRbaKI5qvwHejI4KRe13z5OKFJ7qrVB8
+// bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIzLCJpYXQiOjE2OTc1NDE0Mjg1MzUsImV4cCI6MTY5NzU0NDAyMDUzNX0.HJj7VF4dsO3yMa-ceEuOIu63xdTopxhWubnUTIbYN5M
 
 const API_BASE_URL = "http://localhost:8080/api";
 
-async function makeApiCall(apiEndpoint, data = null) {
+async function makeApiCall(apiEndpoint, data = null, token = null) {
     const url = `${API_BASE_URL}${apiEndpoint.path}`;
     const headers = {
         'Content-Type': 'application/json; charset=utf-8'
     }
     if (apiEndpoint.requiresAuth)
-        headers['Authorization'] = `bearer ${storage.token}`
+        headers['Authorization'] = `bearer ${token}`
     const init = {
         method: apiEndpoint.method,
         headers: headers
@@ -20,11 +22,21 @@ async function makeApiCall(apiEndpoint, data = null) {
         init.body = JSON.stringify(data);
 
     let response = await fetch(url, init);
-    if (!response.ok) {
-        console.error(`API Error for ${url}: ${response.statusText}`)
-        throw Error(response.statusText);
+    const result = {
+        success: response.ok,
+        status: response.status,
+        data: null,
+        error: null
+    };
+    if (response.ok) {
+        result.data = await response.json();
+    } else {
+        const errorData = await response.json();
+        result.error = errorData.error;
+        result.code = errorData.code;
+        result.details = errorData.details;
     }
-    return response.json();
+    return result;
 }
 
 export {makeApiCall};

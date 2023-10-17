@@ -2,7 +2,7 @@ import{createRouter, createWebHistory} from 'vue-router'
 /* aca importar para carga estática*/
 import HomeView from '@/views/HomeView.vue'
 import storage from '../storage/storage.js'
-
+import {useUserStore} from "@/stores/userStore.js";
 
 const routes = [
 
@@ -87,9 +87,9 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
 
     if(to.matched.some(route => route.meta.requiresAuth)){
-        if(!storage.user){
+        if(useUserStore().getToken === null || useUserStore().getToken === undefined){
             next({name: 'login', query: {redirect: to.fullPath }})
-        }else{
+        } else {
             next()
         }
     } else {

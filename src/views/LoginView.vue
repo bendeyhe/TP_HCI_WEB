@@ -2,13 +2,6 @@
     <AppBar/>
     <h1>Inicio de Sesión</h1>
     <div class="login-box">
-        <!--
-        <v-img
-            class="mx-auto my-6"
-            max-width="228"
-            src="https://cdn.vuetifyjs.com/docs/images/logos/vuetify-logo-v3-slim-text-light.svg"
-        ></v-img>
-        -->
         <v-card
             class="mx-auto pt-6 pa-12 pb-8"
             elevation="8"
@@ -150,14 +143,7 @@ async function loginUser() {
     }
 }
 
-async function logoutUser() {
-    await userStore.logout()
-    storage.user = null
-    storage.token = null
-    await router.push({path: '/login'})
-}
-
-async function showSuccessAlert(message = 'Usuario registrado con éxito') {
+async function showSuccessAlert(message) {
     successMessage.value = message
     successAlert.value = true
 
@@ -169,7 +155,7 @@ async function showSuccessAlert(message = 'Usuario registrado con éxito') {
     });
 }
 
-async function showErrorAlert(message = 'Error el registrar usuario') {
+async function showErrorAlert(message) {
     errorMessage.value = message
     errorAlert.value = true
 
