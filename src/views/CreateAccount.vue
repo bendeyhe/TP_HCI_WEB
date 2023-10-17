@@ -3,7 +3,7 @@
     <h1>Crear Cuenta</h1>
     <div class="register-box">
         <v-card
-            class="mx-auto pt-3 pa-12 pb-8"
+            class="mx-auto pt-6 pa-12 pb-8"
             elevation="8"
             max-width="448"
             rounded="lg"
