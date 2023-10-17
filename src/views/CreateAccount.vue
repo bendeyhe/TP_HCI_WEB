@@ -8,15 +8,16 @@
             max-width="448"
             rounded="lg"
         >
-            <div class="text-subtitle-1 text-medium-emphasis">Nombre de usuario</div>
+            <div class="text-subtitle-1 text-medium-emphasis">Nombre de Usuario</div>
             <v-text-field
                 density="compact"
-                placeholder="Ingresá tu Nombre de usuario"
+                placeholder="Ingresá tu Nombre de Usuario"
                 prepend-inner-icon="mdi-account-outline"
                 variant="outlined"
                 v-model="username"
                 :rules="[(v) => !!v || 'Campo requerido', (v) => v.length >= 4 || 'Debe tener al menos 4 caracteres']"
                 required
+                :disabled="loading"
             ></v-text-field>
 
             <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">Contraseña</div>
@@ -24,24 +25,26 @@
                 :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
                 :type="visible ? 'text' : 'password'"
                 density="compact"
-                placeholder="Ingresá tu contraseña"
+                placeholder="Ingresá tu Contraseña"
                 prepend-inner-icon="mdi-lock-outline"
                 variant="outlined"
                 v-model="password"
                 @click:append-inner="visible = !visible"
                 :rules="[(v) => !!v || 'Campo requerido', (v) => v.length >= 3 || 'Debe tener al menos 3 caracteres']"
                 required
+                :disabled="loading"
             ></v-text-field>
 
-            <div class="text-subtitle-1 text-medium-emphasis">Dirección de email</div>
+            <div class="text-subtitle-1 text-medium-emphasis">Dirección de Email</div>
             <v-text-field
                 density="compact"
-                placeholder="Ingresá tu dirección de email"
+                placeholder="Ingresá tu Dirección de email"
                 variant="outlined"
                 v-model="email"
                 prepend-inner-icon="mdi-email-outline"
                 :rules="[(v) => !!v || 'Campo requerido', (v) => /.+@.+\..+/.test(v) || 'Debe ser una dirección de correo válida']"
                 required
+                :disabled="loading"
             ></v-text-field>
 
             <v-alert
@@ -122,20 +125,13 @@ const loading = ref(false);
 
 
 const validateForm = () => {
-    // Lógica de validación de campos
     formErrors.value = [];
-
-    if (!username.value) {
+    if (!username.value)
         formErrors.value.push('El nombre de usuario es requerido.\n');
-    }
-
-    if (!password.value) {
+    if (!password.value)
         formErrors.value.push('La contraseña es requerida.\n');
-    }
-
-    if (!email.value || !/.+@.+\..+/.test(email.value)) {
+    if (!email.value || !/.+@.+\..+/.test(email.value))
         formErrors.value.push('La dirección de correo debe ser válida.\n');
-    }
 };
 
 async function register() {
@@ -145,27 +141,18 @@ async function register() {
         await showErrorAlert(error);
     } else {
         loading.value = true;
-        try {
-            let result = await userStore.register(username.value, password.value, email.value);
-            if (result.error) {
-                await showErrorAlert(result.error);
-            } else {
-                await showSuccessAlert(result.message);
-                userStore.setToken(result.token);
-                result = await userStore.sendVerification(email.value);
-                if (result.error) {
-                    await showErrorAlert(result.error)
-                } else {
-                    await showSuccessAlert(result.message)
-                    const redirectUrl = route.query.redirect || '/'
-                    await router.push({path: redirectUrl})
-                }
-            }
-        } catch (e) {
-            await showErrorAlert('Ocurrió un error durante el registro:' + e.message)
-        } finally {
-            loading.value = false;
+        let result = await userStore.register(username.value, password.value, email.value);
+        if (result.error) {
+            await showErrorAlert('Ocurrió un error al registrar el usuario.');
+        } else {
+            userStore.setToken(result.token);
+            await showSuccessAlert('Su usuario fue registrado con éxito y en su casilla de email: ' +
+                email.value +
+                ' recibirá un mensaje para verificar su cuenta.');
+            const redirectUrl = route.query.redirect || '/'
+            await router.push({path: redirectUrl})
         }
+        loading.value = false;
     }
 }
 
@@ -177,7 +164,7 @@ async function showSuccessAlert(message = 'Usuario registrado con éxito') {
         setTimeout(() => {
             successAlert.value = false;
             resolve();
-        }, 2000);
+        }, 3000);
     });
 }
 
@@ -189,7 +176,7 @@ async function showErrorAlert(message = 'Error el registrar usuario') {
         setTimeout(() => {
             errorAlert.value = false;
             resolve();
-        }, 2000);
+        }, 5000);
     });
 }
 
