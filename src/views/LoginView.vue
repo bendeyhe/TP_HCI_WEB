@@ -122,25 +122,25 @@ const validateForm = () => {
 
 async function loginUser() {
     validateForm();
-    try {
-        if (formErrors.value.length > 0) {
-            const error = formErrors.value.join('');
-            await showErrorAlert(error);
-        } else {
-            loading.value = true;
-            const result = await userStore.login(username.value, password.value);
-            if (result.error) {
-                await showErrorAlert('Error en la autenticación: ' + result.error);
-            } else {
-                await showSuccessAlert('Usuario autenticado con éxito');
-                userStore.setToken(result.token)
-                const redirectUrl = route.query.redirect || '/'
-                await router.push({path: redirectUrl})
-            }
-        }
-    } finally {
+    if (formErrors.value.length > 0) {
+        const error = formErrors.value.join('');
+        await showErrorAlert(error);
         loading.value = false;
+    } else {
+        loading.value = true;
+        const result = await userStore.login(username.value, password.value);
+        if (result.error) {
+            await showErrorAlert('Error en la autenticación: ' + result.error);
+            loading.value = false;
+        } else {
+            userStore.setToken(result.data.token)
+            const tok = userStore.getToken()
+            await showSuccessAlert('Usuario autenticado con éxito');
+            const redirectUrl = route.query.redirect || '/'
+            await router.push({path: redirectUrl})
+        }
     }
+
 }
 
 async function showSuccessAlert(message) {

@@ -67,7 +67,6 @@ import AppBar from "@/components/AppBar.vue";
 import {RouterLink} from "vue-router";
 import RoutineByCategories from "@/components/RoutineByCategories.vue";
 
-
 export default {
     components: {RoutineByCategories, RouterLink, AppBar}
 }

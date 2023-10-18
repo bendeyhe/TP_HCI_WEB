@@ -10,10 +10,10 @@
             rounded="lg"
         >
             <!--Voy a mostrar nombre el usuario-->
-            <div class="text-subtitle-1 text-medium-emphasis">Nombre de Usuario: {{userStore.user.username}}</div>
+            <div class="text-subtitle-1 text-medium-emphasis">Nombre de Usuario: {{userData.username}}</div>
 
             <!--Voy a mostrar el email del usuario-->
-            <div class="text-subtitle-1 text-medium-emphasis">Email: {{userStore.user.email}}</div>
+            <div class="text-subtitle-1 text-medium-emphasis">Email: {{userData.email}}</div>
 
 
             <v-alert
@@ -68,12 +68,12 @@ const errorMessage = ref('Error al loguear')
 
 const userData = ref({
     username: '',
-    firstName: '',
-    lastName: '',
-    gender: '',
+    //firstName: '',
+    //lastName: '',
+    //gender: '',
     email: '',
-    phone: '',
-    avatar_url: '',
+    //phone: '',
+    //avatar_url: '',
     date: ''
 })
 
@@ -83,10 +83,11 @@ onBeforeMount(async ()=>{
 
 
 async function getUserData(){
-    debugger
     const result = await userStore.getCurrentUser()
     if (result.success) {
-        userData.value = result.data
+        userData.value.username = result.data.username
+        userData.value.email = result.data.email
+        userData.value.date = result.data.date
     } else {
         await showErrorAlert('Error al obtener los datos del usuario')
     }
