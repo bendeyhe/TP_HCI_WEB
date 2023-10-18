@@ -94,16 +94,10 @@ async function getUserData(){
 }
 
 async function logoutUser() {
-    const result = await userStore.logout()
-    if (result.success) {
-        await showSuccessAlert()
-        await storage.remove('token')
-        await storage.remove('user')
-        await router.push({path: '/login'})
-    } else {
-        await showErrorAlert()
-    }
-    await router.push({path: '/login'})
+    loading.value = true
+    //await userStore.logout(); todo ver porque esto no funciona y si es necesario
+    await userStore.removeToken();
+    await router.push({path: '/login'});
 }
 
 
