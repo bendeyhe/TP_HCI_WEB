@@ -79,7 +79,6 @@
                         rel="noopener noreferrer"
                         target="_blank"
                     >
-
                         Crear cuenta
                         <v-icon icon="mdi-chevron-right"></v-icon>
                     </a>
@@ -95,9 +94,8 @@
 <script setup>
 import {ref} from 'vue';
 import {useRouter, useRoute, RouterLink} from 'vue-router'
-import {useUserStore} from '@/stores/userStore.js';
+import {useUserStore} from '@/stores/userStore'
 import AppBar from '@/components/AppBar.vue'
-import storage from "@/storage/storage";
 
 const userStore = useUserStore()
 
@@ -134,7 +132,7 @@ async function loginUser() {
             loading.value = false;
         } else {
             userStore.setToken(result.data.token)
-            const tok = userStore.getToken()
+            const tok = userStore.getTokenState
             await showSuccessAlert('Usuario autenticado con éxito');
             const redirectUrl = route.query.redirect || '/'
             await router.push({path: redirectUrl})
@@ -171,10 +169,24 @@ async function showErrorAlert(message) {
 
 
 <script>
+
+import {mapState, mapActions} from "pinia"
+import {useUserStore} from "@/stores/userStore";
+
 export default {
     data: () => ({
         visible: false,
     }),
+    /*
+    computed: {
+        ...mapState(useUserStore, {
+            $user: state => state.user,
+        }),
+        ...mapState(useUserStore, {
+            $isLoggedIn: 'isLoggedIn'
+        }),
+    },
+     */
 }
 </script>
 
