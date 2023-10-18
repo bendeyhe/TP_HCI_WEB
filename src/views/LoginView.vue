@@ -132,7 +132,7 @@ async function loginUser() {
             loading.value = false;
         } else {
             userStore.setToken(result.data.token)
-            const tok = userStore.getTokenState
+            userStore.updateToken(result.data.token, true)
             await showSuccessAlert('Usuario autenticado con éxito');
             const redirectUrl = route.query.redirect || '/'
             await router.push({path: redirectUrl})
