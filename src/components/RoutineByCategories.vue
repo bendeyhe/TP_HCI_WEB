@@ -109,8 +109,8 @@ function getImageUrl(name) {
 
 onBeforeMount(() => {
     loading.value = true
-    routineStore.fetchRoutines()
-    routineStore.fetchRoutines()
+    routineStore.getRoutines()
+    routineStore.getRoutines()
     loading.value = false
 })
 
