@@ -10,8 +10,7 @@
             :max-visible="1"
         >
             <v-slide-group-item
-                v-for="routine in routineStore.routines" :key="routine.id"
-                v-slot="{ isSelected, toggle, selectedClass }"
+                v-for="routine in routines" :key="routine.id"
             >
                 <!--  <v-card
                   color="grey-lighten-1"
@@ -26,7 +25,7 @@
                     class="mx-auto my-12"
                     width="280"
                     height="400"
-                    
+
                 >
                     <template v-slot:loader="{ isActive }">
                         <v-progress-linear
@@ -36,9 +35,10 @@
                         ></v-progress-linear>
                     </template>
                     <div class="cont">
-                        <img class="image" :src="getImageUrl( routine.img )" alt="Foto de la Rutina" height="150"/>
+                        <img class="image" :src="routine.img" alt="Foto de la Rutina" height="150"/>
                         <!-- todo aca queria poner {{ routine.img  }} pero no funciona... ¿como se hace?-->
-                        <v-btn class="heart" :icon="isSelected ? 'mdi-heart' : 'mdi-heart-outline'" @click="toggle"></v-btn>
+                        <v-btn class="heart" :icon="routine.fav ? 'mdi-heart' : 'mdi-heart-outline'"
+                               @click="toggle(routine)"></v-btn>
                     </div>
                     <v-card-item>
                         <v-card-title>{{ routine.name }}</v-card-title>
@@ -69,9 +69,9 @@
                                 4.5 (413)
                             </div>
                         </v-row>
-                        <div class="creator my-4 text-subtitle-1" >
+                        <div class="creator my-4 text-subtitle-1">
                             <v-icon icon="mdi-account"></v-icon>
-                            <div class="creator-text">• {{ routine.creator }}</div>
+                            <div class="creator-text">• {{ routine.creator.username }}</div>
                         </div>
                         <div class="overflow">{{ routine.description }}</div>
                     </v-card-text>
@@ -101,20 +101,48 @@ import ImageWithFavIcon from '@/components/ImageWithFavIcon.vue';
 
 const loading = ref(false)
 const routineStore = useRoutineStore()
-
-
-function getImageUrl(name) {
-    return new URL(`../assets/${name}`, import.meta.url).href
-}
+const model = ref([]);
+const routines = ref([])
 
 onBeforeMount(() => {
     loading.value = true
-    routineStore.getRoutines()
-    routineStore.getRoutines()
+    getRoutines()
     loading.value = false
 })
 
-const model = ref([]);
+async function getRoutines() {
+    loading.value = true
+    const result = await routineStore.getRoutines()
+    if (result.success) {
+        for (let i = 0; i < result.data.totalCount; i++) {
+            const routine = result.data.content[i]
+            routines.value.push({
+                id: routine.id,
+                name: routine.name,
+                img: routine.metadata.image,
+                category: routine.category,
+                description: routine.detail,
+                creator: routine.user,
+                difficulty: routine.difficulty,
+                isPublic: routine.isPublic,
+                fav: routine.metadata.fav,
+                // date: routine.date,
+                // score: routine.score,
+            })
+        }
+    }
+    loading.value = false
+}
+
+async function toggle(routine) {
+    routine.fav = !routine.fav
+    const result = await routineStore.changeRoutine(routine);
+    if (!result.success) {
+        routine.fav = !routine.fav
+        // todo tirar error
+    }
+}
+
 </script>
 
 <script>
@@ -134,57 +162,57 @@ export default {
     padding-left: 20px;
 }
 
-.cont{
-    position:relative;
+.cont {
+    position: relative;
     width: 100%;
- }
+}
 
- .image{
+.image {
     width: 100%;
- }
+}
 
- .heart{
-     position: absolute;
-     top: 17%;
-     left: 85%;
-     transform: translate(-50%, -50%);
-     -ms-transform: translate(-50%, -50%);
-     color: #000000;
-     padding: 12px 24px;
-     border: none;
-     cursor: pointer;
- }
+.heart {
+    position: absolute;
+    top: 17%;
+    left: 85%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    color: #000000;
+    padding: 12px 24px;
+    border: none;
+    cursor: pointer;
+}
 
 
- .detail{
-     width: 100%;
-     position: absolute;
-     bottom: 1%;
- }
+.detail {
+    width: 100%;
+    position: absolute;
+    bottom: 1%;
+}
 
- .v-btn{
-     color: #000000;
- }
+.v-btn {
+    color: #000000;
+}
 
- .overflow{
-     overflow: hidden;
-     text-overflow: ellipsis;
-     max-width: 700px;
-     display: -webkit-box;
-     -webkit-line-clamp: 3; /* number of lines to show */
-     -webkit-box-orient: vertical;
- }
+.overflow {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 700px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* number of lines to show */
+    -webkit-box-orient: vertical;
+}
 
-    .creator{
-        display: flex;
-        align-items: center;
-        margin-top: 10px;
-    }
+.creator {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
 
-    .creator-text{
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 200px;
-    }
+.creator-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+}
 </style>

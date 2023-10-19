@@ -10,41 +10,53 @@
                         </v-row>
                         <v-row>
                             <v-col>
-                            <v-card width="100%">
-                                <div class="cont">
-                                    <v-img
-                                        src="@/assets/routine1.jpg"
+                                <v-card width="100%">
+                                    <div class="cont">
+                                        <v-img
+                                            src="@/assets/routine1.jpg"
 
-                                        height="300px"
-                                        cover/>
-                                    <v-btn class="heart" :icon="isSelected ? 'mdi-heart' : 'mdi-heart-outline'"></v-btn>
-                                </div>
+                                            height="300px"
+                                            cover/>
+                                        <v-btn class="heart"
+                                               :icon="isSelected ? 'mdi-heart' : 'mdi-heart-outline'"></v-btn>
+                                    </div>
 
-                            </v-card>
+                                </v-card>
                             </v-col>
                             <v-col>
                                 <div class="texto">
-                                    <v-row class ="filastext"><v-icon icon="mdi-account" color="black"></v-icon><h3> • Creador: traer dinamicamente o pasar por parametro</h3></v-row>
+                                    <v-row class="filastext">
+                                        <v-icon icon="mdi-account" color="black"></v-icon>
+                                        <h3> • Creador: traer dinamicamente o pasar por parametro</h3></v-row>
 
-                                    <v-row class ="filastext"><v-icon icon="mdi-star" color="black"></v-icon> <h3> • Puntuación: traer dinamicamente o pasar por parametro</h3></v-row>
-                                    <v-row class ="filastext"><v-icon icon="mdi-alarm" color="black"></v-icon><h3> • Duración: traer dinamicamente o pasar por parametro</h3></v-row>
-                                    <v-row class ="filastext"><v-icon icon="mdi-dumbbell" color="black"></v-icon><h3> • Equipamiento necesario: traer dinamicamente o pasar por parametro</h3></v-row>
-                                    <v-row class ="filastext"><v-icon icon="mdi-chart-line" color="black"></v-icon><h3> • Dificultad: traer dinamicamente o pasar por parametro</h3></v-row>
+                                    <v-row class="filastext">
+                                        <v-icon icon="mdi-star" color="black"></v-icon>
+                                        <h3> • Puntuación: traer dinamicamente o pasar por parametro</h3></v-row>
+                                    <v-row class="filastext">
+                                        <v-icon icon="mdi-alarm" color="black"></v-icon>
+                                        <h3> • Duración: traer dinamicamente o pasar por parametro</h3></v-row>
+                                    <v-row class="filastext">
+                                        <v-icon icon="mdi-dumbbell" color="black"></v-icon>
+                                        <h3> • Equipamiento necesario: traer dinamicamente o pasar por parametro</h3>
+                                    </v-row>
+                                    <v-row class="filastext">
+                                        <v-icon icon="mdi-chart-line" color="black"></v-icon>
+                                        <h3> • Dificultad: traer dinamicamente o pasar por parametro</h3></v-row>
                                 </div>
                                 <div class="botones">
                                     <v-row>
                                         <v-col>
 
-                                            <v-btn class="compartir" prepend-icon="mdi-share-variant"> Compartir  </v-btn>
+                                            <v-btn class="compartir" prepend-icon="mdi-share-variant"> Compartir</v-btn>
                                         </v-col>
 
                                         <v-col>
 
-                                            <v-btn class="comenzar" prepend-icon="mdi-play-circle-outline"> Comenzar  </v-btn>
+                                            <v-btn class="comenzar" prepend-icon="mdi-play-circle-outline"> Comenzar
+                                            </v-btn>
                                         </v-col>
                                     </v-row>
                                 </div>
-
 
 
                             </v-col>
@@ -58,7 +70,7 @@
         </v-container>
     </v-card>
 
-<RoutineByCategories nombreRutina="category1"/>
+    <RoutineByCategories nombreRutina="category1"/>
 </template>
 
 
@@ -82,36 +94,37 @@ export default {
     padding: 20px;
     display: inline-block;
 }
+
 .fondo {
     padding-bottom: 50px;
 }
 
-.comenzar{
+.comenzar {
 
     color: #000000;
     background-color: #8efd00;
-    margin-right : 10px;
-    margin-left : 10px;
+    margin-right: 10px;
+    margin-left: 10px;
 }
 
-.compartir{
+.compartir {
     color: #8efd00;
     background-color: #000000;
-    margin-right : 10px;
-    margin-left : 10px;
+    margin-right: 10px;
+    margin-left: 10px;
 }
 
-.cont{
-    position:relative;
+.cont {
+    position: relative;
     width: 100%;
 }
 
-.image{
+.image {
     width: 100%;
     height: auto;
 }
 
-.heart{
+.heart {
     position: absolute;
     top: 10%;
     left: 95%;
@@ -123,26 +136,27 @@ export default {
     cursor: pointer;
 }
 
-.texto{
+.texto {
     padding-top: 20px;
     padding-left: 20px;
 }
 
-.botones{
+.botones {
     position: absolute;
-    left:70%;
-    top:75%;
+    left: 70%;
+    top: 75%;
 }
 
-h3{
+h3 {
     font-family: Montserrat, sans-serif;
 
     font-size: 100%;
     color: #000000;
     display: inline-block;
 }
-.filastext{
-    padding-top:15px;
+
+.filastext {
+    padding-top: 15px;
 }
 
 </style>
