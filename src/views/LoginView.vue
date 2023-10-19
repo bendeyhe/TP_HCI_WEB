@@ -16,19 +16,11 @@
                 prepend-inner-icon="mdi-account-outline"
                 variant="outlined"
                 v-model="username"
-                :disabled="loading"
+                :disabled="loading || passedUsername"
             ></v-text-field>
 
             <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
                 Contraseña
-                <!--
-                <a
-                    href="#"
-                    rel="noopener noreferrer"
-                    target="_blank"
-                >
-                    ¿Olvidó su contraseña?</a>
-                    -->
             </div>
 
             <v-text-field
@@ -94,7 +86,7 @@
 
 
 <script setup>
-import {ref} from 'vue';
+import {onBeforeMount, ref} from 'vue';
 import {useRouter, useRoute, RouterLink} from 'vue-router'
 import {useUserStore} from '@/stores/userStore'
 import AppBarWithoutSearch from "@/components/AppBarWithoutSearch.vue";
@@ -111,6 +103,14 @@ const successMessage = ref('Usuario logueado con éxito')
 const errorMessage = ref('Error al loguear')
 const formErrors = ref([])
 const loading = ref(false);
+const passedUsername = ref(false)
+
+onBeforeMount(() => {
+    if (route.query.username) {
+        passedUsername.value = true;
+        username.value = route.query.username;
+    }
+});
 
 const validateForm = () => {
     formErrors.value = [];
@@ -140,7 +140,6 @@ async function loginUser() {
             await router.push({path: redirectUrl})
         }
     }
-
 }
 
 async function showSuccessAlert(message) {
@@ -171,24 +170,12 @@ async function showErrorAlert(message) {
 
 
 <script>
-
-import {mapState, mapActions} from "pinia"
 import {useUserStore} from "@/stores/userStore";
 
 export default {
     data: () => ({
         visible: false,
     }),
-    /*
-    computed: {
-        ...mapState(useUserStore, {
-            $user: state => state.user,
-        }),
-        ...mapState(useUserStore, {
-            $isLoggedIn: 'isLoggedIn'
-        }),
-    },
-     */
 }
 </script>
 

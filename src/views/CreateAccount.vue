@@ -104,7 +104,7 @@
 </template>
 
 <script setup>
-import {ref} from 'vue';
+import {onBeforeMount, ref} from 'vue';
 import {useRouter, useRoute, RouterLink} from 'vue-router'
 import {useUserStore} from "@/stores/userStore";
 import AppBarWithoutSearch from "@/components/AppBarWithoutSearch.vue";
@@ -124,7 +124,6 @@ const successMessage = ref('Usuario registrado con éxito')
 const errorMessage = ref('Error al registrar usuario')
 const formErrors = ref([])
 const loading = ref(false);
-
 
 const validateForm = () => {
     formErrors.value = [];
@@ -148,13 +147,15 @@ async function register() {
             result = await userStore.register(username.value, password.value, email.value);
             if (result.success) {
                 userStore.setToken(result.token);
-                userStore.setMail(email);
-                await showSuccessAlert('Su usuario fue registrado con éxito y en casilla de' +
-                    ' email: ' + email.value + ' recibirá un mensaje para verificar su cuenta.');
-                await router.push({path: '/validate'})
+                userStore.setMail(email.value);
+                //await showSuccessAlert('Su usuario fue registrado con éxito y en casilla de' +
+                //    ' email: ' + email.value + ' recibirá un mensaje para verificar su cuenta.');
+                await router.push({path: '/validate', query: {email: email.value, username: username.value}})
             } else {
                 loading.value = false;
-                if (result.details[0].includes('username'))
+                if (result.details[0].includes('email') && result.details[0].includes('validation'))
+                    await showErrorAlert('La dirección de correo debe ser válida.');
+                else if (result.details[0].includes('username'))
                     await showErrorAlert('Ya hay un usuario registrado con el nombre: ' + username.value);
                 else if (result.details[0].includes('email'))
                     await showErrorAlert('Ya hay un usuario registrado con el email: ' + email.value);

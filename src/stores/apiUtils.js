@@ -29,7 +29,11 @@ async function makeApiCall(apiEndpoint, data = null, token = null) {
         error: null
     };
     if (response.ok) {
-        result.data = await response.json();
+        try{
+            result.data = await response.json();
+        } catch (e) {
+            result.data = null;
+        }
     } else {
         const errorData = await response.json();
         result.error = errorData.error;

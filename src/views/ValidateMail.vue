@@ -16,7 +16,7 @@
                 prepend-inner-icon="mdi-email-outline"
                 variant="outlined"
                 v-model="email"
-                :disabled="loading"
+                :disabled="loading || passedEmail"
             ></v-text-field>
 
             <div class="text-subtitle-1 text-medium-emphasis">Código de verificación</div>
@@ -74,6 +74,7 @@ import {useRouter, useRoute, RouterLink} from 'vue-router'
 import {useUserStore} from '@/stores/userStore'
 import AppBar from '@/components/AppBar.vue'
 import AppBarWithoutSearch from "@/components/AppBarWithoutSearch.vue";
+import loginView from "@/views/LoginView.vue";
 
 const userStore = useUserStore()
 
@@ -87,6 +88,16 @@ const successMessage = ref('Usuario logueado con éxito')
 const errorMessage = ref('Error al loguear')
 const formErrors = ref([])
 const loading = ref(false);
+const passedEmail = ref(false)
+const username = ref('')
+
+onBeforeMount(() => {
+    if (route.query.email && route.query.username) {
+        passedEmail.value = true;
+        email.value = route.query.email;
+        username.value = route.query.username;
+    }
+});
 
 const validateForm = () => {
     formErrors.value = [];
@@ -105,12 +116,13 @@ async function validate() {
     } else {
         loading.value = true;
         const result = await userStore.verify_email(email.value, code.value);
-        if (result.status !== 200) {
+        if (result.success) {
+            loading.value = false;
+            if(passedEmail.value)
+                await router.push({path: '/login', query: {username: username.value}});
+        } else {
             loading.value = false;
             await showErrorAlert('El código ingresado es incorrecto.');
-        } else {
-            await showSuccessAlert('Su mail fue validado con éxito.');
-            await router.push({path: '/login'})
         }
     }
 
