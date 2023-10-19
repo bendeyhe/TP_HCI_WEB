@@ -81,8 +81,12 @@ export const useUserStore = defineStore('login', {
 
 
         // POST: /users
-        async register(user, pwd, email) {
-            const data = {'username': user, 'password': pwd, 'email': email};
+        async register(user, pwd, email, firstName, lastName, gender) {
+            const data = {
+                'username': user, 'password': pwd,
+                'email': email, 'firstName': firstName,
+                'lastName': lastName, 'gender': gender
+            };
             return await makeApiCall(this.apiEndpoints.register, data);
         },
 
@@ -113,11 +117,16 @@ export const useUserStore = defineStore('login', {
         },
 
         // PUT: /users/current
-        async modifyCurrentUser(firstName, lastName, gender, birthdate, phone, avatarUrl) {
-            const data = {
-                'firstName': firstName, 'lastName': lastName,
-                'gender': gender, 'birthdate': birthdate, 'phone': phone, 'avatarUrl': avatarUrl
-            };
+        async modifyCurrentUser(firstName, lastName, gender) {
+            const data = {};
+            if (firstName != null)
+                data['firstName'] = firstName;
+            if (lastName != null)
+                data['lastName'] = lastName;
+            if (gender != null && gender !== "")
+                data['gender'] = gender;
+            if(Object.keys(data).length === 0)
+                return null;
             return await makeApiCall(this.apiEndpoints.modifyCurrentUser, data, this.token);
         },
 

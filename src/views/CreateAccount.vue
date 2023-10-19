@@ -9,11 +9,31 @@
             max-width="448"
             rounded="lg"
         >
+            <div class="text-subtitle-1 text-medium-emphasis">Nombre</div>
+            <v-text-field
+                density="compact"
+                placeholder="Ingresá tu nombre"
+                prepend-inner-icon="mdi-account-outline"
+                variant="outlined"
+                v-model="firstName"
+                :disabled="loading"
+            ></v-text-field>
+
+            <div class="text-subtitle-1 text-medium-emphasis">Apellido</div>
+            <v-text-field
+                density="compact"
+                placeholder="Ingresá tu apellido"
+                prepend-inner-icon="mdi-account"
+                variant="outlined"
+                v-model="lastName"
+                :disabled="loading"
+            ></v-text-field>
+
             <div class="text-subtitle-1 text-medium-emphasis">Nombre de Usuario</div>
             <v-text-field
                 density="compact"
                 placeholder="Ingresá tu nombre de usuario"
-                prepend-inner-icon="mdi-account-outline"
+                prepend-inner-icon="mdi-account-box"
                 variant="outlined"
                 v-model="username"
                 :rules="[(v) => !!v || 'Campo requerido', (v) => v.length >= 4 || 'Debe tener al menos 4 caracteres']"
@@ -48,6 +68,16 @@
                 :disabled="loading"
             ></v-text-field>
 
+            <div class="text-subtitle-1 text-medium-emphasis">Género</div>
+            <v-select
+                density="compact"
+                variant="outlined"
+                v-model="gender"
+                :items="genderOptions"
+                prepend-inner-icon="mdi-human-male-female"
+                :disabled="loading"
+            ></v-select>
+
             <v-alert
                 v-if="successAlert"
                 color="success"
@@ -76,9 +106,12 @@
 
             <v-card-actions>
                 <v-btn
-                    class="cancel"
                     variant="text"
-                    @click="resetForm">
+                    @click="resetForm"
+                    style="background-color: antiquewhite; border-color: #8efd00; color: #000000;"
+                >
+                    <v-icon>mdi-cancel</v-icon>
+                    &nbsp;
                     Cancelar
                 </v-btn>
                 <v-spacer></v-spacer>
@@ -95,6 +128,8 @@
                         ></v-progress-circular>
                     </template>
                     <template v-else>
+                        <v-icon>mdi-account-plus</v-icon>
+                        &nbsp;
                         REGISTRARSE
                     </template>
                 </v-btn>
@@ -116,8 +151,14 @@ const route = useRoute()
 const router = useRouter()
 
 const username = ref('')
+const firstName = ref('')
+const lastName = ref('')
 const password = ref('')
 const email = ref('')
+const genderOptions = ['Masculino', 'Femenino', 'Otro'];
+const genderOptionsEnglish = ['male', 'female', 'other'];
+const gender = ref('');
+const genderEnglish = ref('');
 const successAlert = ref(false)
 const errorAlert = ref(false)
 const successMessage = ref('Usuario registrado con éxito')
@@ -128,9 +169,9 @@ const loading = ref(false);
 const validateForm = () => {
     formErrors.value = [];
     if (!username.value || username.value.length < 4)
-        formErrors.value.push('El nombre de usuario es requerido y debe tener al menos 4 caracteres.\n');
+        formErrors.value.push('El nombre de usuario es obligatorio y debe tener al menos 4 caracteres.\n');
     if (!password.value || password.value.length < 3)
-        formErrors.value.push('La contraseña es requerida y debe tener al menos 3 caracteres.\n');
+        formErrors.value.push('La contraseña es obligatorio y debe tener al menos 3 caracteres.\n');
     if (!email.value || !/.+@.+\..+/.test(email.value))
         formErrors.value.push('La dirección de correo debe ser válida.\n');
 };
@@ -144,7 +185,8 @@ async function register() {
             await showErrorAlert(error);
         } else {
             loading.value = true;
-            result = await userStore.register(username.value, password.value, email.value);
+            convertToEnglishGender()
+            result = await userStore.register(username.value, password.value, email.value, firstName.value, lastName.value, genderEnglish.value);
             if (result.success) {
                 userStore.setToken(result.token);
                 userStore.setMail(email.value);
@@ -197,7 +239,18 @@ function resetForm() {
     username.value = ''
     password.value = ''
     email.value = ''
+    firstName.value = ''
+    lastName.value = ''
+    gender.value = ''
 }
+
+function convertToEnglishGender() {
+    const index = genderOptions.indexOf(gender.value);
+    if (index !== -1) {
+        genderEnglish.value = genderOptionsEnglish[index];
+    }
+}
+
 
 </script>
 
@@ -218,12 +271,6 @@ export default {
 .registrarse {
     color: #8efd00;
     background-color: #000000;
-    margin-right: 10px;
-    margin-left: 10px;
-}
-
-.cancel {
-    color: #000000;
     margin-right: 10px;
     margin-left: 10px;
 }

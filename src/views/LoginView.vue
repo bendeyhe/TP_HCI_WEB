@@ -63,6 +63,8 @@
                     ></v-progress-circular>
                 </template>
                 <template v-else>
+                    <v-icon>mdi-login</v-icon>
+                    &nbsp;
                     Iniciar Sesión
                 </template>
             </v-btn>
@@ -130,8 +132,13 @@ async function loginUser() {
         loading.value = true;
         const result = await userStore.login(username.value, password.value);
         if (result.error || !result.success) {
+            if(result.details[0].includes('verified')){
+                await showErrorAlert('Debe verificar su cuenta antes de iniciar sesión');
+                await router.push({path: '/validate'})
+            }
+            else
+                await showErrorAlert('Usuario o contraseña incorrectos');
             loading.value = false;
-            await showErrorAlert('Usuario o contraseña incorrectos.');
         } else {
             userStore.setToken(result.data.token)
             userStore.updateToken(result.data.token, true)
