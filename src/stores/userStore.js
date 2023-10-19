@@ -1,24 +1,27 @@
 import {defineStore} from 'pinia'
 import {makeApiCall} from "@/stores/apiUtils";
-import storage from "@/storage/storage";
+import {API_BASE_URL} from "@/stores/apiUtils";
 
 const SECURITY_TOKEN_KEY = "security-token";
+
+const USER_B_URL = `${API_BASE_URL}/users`;
 
 export const useUserStore = defineStore('login', {
     state: () => ({
         token: "",
         user: null,
+        mail: null,
         apiEndpoints: {
-            getUsers: {path: '/users', requiresAuth: true, method: 'GET'},
-            register: {path: '/users', requiresAuth: false, method: 'POST'},
-            getUser: (userId) => ({path: `/users/${userId}`, requiresAuth: true, method: 'GET'}),
-            login: {path: '/users/login', requiresAuth: false, method: 'POST'},
-            sendVerification: {path: '/users/resend_verification', requiresAuth: false, method: 'POST'},
-            verify_email: {path: '/users/verify_email', requiresAuth: false, method: 'POST'},
-            logout: {path: '/users/logout', requiresAuth: true, method: 'POST'},
-            getCurrentUser: {path: '/users/current', requiresAuth: true, method: 'GET'},
-            modifyCurrentUser: {path: '/users/current', requiresAuth: true, method: 'PUT'},
-            deleteCurrentUser: {path: '/users/current', requiresAuth: true, method: 'DELETE'}
+            getUsers: {path: `${USER_B_URL}`, requiresAuth: true, method: 'GET'},
+            register: {path: USER_B_URL, requiresAuth: false, method: 'POST'},
+            getUser: (userId) => ({path: `${USER_B_URL}/${userId}`, requiresAuth: true, method: 'GET'}),
+            login: {path: `${USER_B_URL}/login`, requiresAuth: false, method: 'POST'},
+            sendVerification: {path: `${USER_B_URL}/resend_verification`, requiresAuth: false, method: 'POST'},
+            verify_email: {path: `${USER_B_URL}/verify_email`, requiresAuth: false, method: 'POST'},
+            logout: {path: `${USER_B_URL}/logout`, requiresAuth: true, method: 'POST'},
+            getCurrentUser: {path: `${USER_B_URL}/current`, requiresAuth: true, method: 'GET'},
+            modifyCurrentUser: {path: `${USER_B_URL}/current`, requiresAuth: true, method: 'PUT'},
+            deleteCurrentUser: {path: `${USER_B_URL}/current`, requiresAuth: true, method: 'DELETE'}
         }
     }),
     getters: {
@@ -27,6 +30,9 @@ export const useUserStore = defineStore('login', {
         },
         getUserState() {
             return this.user;
+        },
+        getMailState() {
+            return this.mail;
         },
         isLoggedIn() {
             return this.token != null;
@@ -41,6 +47,9 @@ export const useUserStore = defineStore('login', {
         },
         setUser(user) {
             this.user = user;
+        },
+        setMail(mail) {
+            this.mail = mail;
         },
         setToken(token) {
             this.token = token;

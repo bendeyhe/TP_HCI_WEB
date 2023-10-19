@@ -28,7 +28,7 @@
 
                                     <v-row class ="filastext"><v-icon icon="mdi-star" color="black"></v-icon> <h3> • Puntuación: traer dinamicamente o pasar por parametro</h3></v-row>
                                     <v-row class ="filastext"><v-icon icon="mdi-alarm" color="black"></v-icon><h3> • Duración: traer dinamicamente o pasar por parametro</h3></v-row>
-                                    <v-row class ="filastext"><v-icon icon="mdi-football" color="black"></v-icon><h3> • Equipamiento necesario: traer dinamicamente o pasar por parametro</h3></v-row>
+                                    <v-row class ="filastext"><v-icon icon="mdi-dumbbell" color="black"></v-icon><h3> • Equipamiento necesario: traer dinamicamente o pasar por parametro</h3></v-row>
                                     <v-row class ="filastext"><v-icon icon="mdi-chart-line" color="black"></v-icon><h3> • Dificultad: traer dinamicamente o pasar por parametro</h3></v-row>
                                 </div>
                                 <div class="botones">

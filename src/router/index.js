@@ -1,54 +1,53 @@
-import{createRouter, createWebHistory} from 'vue-router'
+import {createRouter, createWebHistory} from 'vue-router'
 /* aca importar para carga estática*/
 import HomeView from '@/views/HomeView.vue'
 import storage from '../storage/storage.js'
 import {useUserStore} from "@/stores/userStore.js";
 
 const routes = [
-
     {
         path: '/',
         name: 'home',
-        meta: { requiresAuth: false },
+        meta: {requiresAuth: false},
         component: HomeView
     },
-
     {
         path: '/example',
         name: 'example',
-        meta: { requiresAuth: true },
+        meta: {requiresAuth: true},
         component: () => import('@/components/ExampleComponent.vue')
-      /* de esta manera se carga dinámicamente, bajo demanda */
+        /* de esta manera se carga dinámicamente, bajo demanda */
     },
-
     {
         path: '/my-profile',
         name: 'my-profile',
-        meta: { requiresAuth: true },
+        meta: {requiresAuth: true},
         component: () => import('@/views/MyProfile.vue')
     },
-
     {
         path: '/create-routine',
         name: 'create-routine',
-        meta: { requiresAuth: true },
+        meta: {requiresAuth: true},
         component: () => import('@/views/CreateRoutine.vue')
     },
-
     {
         path: '/login',
         name: 'login',
-        meta: { requiresAuth: false },
+        meta: {requiresAuth: false},
         component: () => import('@/views/LoginView.vue')
     },
-
     {
         path: '/create-account',
         name: 'create-account',
         meta: {requiresAuth: false},
         component: () => import('@/views/CreateAccount.vue')
     },
-
+    {
+        path: '/validate',
+        name: 'validate',
+        meta: {requiresAuth: false},
+        component: () => import('@/views/ValidateMail.vue')
+    },
     {
         path: "/routine-details",
         //path: "/routine-details/:slug", todo: asi es como tiene que quedar
@@ -68,11 +67,10 @@ const routes = [
             }//todo: asi es como tiene que quedar
         }*/
     },
-
     {
         path: '/:pathMatch(.*)*',
         name: 'not-found',
-        meta: { requiresAuth: false },
+        meta: {requiresAuth: false},
         component: () => import('@/views/NotFound.vue')
     }
 ]
@@ -86,9 +84,9 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
 
-    if(to.matched.some(route => route.meta.requiresAuth)){
-        if(useUserStore().getTokenState === null || useUserStore().getTokenState === undefined || useUserStore().getTokenState === ''){
-            next({name: 'login', query: {redirect: to.fullPath }})
+    if (to.matched.some(route => route.meta.requiresAuth)) {
+        if (useUserStore().getTokenState === null || useUserStore().getTokenState === undefined || useUserStore().getTokenState === '') {
+            next({name: 'login', query: {redirect: to.fullPath}})
         } else {
             next()
         }

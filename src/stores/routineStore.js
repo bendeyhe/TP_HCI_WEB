@@ -1,34 +1,60 @@
-import { ref } from 'vue'
-import { defineStore } from 'pinia'
-import { useUserStore } from './userStore';
+import {ref} from 'vue'
+import {defineStore} from 'pinia'
+import {useUserStore} from './userStore';
+import {makeApiCall} from "@/stores/apiUtils";
+import {API_BASE_URL} from "@/stores/apiUtils";
 
-const SECURITY_TOKEN_KEY = "security-token";
+const ROUT_B_URL = `${API_BASE_URL}/routines`;
 
 export const useRoutineStore = defineStore('routine', {
     state: () => ({
-        routines: [{id: 1, name: 'Rutina de Espalda', creator: 'Jorge Almiron', description: 'Para tener alas en vez de dorsales', img:'routine1.jpg'},
-        {id: 2, name: 'Routina Biceps', creator: 'Nate Deyheralde', description: 'Para poder llevar mas bolsas de supermercado a la vez', img:'routine2.jpg'},
-        {id: 3, name: 'Routina de Piernas', creator: 'Pitufo Mutz', description: 'No vas a poder caminar despues de realizarla!', img:'routine3.jpg'},
-        {id: 4, name: 'Routina aerobica', creator: 'Robert Ves Losada', description: 'Para no cansarte en el partido', img:'routine4.jpg'},
-        {id: 5, name: 'Routina de hombros', creator: 'The Rock Candisano', description: 'Para dejar de estar chico', img:'routine5.jpg'},],
-        
+        routines: [{
+            id: 1,
+            name: 'Rutina de Espalda',
+            creator: 'Jorge Almiron',
+            description: 'Para tener alas en vez de dorsales',
+            img: 'routine1.jpg'
+        },
+            {
+                id: 2,
+                name: 'Routina Biceps',
+                creator: 'Nate Deyheralde',
+                description: 'Para poder llevar mas bolsas de supermercado a la vez',
+                img: 'routine2.jpg'
+            },
+            {
+                id: 3,
+                name: 'Routina de Piernas',
+                creator: 'Pitufo Mutz',
+                description: 'No vas a poder caminar despues de realizarla!',
+                img: 'routine3.jpg'
+            },
+            {
+                id: 4,
+                name: 'Routina aerobica',
+                creator: 'Robert Ves Losada',
+                description: 'Para no cansarte en el partido',
+                img: 'routine4.jpg'
+            },
+            {
+                id: 5,
+                name: 'Routina de hombros',
+                creator: 'The Rock Candisano',
+                description: 'Para dejar de estar chico',
+                img: 'routine5.jpg'
+            },],
+
+
         apiEndpoints: {
-            getRoutines: {path: '/routines', requiresAuth: true, method: 'GET'},
-            addRoutine: {path: '/routines', requiresAuth: true, method: 'POST'},
-            getRoutine: (routineId) => ({path: `/routines/${routineId}`, requiresAuth: true, method: 'GET'}),
-            changeRoutine: (routineId)=>({path: `/routines/${routineId}`, requiresAuth: true, method: 'PUT'}),
-            deleteRoutine:(routineId)=>({path: `/routines/${routineId}`, requiresAuth: true, method: 'DELETE'})
+            getRoutines: {path: `${ROUT_B_URL}`, requiresAuth: true, method: 'GET'},
+            addRoutine: {path: `${ROUT_B_URL}`, requiresAuth: true, method: 'POST'},
+            getRoutine: (routineId) => ({path: `${ROUT_B_URL}/${routineId}`, requiresAuth: true, method: 'GET'}),
+            changeRoutine: (routineId) => ({path: `${ROUT_B_URL}/${routineId}`, requiresAuth: true, method: 'PUT'}),
+            deleteRoutine: (routineId) => ({path: `${ROUT_B_URL}/${routineId}`, requiresAuth: true, method: 'DELETE'})
         }
     }),
 
     actions: {
-         
-        initialize() {
-            const token = localStorage.getItem(SECURITY_TOKEN_KEY);
-            if (token) {
-                this.setToken(token);
-            }
-        },
         async getRoutines() {
             return await makeApiCall(this.apiEndpoints.getRoutines, null, this.token);
         },
@@ -55,28 +81,24 @@ export const useRoutineStore = defineStore('routine', {
 });
 
 
+/*esto no va a andar pero es algo asi la idea, habria que pasarle la categoria que queremos obtener
+const getRoutinesByCategory = computed(() => routines.value.filter((p) => p.category === category))
+*/
+/*const routines = ref([])
+fetchRoutines(){
+        return [
+            {id: 1, name: 'Rutina de Espalda', creator: 'Jorge Almiron', description: 'Para tener alas en vez de dorsales', img:'routine1.jpg'},
+            {id: 2, name: 'Routina Biceps', creator: 'Nate Deyheralde', description: 'Para poder llevar mas bolsas de supermercado a la vez', img:'routine2.jpg'},
+            {id: 3, name: 'Routina de Piernas', creator: 'Pitufo Mutz', description: 'No vas a poder caminar despues de realizarla!', img:'routine3.jpg'},
+            {id: 4, name: 'Routina aerobica', creator: 'Robert Ves Losada', description: 'Para no cansarte en el partido', img:'routine4.jpg'},
+            {id: 5, name: 'Routina de hombros', creator: 'The Rock Candisano', description: 'Para dejar de estar chico', img:'routine5.jpg'},
+        ]
+    },
 
 
+function setRoutines(routinesToSet){
+    routines.value = routinesToSet
+}
 
-
-    /*esto no va a andar pero es algo asi la idea, habria que pasarle la categoria que queremos obtener
-    const getRoutinesByCategory = computed(() => routines.value.filter((p) => p.category === category))
-    */
-    /*const routines = ref([])
-    fetchRoutines(){
-            return [
-                {id: 1, name: 'Rutina de Espalda', creator: 'Jorge Almiron', description: 'Para tener alas en vez de dorsales', img:'routine1.jpg'},
-                {id: 2, name: 'Routina Biceps', creator: 'Nate Deyheralde', description: 'Para poder llevar mas bolsas de supermercado a la vez', img:'routine2.jpg'},
-                {id: 3, name: 'Routina de Piernas', creator: 'Pitufo Mutz', description: 'No vas a poder caminar despues de realizarla!', img:'routine3.jpg'},
-                {id: 4, name: 'Routina aerobica', creator: 'Robert Ves Losada', description: 'Para no cansarte en el partido', img:'routine4.jpg'},
-                {id: 5, name: 'Routina de hombros', creator: 'The Rock Candisano', description: 'Para dejar de estar chico', img:'routine5.jpg'},
-            ]
-        },
-    
-
-    function setRoutines(routinesToSet){
-        routines.value = routinesToSet
-    }
-
-    return { routines, fetchRoutines, setRoutines  }
+return { routines, fetchRoutines, setRoutines  }
 })*/

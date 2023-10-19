@@ -5,10 +5,10 @@
 // token para autorización:
 // bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIzLCJpYXQiOjE2OTc1NDE0Mjg1MzUsImV4cCI6MTY5NzU0NDAyMDUzNX0.HJj7VF4dsO3yMa-ceEuOIu63xdTopxhWubnUTIbYN5M
 
-const API_BASE_URL = "http://localhost:8080/api";
+export const API_BASE_URL = "http://localhost:8080/api";
 
 async function makeApiCall(apiEndpoint, data = null, token = null) {
-    const url = `${API_BASE_URL}${apiEndpoint.path}`;
+    const url = `${apiEndpoint.path}`;
     const headers = {
         'Content-Type': 'application/json; charset=utf-8'
     }

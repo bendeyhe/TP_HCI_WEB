@@ -1,6 +1,6 @@
 <template>
     <AppBarWithoutSearch/>
-    <h1>Inicio de Sesión</h1>
+    <h1>Validación de Mail</h1>
     <div class="login-box">
         <v-card
             class="mx-auto pt-6 pa-12 pb-8"
@@ -8,38 +8,25 @@
             max-width="448"
             rounded="lg"
         >
-            <div class="text-subtitle-1 text-medium-emphasis">Usuario</div>
+            <div class="text-subtitle-1 text-medium-emphasis">Mail</div>
 
             <v-text-field
                 density="compact"
-                placeholder="Ingresá tu usuario"
-                prepend-inner-icon="mdi-account-outline"
+                placeholder="Ingresá tu mail"
+                prepend-inner-icon="mdi-email-outline"
                 variant="outlined"
-                v-model="username"
+                v-model="email"
                 :disabled="loading"
             ></v-text-field>
 
-            <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
-                Contraseña
-                <!--
-                <a
-                    href="#"
-                    rel="noopener noreferrer"
-                    target="_blank"
-                >
-                    ¿Olvidó su contraseña?</a>
-                    -->
-            </div>
+            <div class="text-subtitle-1 text-medium-emphasis">Código de verificación</div>
 
             <v-text-field
-                :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
-                :type="visible ? 'text' : 'password'"
                 density="compact"
-                placeholder="Ingresá tu contraseña"
-                prepend-inner-icon="mdi-lock-outline"
+                placeholder="Ingresá el código"
+                prepend-inner-icon="mdi-account-outline"
                 variant="outlined"
-                v-model="password"
-                @click:append-inner="visible = !visible"
+                v-model="code"
                 :disabled="loading"
             ></v-text-field>
 
@@ -61,7 +48,7 @@
                 class="mb-8"
                 size="large"
                 variant="tonal"
-                @click="loginUser"
+                @click="validate"
             >
                 <template v-if="loading">
                     <v-progress-circular
@@ -71,21 +58,9 @@
                     ></v-progress-circular>
                 </template>
                 <template v-else>
-                    Iniciar Sesión
+                    VALIDAR
                 </template>
             </v-btn>
-            <RouterLink to="/create-account">
-                <v-card-text class="text-center">
-                    <a
-                        href="#"
-                        rel="noopener noreferrer"
-                        target="_blank"
-                    >
-                        Crear cuenta
-                        <v-icon icon="mdi-chevron-right"></v-icon>
-                    </a>
-                </v-card-text>
-            </RouterLink>
         </v-card>
     </div>
 
@@ -94,15 +69,16 @@
 
 
 <script setup>
-import {ref} from 'vue';
+import {onBeforeMount, ref} from 'vue';
 import {useRouter, useRoute, RouterLink} from 'vue-router'
 import {useUserStore} from '@/stores/userStore'
+import AppBar from '@/components/AppBar.vue'
 import AppBarWithoutSearch from "@/components/AppBarWithoutSearch.vue";
 
 const userStore = useUserStore()
 
-const username = ref('')
-const password = ref('')
+const email = ref('')
+const code = ref('')
 const route = useRoute()
 const router = useRouter()
 const successAlert = ref(false)
@@ -114,13 +90,13 @@ const loading = ref(false);
 
 const validateForm = () => {
     formErrors.value = [];
-    if (!username.value)
-        formErrors.value.push('El usuario es obligatorio. ');
-    if (!password.value)
-        formErrors.value.push('La contraseña es obligatoria.');
+    if (!email.value)
+        formErrors.value.push('El mail es obligatorio.');
+    if (!code.value)
+        formErrors.value.push('El código es obligatorio.');
 };
 
-async function loginUser() {
+async function validate() {
     validateForm();
     if (formErrors.value.length > 0) {
         const error = formErrors.value.join('');
@@ -128,16 +104,13 @@ async function loginUser() {
         loading.value = false;
     } else {
         loading.value = true;
-        const result = await userStore.login(username.value, password.value);
-        if (result.error || !result.success) {
+        const result = await userStore.verify_email(email.value, code.value);
+        if (result.status !== 200) {
             loading.value = false;
-            await showErrorAlert('Usuario o contraseña incorrectos.');
+            await showErrorAlert('El código ingresado es incorrecto.');
         } else {
-            userStore.setToken(result.data.token)
-            userStore.updateToken(result.data.token, true)
-            await showSuccessAlert('Usuario autenticado con éxito');
-            const redirectUrl = route.query.redirect || '/'
-            await router.push({path: redirectUrl})
+            await showSuccessAlert('Su mail fue validado con éxito.');
+            await router.push({path: '/login'})
         }
     }
 
@@ -163,7 +136,7 @@ async function showErrorAlert(message) {
         setTimeout(() => {
             errorAlert.value = false;
             resolve();
-        }, 1500);
+        }, 5000);
     });
 }
 
@@ -171,24 +144,12 @@ async function showErrorAlert(message) {
 
 
 <script>
-
-import {mapState, mapActions} from "pinia"
 import {useUserStore} from "@/stores/userStore";
 
 export default {
     data: () => ({
         visible: false,
     }),
-    /*
-    computed: {
-        ...mapState(useUserStore, {
-            $user: state => state.user,
-        }),
-        ...mapState(useUserStore, {
-            $isLoggedIn: 'isLoggedIn'
-        }),
-    },
-     */
 }
 </script>
 

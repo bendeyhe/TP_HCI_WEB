@@ -1,5 +1,5 @@
 <template>
-    <AppBar/>
+    <AppBarWithoutSearch/>
     <h1>Crear Cuenta</h1>
     <div class="register-box">
         <v-card
@@ -12,7 +12,7 @@
             <div class="text-subtitle-1 text-medium-emphasis">Nombre de Usuario</div>
             <v-text-field
                 density="compact"
-                placeholder="Ingresá tu Nombre de Usuario"
+                placeholder="Ingresá tu nombre de usuario"
                 prepend-inner-icon="mdi-account-outline"
                 variant="outlined"
                 v-model="username"
@@ -26,7 +26,7 @@
                 :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
                 :type="visible ? 'text' : 'password'"
                 density="compact"
-                placeholder="Ingresá tu Contraseña"
+                placeholder="Ingresá tu contraseña"
                 prepend-inner-icon="mdi-lock-outline"
                 variant="outlined"
                 v-model="password"
@@ -39,7 +39,7 @@
             <div class="text-subtitle-1 text-medium-emphasis">Dirección de Email</div>
             <v-text-field
                 density="compact"
-                placeholder="Ingresá tu Dirección de email"
+                placeholder="Ingresá tu dirección de email"
                 variant="outlined"
                 v-model="email"
                 prepend-inner-icon="mdi-email-outline"
@@ -106,8 +106,8 @@
 <script setup>
 import {ref} from 'vue';
 import {useRouter, useRoute, RouterLink} from 'vue-router'
-import AppBar from '@/components/AppBar.vue'
 import {useUserStore} from "@/stores/userStore";
+import AppBarWithoutSearch from "@/components/AppBarWithoutSearch.vue";
 
 
 const userStore = useUserStore()
@@ -148,16 +148,15 @@ async function register() {
             result = await userStore.register(username.value, password.value, email.value);
             if (result.success) {
                 userStore.setToken(result.token);
-                await showSuccessAlert('Su usuario fue registrado con éxito y en su casilla de email: ' +
-                    email.value +
-                    ' recibirá un mensaje para verificar su cuenta.');
-                const redirectUrl = route.query.redirect || '/'
-                await router.push({path: redirectUrl})
+                userStore.setMail(email);
+                await showSuccessAlert('Su usuario fue registrado con éxito y en casilla de' +
+                    ' email: ' + email.value + ' recibirá un mensaje para verificar su cuenta.');
+                await router.push({path: '/validate'})
             } else {
                 loading.value = false;
-                if(result.details[0].includes('username'))
+                if (result.details[0].includes('username'))
                     await showErrorAlert('Ya hay un usuario registrado con el nombre: ' + username.value);
-                else if(result.details[0].includes('email'))
+                else if (result.details[0].includes('email'))
                     await showErrorAlert('Ya hay un usuario registrado con el email: ' + email.value);
                 else
                     await showErrorAlert('Error en el registro: ' + result.error);
