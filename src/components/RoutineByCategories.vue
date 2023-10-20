@@ -10,7 +10,7 @@
             :max-visible="1"
         >
             <v-slide-group-item
-                v-for="routine in favourite ? favs : routines"
+                v-for="routine in favourite ? routineStore.getfavoriteRoutines() : routineStore.getAllRoutines()"
                 :key="routine.id"
             >
                 <!--  <v-card
@@ -23,6 +23,7 @@
   -->
                 <v-card
                     :loading="loading"
+                    
                     class="mx-auto my-12"
                     width="280"
                     height="400"
@@ -107,8 +108,9 @@ import ImageWithFavIcon from "@/components/ImageWithFavIcon.vue";
 const loading = ref(false);
 const routineStore = useRoutineStore();
 const model = ref([]);
-const routines = ref([]);
-const favs = ref([]);
+
+
+
 onBeforeMount(() => {
     getRoutines();
     getFavs();
@@ -121,7 +123,8 @@ async function getFavs() {
         for (let i = 0; i < result.data.totalCount; i++) {
             if (result.data.content[i].metadata.fav) {
                 const routine = result.data.content[i];
-                favs.value.push({
+                debugger;
+                routineStore.addFavoriteRoutine({
                     id: routine.id,
                     name: routine.name,
                     img: routine.metadata.image,
@@ -146,7 +149,7 @@ async function getRoutines() {
     if (result.success) {
         for (let i = 0; i < result.data.totalCount; i++) {
             const routine = result.data.content[i];
-            routines.value.push({
+            routineStore.addRoutineArray({
                 id: routine.id,
                 name: routine.name,
                 img: routine.metadata.image,

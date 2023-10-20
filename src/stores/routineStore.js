@@ -22,10 +22,27 @@ export const useRoutineStore = defineStore('routine', {
 
     actions: {
         getfavoriteRoutines() {
-            return this.favoriteRoutines;
+            return this.favoriteRoutines.values();
         },
         addFavoriteRoutine(routine) {
+            for(let i = 0; i < this.favoriteRoutines.length; i++){
+                if(this.favoriteRoutines[i].id === routine.id){
+                    return;
+                }
+            }
             this.favoriteRoutines.push(routine);
+            
+        },
+        getAllRoutines() {
+            return this.routines.values();
+        },
+        addRoutineArray(routine) {
+            for(let i = 0; i < this.routines.length; i++){
+                if(this.routines[i].id === routine.id){
+                    return;
+                }
+            }
+            this.routines.push(routine);
         },
         removeFavoriteRoutine(routine) {
             const index = this.favoriteRoutines.findIndex(favRoutine => favRoutine.id === routine.id);
