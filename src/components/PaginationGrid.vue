@@ -1,5 +1,5 @@
 <template>
-    <div style="background-color: lightgray;">
+    <div >
       <v-row class="width">
       <v-col cols="4" v-for="(routine, index) in visibleRoutines"
              :key="routine.index"
@@ -84,7 +84,7 @@
       </v-row>
       <v-spacer></v-spacer>
       <v-pagination v-if="amountPages > 1"
-                    v-model="page"
+                    v-model="pageNumber"
                     :length="amountPages"
                     circle
                     @next="nextPage"
@@ -103,7 +103,7 @@ import { useRoutineStore } from '@/stores/routineStore.js';
 
 const page = ref(1);
 const pageNumber = ref(0);
-const pageSize = ref(8);
+const pageSize = ref(9);
 const visibleRoutines = ref([]);
 const routineArray = ref([]);
 const amountPages = computed(() => Math.ceil(parseInt(routineArray.value.length) / pageSize.value));
@@ -141,6 +141,7 @@ async function getFavs() {
 }
 
  async function updateVisibleRoutines() {
+    debugger;
     await getFavs();
     visibleRoutines.value = Array.from(routineStore.getfavoriteRoutines()).slice(
     pageNumber.value * pageSize.value,
@@ -158,15 +159,14 @@ function updatePage(PageNumber) {
 }
 
 function nextPage() {
-  if (pageNumber.value + 1 < amountPages.value) {
+  if (pageNumber.value + 1 <= amountPages.value) {
     updateVisibleRoutines();
   }
 }
 
 function previousPage() {
-  if (pageNumber.value > 0) {
     updateVisibleRoutines();
-  }
+
 }
 
 function inputPage(number) {
@@ -180,7 +180,7 @@ onBeforeMount(() => {
   updateVisibleRoutines();
 });
 
-/*watch(routineArray, () => {
+/*watch(page, () => {
   updateVisibleRoutines();
 });*/
 </script>

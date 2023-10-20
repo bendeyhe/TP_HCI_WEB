@@ -3,9 +3,9 @@
     <div  class="total-height">
       <div class="bottom-heigh d-flex  width">
         <div  class=" general-area width ">
-          <div class="pt-10 text flex-column">
-            <div class="width">
-              <h1 class="pb-10">Favourite Routines</h1>
+          <div class="pt-10 text flex-column" >
+            <div class="width" >
+              <h1 class="pb-10" >Favourite Routines</h1>
             </div>
           <div v-if="routineStore.getfavoriteRoutines() === null || routineStore.getfavoriteRoutines() === 0" class="flex-container">
             <h2>Looks like you haven't liked any routines. I'm sure you'll find one you enjoy! ʕ•ᴥ•ʔ</h2>
