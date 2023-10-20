@@ -23,10 +23,10 @@
 
         <v-main>
             <!--todo quizas aca esta bueno hacer un v-for?-->
-            <RoutineByCategories :nombreRutina="category1"/>
-            <RoutineByCategories :nombreRutina="category2"/>
-            <RoutineByCategories :nombreRutina="category3"/>
-            <RoutineByCategories :nombreRutina="category4"/>
+            <RoutineByCategories :nombreRutina="category1" :favourite="false"/>
+            <RoutineByCategories :nombreRutina="category2" :favourite="false"/>
+            <RoutineByCategories :nombreRutina="category3" :favourite="true"/>
+            <RoutineByCategories :nombreRutina="category4" :favourite="false"/>
 
         </v-main>
     </v-app>

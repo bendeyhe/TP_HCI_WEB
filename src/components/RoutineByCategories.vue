@@ -10,7 +10,8 @@
             :max-visible="1"
         >
             <v-slide-group-item
-                v-for="routine in routines" :key="routine.id"
+                v-for="routine in favourite ? favs : routines"
+                :key="routine.id"
             >
                 <!--  <v-card
                   color="grey-lighten-1"
@@ -25,7 +26,6 @@
                     class="mx-auto my-12"
                     width="280"
                     height="400"
-
                 >
                     <template v-slot:loader="{ isActive }">
                         <v-progress-linear
@@ -35,10 +35,20 @@
                         ></v-progress-linear>
                     </template>
                     <div class="cont">
-                        <img class="image" :src="routine.img" alt="Foto de la Rutina" height="150"/>
+                        <img
+                            class="image"
+                            :src="routine.img"
+                            alt="Foto de la Rutina"
+                            height="150"
+                        />
                         <!-- todo aca queria poner {{ routine.img  }} pero no funciona... ¿como se hace?-->
-                        <v-btn class="heart" :icon="routine.fav ? 'mdi-heart' : 'mdi-heart-outline'"
-                               @click="toggle(routine)"></v-btn>
+                        <v-btn
+                            class="heart"
+                            :icon="
+                                routine.fav ? 'mdi-heart' : 'mdi-heart-outline'
+                            "
+                            @click="toggle(routine)"
+                        ></v-btn>
                     </div>
                     <v-card-item>
                         <v-card-title>{{ routine.name }}</v-card-title>
@@ -53,12 +63,9 @@
                         -->
                     </v-card-item>
                     <v-card-text>
-                        <v-row
-                            allign="center"
-                            class="mx-0"
-                        >
+                        <v-row allign="center" class="mx-0">
                             <v-rating
-                                :model-value="4.5"
+                                :model-value="routine.score"
                                 color="amber"
                                 density="compact"
                                 half-increments
@@ -66,56 +73,79 @@
                                 size="small"
                             ></v-rating>
                             <div class="text-grey ms-4">
-                                4.5 (413)
+                                {{ routine.score }}
                             </div>
                         </v-row>
                         <div class="creator my-4 text-subtitle-1">
                             <v-icon icon="mdi-account"></v-icon>
-                            <div class="creator-text">• {{ routine.creator.username }}</div>
+                            <div class="creator-text">
+                                • {{ routine.creator.username }}
+                            </div>
                         </div>
                         <div class="overflow">{{ routine.description }}</div>
                     </v-card-text>
                     <div class="detail">
                         <v-divider></v-divider>
                         <v-card-actions>
-                            <RouterLink to="/routine-details">
-                                <v-btn>
-                                    Ver Detalle
-                                </v-btn>
+                            <RouterLink to="/routine-details/{{ routine.id }}">
+                                <v-btn> Ver Detalle </v-btn>
                             </RouterLink>
                         </v-card-actions>
                     </div>
                 </v-card>
             </v-slide-group-item>
         </v-slide-group>
-
     </v-sheet>
-
 </template>
 
 <script setup>
-import {ref, onBeforeMount} from 'vue';
-import {useRoutineStore} from '@/stores/routineStore.js';
-import {RouterLink} from 'vue-router';
-import ImageWithFavIcon from '@/components/ImageWithFavIcon.vue';
+import { ref, onBeforeMount } from "vue";
+import { useRoutineStore } from "@/stores/routineStore.js";
+import { RouterLink } from "vue-router";
+import ImageWithFavIcon from "@/components/ImageWithFavIcon.vue";
 
-const loading = ref(false)
-const routineStore = useRoutineStore()
+const loading = ref(false);
+const routineStore = useRoutineStore();
 const model = ref([]);
-const routines = ref([])
-
+const routines = ref([]);
+const favs = ref([]);
 onBeforeMount(() => {
-    loading.value = true
-    getRoutines()
-    loading.value = false
-})
+    getRoutines();
+    getFavs();
+});
 
-async function getRoutines() {
-    loading.value = true
-    const result = await routineStore.getRoutines()
+async function getFavs() {
+    loading.value = true;
+    const result = await routineStore.getRoutines();
     if (result.success) {
         for (let i = 0; i < result.data.totalCount; i++) {
-            const routine = result.data.content[i]
+            if (result.data.content[i].metadata.fav) {
+                const routine = result.data.content[i];
+                favs.value.push({
+                    id: routine.id,
+                    name: routine.name,
+                    img: routine.metadata.image,
+                    category: routine.category,
+                    description: routine.detail,
+                    creator: routine.user,
+                    difficulty: routine.difficulty,
+                    isPublic: routine.isPublic,
+                    fav: routine.metadata.fav,
+                    date: routine.date,
+                    score: routine.score,
+                });
+            }
+        }
+    }
+    loading.value = false;
+}
+
+async function getRoutines() {
+    loading.value = true;
+    const result = await routineStore.getRoutines();
+    if (result.success) {
+        for (let i = 0; i < result.data.totalCount; i++) {
+            const routine = result.data.content[i];
             routines.value.push({
                 id: routine.id,
                 name: routine.name,
@@ -128,21 +158,22 @@ async function getRoutines() {
                 fav: routine.metadata.fav,
                 // date: routine.date,
                 // score: routine.score,
-            })
+            });
         }
     }
-    loading.value = false
+    loading.value = false;
 }
 
 async function toggle(routine) {
-    routine.fav = !routine.fav
+    if (routine.fav) routineStore.removeFavoriteRoutine(routine);
+    else routineStore.addFavoriteRoutine(routine);
+    routine.fav = !routine.fav;
     const result = await routineStore.changeRoutine(routine);
     if (!result.success) {
-        routine.fav = !routine.fav
+        routine.fav = !routine.fav;
         // todo tirar error
     }
 }
-
 </script>
 
 <script>
@@ -152,6 +183,7 @@ export default {
     }),
     props: {
         nombreRutina: String,
+        favourite: Boolean,
     },
 };
 </script>
@@ -182,7 +214,6 @@ export default {
     border: none;
     cursor: pointer;
 }
-
 
 .detail {
     width: 100%;
@@ -215,4 +246,8 @@ export default {
     text-overflow: ellipsis;
     max-width: 200px;
 }
+
+/*array de favs
+getFavs
+*/
 </style>

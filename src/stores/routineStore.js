@@ -8,16 +8,31 @@ const ROUT_B_URL = `${API_BASE_URL}/routines`;
 
 export const useRoutineStore = defineStore('routine', {
     state: () => ({
+        routines: ref([]),
+        favoriteRoutines: ref([]),
         apiEndpoints: {
             getRoutines: {path: `${ROUT_B_URL}`, requiresAuth: true, method: 'GET'},
             addRoutine: {path: `${ROUT_B_URL}`, requiresAuth: true, method: 'POST'},
             getRoutine: (routineId) => ({path: `${ROUT_B_URL}/${routineId}`, requiresAuth: true, method: 'GET'}),
             changeRoutine: (routineId) => ({path: `${ROUT_B_URL}/${routineId}`, requiresAuth: true, method: 'PUT'}),
             deleteRoutine: (routineId) => ({path: `${ROUT_B_URL}/${routineId}`, requiresAuth: true, method: 'DELETE'})
-        }
+        },
+        
     }),
 
     actions: {
+        getfavoriteRoutines() {
+            return this.favoriteRoutines;
+        },
+        addFavoriteRoutine(routine) {
+            this.favoriteRoutines.push(routine);
+        },
+        removeFavoriteRoutine(routine) {
+            const index = this.favoriteRoutines.findIndex(favRoutine => favRoutine.id === routine.id);
+            if (index !== -1) {
+                this.favoriteRoutines.splice(index, 1);
+            }
+        },
         async getRoutines() {
             return await makeApiCall(this.apiEndpoints.getRoutines, null, useUserStore().token);
         },
