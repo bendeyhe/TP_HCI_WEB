@@ -21,7 +21,7 @@ export const useUserStore = defineStore('login', {
             logout: {path: `${USER_B_URL}/logout`, requiresAuth: true, method: 'POST'},
             getCurrentUser: {path: `${USER_B_URL}/current`, requiresAuth: true, method: 'GET'},
             modifyCurrentUser: {path: `${USER_B_URL}/current`, requiresAuth: true, method: 'PUT'},
-            deleteCurrentUser: {path: `${USER_B_URL}/current`, requiresAuth: true, method: 'DELETE'}
+            deleteCurrentUser: {path: `${USER_B_URL}/current`, requiresAuth: true, method: 'DELETE'},
         }
     }),
     getters: {

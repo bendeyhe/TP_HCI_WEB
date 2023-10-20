@@ -26,7 +26,7 @@
   -->
                 <v-card
                     :loading="loading"
-                    
+
                     class="mx-auto my-12"
                     width="280"
                     height="400"
@@ -125,7 +125,6 @@ async function getFavs() {
         for (let i = 0; i < result.data.totalCount; i++) {
             if (result.data.content[i].metadata.fav) {
                 const routine = result.data.content[i];
-                debugger;
                 routineStore.addFavoriteRoutine({
                     id: routine.id,
                     name: routine.name,
