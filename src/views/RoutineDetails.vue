@@ -129,7 +129,7 @@ async function getRoutine() {
             duration: result.data.metadata.duration,
             // date: result.data.date,
         }
-        routine.value = { ...routine.value, ...newRoutine };
+        routine.value = {...routine.value, ...newRoutine};
         console.log(routine)
     }
 }
@@ -159,12 +159,29 @@ function formatDuration(durationInSeconds) {
 
     if (minutes > 0) {
         if (seconds > 0) {
-            return `${minutes} min ${seconds} seg`;
+            if (minutes === 1) {
+                if (seconds === 1)
+                    return `${minutes} minuto y ${seconds} segundo`;
+                else
+                    return `${minutes} minuto y ${seconds} segundos`;
+            } else {
+                if (seconds === 1)
+                    return `${minutes} minutos y ${seconds} segundo`;
+                else
+                    return `${minutes} minutos y ${seconds} segundos`;
+            }
         } else {
-            return `${minutes} min`;
+            if (minutes === 1)
+                return `${minutes} minuto`;
+            else
+                return `${minutes} minutos`;
         }
     } else {
-        return `${seconds} seg`;
+        if (seconds === 1)
+            return `${seconds} segundo`;
+        else
+            return `${seconds} segundos`;
+
     }
 }
 
