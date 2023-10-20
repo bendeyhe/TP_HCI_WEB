@@ -1,49 +1,37 @@
 <template>
-    <v-app-bar scroll-behavior="elevate" class="bg-secondary">
+    <AppBar>
+        <template v-slot:search>
+            <div class="flex-grow-1"></div>
+        </template>
 
-        <RouterLink to="/">
-            <v-app-bar-title><h2>TooBig</h2></v-app-bar-title>
-        </RouterLink>
-
-        <div class="flex-grow-1"></div>
-
-        <RouterLink to="/create-routine">
-            <v-btn>Crear Rutina</v-btn>
-        </RouterLink>
-
-        <RouterLink to="/my-profile">
-            <v-btn prepend-icon="mdi-account-circle"> Mi Perfil </v-btn>
-        </RouterLink>
-
-    </v-app-bar>
+        <template v-slot:perfil>
+            <v-menu open-on-hover>
+                <template v-slot:activator="{ props }">
+                    <v-btn prepend-icon="mdi-account-circle" v-bind="props">Ingresar</v-btn>
+                </template>
+                <v-list>
+                    <v-list-item @click="goTo('/login')">Iniciar sesión</v-list-item>
+                    <v-list-item @click="goTo('/create-account')">Registrarse</v-list-item>
+                    <v-list-item @click="goTo('/validate')">Verificar email</v-list-item>
+                </v-list>
+            </v-menu>
+        </template>
+    </AppBar>
 </template>
 
 <script setup>
-  import SearchBar from "@/components/SearchBar.vue";
-  import { RouterLink } from 'vue-router';
+import AppBar from "@/components/AppBar.vue";
+import router from "@/router";
+
+const goTo = (route) => {
+    router.push({path: route});
+};
 </script>
 
 <style scoped>
-/* todo por qué no anda esto?????? tuve que poner el color en el app-bar de arriba
-.v-app-bar{
-  color: primary;
-  background-color: secondary;
-}*/
-
-h2{
-  font-family: Montserrat, sans-serif;
-  font-weight: bolder;
-  font-size: 200%;
-  color: #000000;
-  background-color: #8efd00;
-  padding:20px;
-  display: inline-block;
-}
-
-.v-btn{
-  color: #8efd00;
-  margin-right : 10px;
-  margin-left : 10px;
+.v-btn {
+    color: #8efd00;
+    margin-right: 10px;
+    margin-left: 10px;
 }
 </style>
-
