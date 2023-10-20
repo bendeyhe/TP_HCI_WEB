@@ -1,6 +1,9 @@
 <template>
     <v-sheet class="mx-auto" elevation="8">
-        <h1 class="titulo">{{ nombreRutina }}</h1>
+        <RouterLink :to="{ name: 'favourite-routines' }" v-if="nombreRutina==='Favoritas'" class="favor">
+                                <h1 class="titulo">Favoritas</h1>
+        </RouterLink>
+        <h1 v-else class="titulo">{{ nombreRutina }}</h1>
         <v-slide-group
             v-model="model"
             multiple
@@ -86,10 +89,9 @@
                         <div class="overflow">{{ routine.description }}</div>
                     </v-card-text>
                     <div class="detail">
-                        <v-divider></v-divider>
                         <v-card-actions>
                             <RouterLink :to="{ name: 'routine-details', params: { id: routine.id } }">
-                                <v-btn>Ver Detalle</v-btn>
+                                <v-btn variant="tonal">Ver Detalle</v-btn>
                             </RouterLink>
                         </v-card-actions>
                     </div>
@@ -237,6 +239,10 @@ export default {
     -webkit-box-orient: vertical;
 }
 
+.favor {
+    text-decoration: none;
+    color: #000000;
+}
 .creator {
     display: flex;
     align-items: center;
