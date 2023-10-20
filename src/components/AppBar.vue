@@ -8,7 +8,6 @@
         <slot name="search">
             <SearchBar/>
         </slot>
-
         <RouterLink to="/create-routine">
             <v-btn>Crear Rutina</v-btn>
         </RouterLink>
@@ -48,11 +47,6 @@ const logout = async () => {
 </script>
 
 <style scoped>
-/* todo por qué no anda esto?????? tuve que poner el color en el app-bar de arriba
-.v-app-bar{
-  color: primary;
-  background-color: secondary;
-}*/
 
 h2 {
     font-family: Montserrat, sans-serif;
@@ -67,7 +61,6 @@ h2 {
 .v-btn {
     color: #8efd00;
     margin-right: 10px;
-    margin-left: 10px;
 }
 </style>
 
