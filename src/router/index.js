@@ -32,6 +32,12 @@ const routes = [
         component: () => import('@/views/CreateRoutine.vue')
     },
     {
+        path: '/favourite',
+        name: 'favourite',
+        meta: {requiresAuth: true},
+        component: () => import('@/views/FavouriteView.vue')
+    },
+    {
         path: '/login',
         name: 'login',
         meta: {requiresAuth: false},
