@@ -135,7 +135,7 @@ async function getFavs() {
                     isPublic: routine.isPublic,
                     fav: routine.metadata.fav,
                     date: routine.date,
-                    score: routine.score,
+                    score: routine.metadata.score,
                 });
             }
         }
@@ -159,8 +159,8 @@ async function getRoutines() {
                 difficulty: routine.difficulty,
                 isPublic: routine.isPublic,
                 fav: routine.metadata.fav,
-                // date: routine.date,
-                // score: routine.score,
+                date: routine.date,
+                score: routine.metadata.score,
             });
         }
     }
