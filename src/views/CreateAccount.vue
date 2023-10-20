@@ -108,7 +108,7 @@
                 <v-btn
                     variant="text"
                     @click="resetForm"
-                    style="background-color: antiquewhite; border-color: #8efd00; color: #000000;"
+                    style="background-color: lightgray; border-color: #8efd00; color: #000000;"
                 >
                     <v-icon>mdi-cancel</v-icon>
                     &nbsp;

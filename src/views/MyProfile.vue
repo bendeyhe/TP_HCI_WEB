@@ -74,7 +74,7 @@
                     variant="tonal"
                     @click="isEditing ? cancelEdit() : editProfile()"
                     class="ml-auto"
-                    style="background-color: white; border-color: #8efd00; color: #000000;"
+                    style="background-color: lightgray; border-color: #8efd00; color: #000000;"
                 >
                     <template v-if="loading">
                         <v-progress-circular

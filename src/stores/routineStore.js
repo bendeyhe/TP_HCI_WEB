@@ -17,7 +17,7 @@ export const useRoutineStore = defineStore('routine', {
             changeRoutine: (routineId) => ({path: `${ROUT_B_URL}/${routineId}`, requiresAuth: true, method: 'PUT'}),
             deleteRoutine: (routineId) => ({path: `${ROUT_B_URL}/${routineId}`, requiresAuth: true, method: 'DELETE'})
         },
-        
+
     }),
 
     actions: {
@@ -50,6 +50,7 @@ export const useRoutineStore = defineStore('routine', {
             const data = {
                 'name': routine.name, 'detail': routine.description,
                 'isPublic': routine.isPublic, 'difficulty': routine.difficulty,
+                'score': routine.score,
                 'metadata': {'image': routine.img, 'fav': routine.fav}
             };
             return await makeApiCall(this.apiEndpoints.changeRoutine(routine.id), data, useUserStore().token);
@@ -61,26 +62,3 @@ export const useRoutineStore = defineStore('routine', {
 
     }
 });
-
-
-/*esto no va a andar pero es algo asi la idea, habria que pasarle la categoria que queremos obtener
-const getRoutinesByCategory = computed(() => routines.value.filter((p) => p.category === category))
-*/
-/*const routines = ref([])
-fetchRoutines(){
-        return [
-            {id: 1, name: 'Rutina de Espalda', creator: 'Jorge Almiron', description: 'Para tener alas en vez de dorsales', img:'routine1.jpg'},
-            {id: 2, name: 'Routina Biceps', creator: 'Nate Deyheralde', description: 'Para poder llevar mas bolsas de supermercado a la vez', img:'routine2.jpg'},
-            {id: 3, name: 'Routina de Piernas', creator: 'Pitufo Mutz', description: 'No vas a poder caminar despues de realizarla!', img:'routine3.jpg'},
-            {id: 4, name: 'Routina aerobica', creator: 'Robert Ves Losada', description: 'Para no cansarte en el partido', img:'routine4.jpg'},
-            {id: 5, name: 'Routina de hombros', creator: 'The Rock Candisano', description: 'Para dejar de estar chico', img:'routine5.jpg'},
-        ]
-    },
-
-
-function setRoutines(routinesToSet){
-    routines.value = routinesToSet
-}
-
-return { routines, fetchRoutines, setRoutines  }
-})*/

@@ -3,6 +3,7 @@ import {createRouter, createWebHistory} from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import storage from '../storage/storage.js'
 import {useUserStore} from "@/stores/userStore.js";
+import {useRoutineStore} from "@/stores/routineStore";
 
 const routes = [
     {
@@ -49,23 +50,26 @@ const routes = [
         component: () => import('@/views/ValidateMail.vue')
     },
     {
-        path: "/routine-details",
-        //path: "/routine-details/:slug", todo: asi es como tiene que quedar
+        path: "/routine-details/:id",
         name: "routine-details",
         meta: {requiresAuth: true},
-        component: () => import("@/views/RoutineDetails.vue")
-        //props: true,
-        /*beforeEnter: (to, from, next) => {
-            const exists = storage.routines.find(
-                (routine) => routines.slug === to.params.slug
-            )
+        props: true,
+        component: () => import("@/views/RoutineDetails.vue"),
+        beforeEnter: async (to, from, next) => {
+            const routineId = to.params.id;
+            const result = await useRoutineStore().getRoutine(routineId);
+            try{
+                if (result.success) {
+                    next();
+                } else {
+                    next({name: 'not-found'})
+                }
+            } catch (error) {
+                console.error("Error en la solicitud API:", error);
+                next({ name: "not-found" }); //todo hacer una pantallita de error o algo? o dejar el not found?
 
-            if(exists){
-                next();
-            } else{
-                next({name: "not-found"})
-            }//todo: asi es como tiene que quedar
-        }*/
+            }
+        }
     },
     {
         path: '/:pathMatch(.*)*',

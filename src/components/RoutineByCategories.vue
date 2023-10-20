@@ -87,8 +87,8 @@
                     <div class="detail">
                         <v-divider></v-divider>
                         <v-card-actions>
-                            <RouterLink to="/routine-details/{{ routine.id }}">
-                                <v-btn> Ver Detalle </v-btn>
+                            <RouterLink :to="{ name: 'routine-details', params: { id: routine.id } }">
+                                <v-btn>Ver Detalle</v-btn>
                             </RouterLink>
                         </v-card-actions>
                     </div>
