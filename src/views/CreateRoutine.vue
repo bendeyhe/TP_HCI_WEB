@@ -1,18 +1,22 @@
 <template>
   <AppBar/>
     <h1>Crear Rutina</h1>
+<v-row>
+    <v-col cols="9">
+        <h3 class="nombre-rutina"> Nombre de la rutina: </h3>
 
-    <h3 class="nombre-rutina"> Nombre de la rutina: </h3>
-
-    <v-text-field
-        class="nombre-rutina"
-        density="compact"
-        placeholder="Elija un nombre descriptivo"
-        variant="outlined"
-        v-model="routineName"
-    ></v-text-field>
-
-
+        <v-text-field
+            class="nombre-rutina"
+            density="compact"
+            placeholder="Elija un nombre descriptivo"
+            variant="outlined"
+            v-model="routineName"
+        ></v-text-field>
+    </v-col>
+    <v-col>
+        <v-btn prepend-icon="mdi-content-save" class="save"> Guardar Rutina </v-btn>
+    </v-col>
+</v-row>
 
     <v-card>
         <v-tabs
@@ -41,7 +45,57 @@
                                 </v-col>
                                 <v-col cols="1"><h3 class="o"> ó </h3></v-col>
                                 <v-col>
-                                    <v-btn class="nuevo-ejercicio" prepend-icon="mdi-pencil"> Crear Nuevo Ejercicio </v-btn>
+                                    <v-dialog width="500">
+                                        <template v-slot:activator="{ props }">
+                                            <v-btn class="nuevo-ejercicio" prepend-icon="mdi-pencil" v-bind="props" text="Open Dialog"> Crear Nuevo Ejercicio </v-btn>
+                                        </template>
+                                            <template v-slot:default="{ isActive }">
+                                                <v-card title="Crear Nuevo Ejercicio">
+                                                    <v-card-text>
+                                                        <v-text-field
+                                                            label="Nombre del ejercicio"
+                                                            v-model="name"
+                                                        ></v-text-field>
+                                                        <v-text-field
+                                                            label="Descripción"
+                                                            v-model="description"
+                                                        ></v-text-field>
+                                                        <v-text-field
+                                                            label="Duración"
+                                                            v-model="duration"
+                                                        ></v-text-field>
+                                                        <v-text-field
+                                                            label="Dificultad"
+                                                            v-model="difficulty"
+                                                        ></v-text-field>
+                                                        <v-text-field
+                                                            label="Equipamiento"
+                                                            v-model="equipment"
+                                                        ></v-text-field>
+                                                        <v-file-input
+                                                            label="Imagen"
+                                                            variant="filled"
+                                                            prepend-icon="mdi-camera"
+                                                        ></v-file-input>
+                                                    </v-card-text>
+
+                                                    <v-card-actions>
+                                                        <v-spacer></v-spacer>
+
+                                                        <v-btn
+                                                            text="cancelar"
+                                                            class="cancelar"
+                                                            @click="isActive.value = false"
+                                                        ></v-btn>
+                                                        <v-btn
+                                                            class="confirmar"
+                                                            text="Confirmar"
+                                                            @click="isActive.value = false"
+                                                        ></v-btn>
+                                                    </v-card-actions>
+                                                </v-card>
+                                            </template>
+                                    </v-dialog>
                                 </v-col>
                             </v-row>
 
@@ -61,16 +115,34 @@
                             </v-row>
 
                             <v-row>
-                                <v-btn v-if="n===1" class="boton" prepend-icon="mdi-plus">Agregar Ejercicio a Entrada en Calor</v-btn>
-                                <v-btn v-else-if="n===2" class="boton" prepend-icon="mdi-plus">Agregar Ejercicio a Principal</v-btn>
-                                <v-btn v-else class="boton" prepend-icon="mdi-plus"> Agregar Ejercicio a Enfriamiento</v-btn>
+                                <v-btn v-if="n===1" class="boton" prepend-icon="mdi-plus" @click="agregarEjercicio">Agregar Ejercicio a Entrada en Calor</v-btn>
+                                <v-btn v-else-if="n===2" class="boton" prepend-icon="mdi-plus" @click="agregarEjercicio">Agregar Ejercicio a Principal</v-btn>
+                                <v-btn v-else class="boton" prepend-icon="mdi-plus" @click="agregarEjercicio"> Agregar Ejercicio a Enfriamiento</v-btn>
                             </v-row>
                         </v-col>
                         <v-col cols="4">
                             <ExerciseDetail/>
                         </v-col>
-
-                        <v-row> <ExerciseDetailMini/> </v-row>
+                        <v-row v-if="n===1">   <!-- ExerciseDetailMini para Entrada en Calor -->
+                            <h2>Entrada en calor:</h2>
+                            <div v-for="n in contadorEntradaCalor" :key="'entrada-calor-' + n">
+                                <ExerciseDetailMini />
+                            </div>
+                        </v-row>
+                        <v-row v-else-if="n===2">
+                            <!-- ExerciseDetailMini para Principal -->
+                            <h2>Principal:</h2>
+                            <div v-for="n in contadorPrincipal" :key="'principal-' + n">
+                                <ExerciseDetailMini />
+                            </div>
+                        </v-row>
+                        <v-row v-else>
+                            <!-- ExerciseDetailMini para Enfriamiento -->
+                            <h2>Enfriamiento</h2>
+                            <div v-for="n in contadorEnfriamiento" :key="'enfriamiento-' + n">
+                                <ExerciseDetailMini />
+                            </div>
+                        </v-row>
                     </v-row>
                 </v-container>
             </v-window-item>
@@ -94,8 +166,29 @@ const routineName = ref('');
 export default {
     data: () => ({
         tab: null,
+        ejerciciosEntradaCalor: [],
+        ejerciciosPrincipal: [],
+        ejerciciosEnfriamiento: [],
+        contadorEntradaCalor: 0,
+        contadorPrincipal: 0,
+        contadorEnfriamiento: 0,
     }),
-}
+    methods: {
+        agregarEjercicio() {
+            const nuevoEjercicio = {}; //inicializar aquí con los datos del ejercicio
+            if (this.tab === 1) {
+                this.ejerciciosEntradaCalor.push(nuevoEjercicio);
+                this.contadorEntradaCalor++;
+            } else if (this.tab === 2) {
+                this.ejerciciosPrincipal.push(nuevoEjercicio);
+                this.contadorPrincipal++;
+            } else if (this.tab === 3) {
+                this.ejerciciosEnfriamiento.push(nuevoEjercicio);
+                this.contadorEnfriamiento++;
+            }
+        },
+    },
+};
 </script>
 
 <style scoped>
@@ -118,6 +211,8 @@ h1 {
     color: #000000;
     margin-right: 10px;
     margin-top: 20px;
+    position: absolute;
+    left: 20%;
 
 }
 
@@ -131,8 +226,29 @@ h1 {
     padding-top: 25px;
 }
 
-.boton {
-    position: absolute;
-    left: 20%;
+.confirmar{
+    background-color: #8efd00;
+    color: #000000;
+    margin-right: 10px;
+    margin-top: 20px;
 }
+
+.cancelar{
+    background-color: #000000;
+    color: #8efd00;
+    margin-right: 10px;
+    margin-top: 20px;
+}
+
+h2{
+    padding-left:25px;
+    padding-bottom:35px;
+}
+
+.save{
+    background-color: #8efd00;
+    color: #000000;
+    margin-top:40px;
+}
+
 </style>
