@@ -72,6 +72,13 @@ const routes = [
         }
     },
     {
+        path: "/favourite-routines",
+        name: "favourite-routines",
+        meta: {requiresAuth: true},
+        props: true,
+        component: () => import("@/views/FavouriteView.vue")
+    },
+    {
         path: '/:pathMatch(.*)*',
         name: 'not-found',
         meta: {requiresAuth: false},
