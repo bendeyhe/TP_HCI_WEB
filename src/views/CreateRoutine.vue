@@ -13,7 +13,7 @@
             ></v-text-field>
         </v-col>
         <v-col>
-            <v-btn prepend-icon="mdi-content-save" class="save"> Guardar Rutina</v-btn>
+            <v-btn prepend-icon="mdi-content-save" class="save" @click="saveRutina"> Guardar Rutina</v-btn>
         </v-col>
     </v-row>
 
@@ -64,6 +64,12 @@
                                                         label="Descripción"
                                                         v-model="newEjercicio.detail"
                                                     ></v-text-field>
+                                                    <v-file-input
+                                                        label="Imagen"
+                                                        v-model="newEjercicio.url"
+                                                        variant="filled"
+                                                        prepend-icon="mdi-camera"
+                                                    ></v-file-input>
                                                     <!--
                                                     <v-text-field
                                                         label="Duración"
@@ -200,14 +206,14 @@ const contEnfriamiento = ref(0);
 const newEjercicio = ref({
     name: '',
     detail: '',
-    url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlTVnZbJf3cApR5T3NdkQc28_ifsQ26s5TGnOx_qE7MA&s',
+    url: '',
     type: '',
     number: 1
 });
 const ejercicioSeleccionado = ref({
     name: '',
     detail: '',
-    url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlTVnZbJf3cApR5T3NdkQc28_ifsQ26s5TGnOx_qE7MA&s',
+    url: '',
     type: '',
     number: 1
 });
@@ -232,6 +238,7 @@ function agregarEjercicio() {
 }
 
 async function saveExercise() {
+    debugger
     if (type.value === 3)
         newEjercicio.value.type = 'rest'
     else
@@ -250,6 +257,10 @@ async function saveExercise() {
             }
         }
     }
+}
+
+async function saveRutina(){
+
 }
 
 </script>

@@ -33,6 +33,7 @@
                 v-model="password"
                 @click:append-inner="visible = !visible"
                 :disabled="loading"
+                @keydown.enter="loginUser"
             ></v-text-field>
 
             <v-alert
@@ -144,7 +145,7 @@ async function loginUser() {
             userStore.updateToken(result.data.token, true)
             await showSuccessAlert('Usuario autenticado con éxito');
             const redirectUrl = route.query.redirect || '/'
-            
+
             await router.push({name: 'home'})
         }
     }
