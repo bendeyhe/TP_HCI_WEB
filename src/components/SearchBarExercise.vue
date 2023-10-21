@@ -12,7 +12,7 @@
         v-model="searchQuery"
     ></v-text-field>
 
-    <v-dialog v-model="showModal" persistent max-width="600">
+    <v-dialog v-model="showModal" max-width="600">
         <v-card>
             <v-card-title>Resultados de búsqueda</v-card-title>
             <v-card-text>
@@ -20,28 +20,53 @@
                     <v-col
                         v-for="(exercise, index) in exercises"
                         :key="index"
-                        cols="12"
                     >
                         <v-card
                             class="exercise-card"
                             @click="selectExercise(exercise)"
                         >
-                            <v-col cols="4">
-                                <img
-                                    class="image"
-                                    :src="exercise.img"
-                                    alt="Foto del Ejercicio"
-                                    height="150"
-                                />
-                            </v-col>
-                            <v-col cols="8">
-                                <v-card-title class="text-h6">
-                                    {{ exercise.name }}
-                                </v-card-title>
-                                <v-card-text>
-                                    {{ exercise.detail }}
-                                </v-card-text>
-                            </v-col>
+                            <v-row>
+                                <v-col cols="6">
+                                    <img
+                                        class="image"
+                                        :src="exercise.img"
+                                        alt="Foto del Ejercicio"
+                                        height="150"
+                                    />
+                                </v-col>
+                                <v-col cols="6">
+                                        <v-card-text class="titulo">
+                                            {{ exercise.name }}
+                                        </v-card-text>
+
+                                    <v-card-actions>
+                                        <v-btn
+                                            color="primary"
+                                            variant="text"
+                                            @click="$event.stopPropagation(); show[index] = !show[index]"
+                                        >
+                                            Ver Detalle
+                                        </v-btn>
+
+                                        <v-spacer></v-spacer>
+
+                                        <v-btn
+                                            :icon="show[index] ? 'mdi-chevron-up' : 'mdi-chevron-down'"
+                                            @click="$event.stopPropagation(); show[index] = !show[index]"
+                                        ></v-btn>
+                                    </v-card-actions>
+
+                                    <v-expand-transition>
+                                        <div v-show="show[index]">
+                                            <v-divider></v-divider>
+
+                                            <v-card-text class="detalle">
+                                                {{ exercise.detail }}
+                                            </v-card-text>
+                                        </div>
+                                    </v-expand-transition>
+                                </v-col>
+                            </v-row>
                         </v-card>
                     </v-col>
                 </v-row>
@@ -85,6 +110,9 @@ const props = defineProps({
 
 const { isRest } = toRefs(props);
 
+// Crear una matriz show para controlar cada tarjeta
+const show = ref([])
+
 async function openModal() {
     loading.value = true;
     const result = await exerciseStore.getExercises()
@@ -97,6 +125,11 @@ async function openModal() {
                 return exercise.name.toLowerCase().includes(searchQuery.value.toLowerCase()) && exercise.type !== 'rest'
             }
         })
+
+        // Inicializa la matriz show con valores falsos para cada tarjeta
+        show.value = new Array(exercises.value.length).fill(false)
+
+
         for (const exercise of exercises.value) {
             const result2 = await exerciseStore.getExerciseImage(exercise, 1);
             if (result2.success)
@@ -116,6 +149,14 @@ function selectExercise(exercise) {
     closeModal();
 }
 
+</script>
+
+<script>
+export default {
+    data: () => ({
+        show: false,
+    }),
+}
 </script>
 
 <style scoped>
@@ -139,5 +180,19 @@ function selectExercise(exercise) {
     margin-top: 20px;
 }
 
+.image {
+    padding: 10px;
+
+}
+
+.titulo {
+    font-size: 20px;
+    font-weight: bold;
+    padding-bottom: 5px;
+}
+
+.detalle {
+    padding-top: 5px;
+}
 </style>
 
