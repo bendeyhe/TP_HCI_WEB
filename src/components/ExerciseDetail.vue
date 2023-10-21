@@ -17,7 +17,7 @@
                 <v-card-item>
                     <img
                         class="image"
-                        :src="exercise.img"
+                        :src="exercise.url"
                         alt="Foto del Ejercicio"
                         height="150"
                     />

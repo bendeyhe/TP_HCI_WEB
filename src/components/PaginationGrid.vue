@@ -285,6 +285,16 @@ onBeforeMount(() => {
   text-align: center;
 }
 
+.v-row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.v-col{
+    flex: 1;
+    margin: 40px;
+}
+
 /*array de favs
 getFavs
 */
