@@ -30,16 +30,7 @@
 
             </div>
         <v-card-item>
-            <v-card-title> exercise.name </v-card-title>
-            <!--<v-card-subtitle>
-              <span class="me-1">Local Favorite</span>
-              <v-icon
-                color="error"
-                icon="mdi-fire-circle"
-                size="small"
-              ></v-icon>
-            </v-card-subtitle>
-            -->
+            <v-card-title> {{ exercise.name }} </v-card-title>
         </v-card-item>
         <v-card-text>
             <v-row allign="center" class="mx-0">
@@ -47,7 +38,7 @@
             </v-row>
             <div class="creator my-4 text-subtitle-1">
             </div>
-            <div class="overflow"> exercise.description </div>
+            <div class="overflow"> {{ exercise.detail }} </div>
         </v-card-text>
         <div class="detail">
             <v-card-actions>
@@ -73,7 +64,16 @@
 <script setup>
 //todo hay que hacer la función de delete(exercise)
 //todo tambien estaria bueno que se pueda editar el ejercicio y cambiar el orden de los ejercicios, no se bien cómo hacerlo
-import {RouterLink} from "vue-router";
+import { toRefs } from 'vue';
+
+const props = defineProps({
+    exercise: {
+        type: Object,
+        required: true,
+    },
+});
+
+const { exercise } = toRefs(props);
 </script>
 
 <style scoped>

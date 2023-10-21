@@ -6,11 +6,11 @@ import {API_BASE_URL} from "@/stores/apiUtils";
 
 const EX_B_URL = `${API_BASE_URL}/exercises`;
 
-const useExerciseStore = defineStore('exercise', {
+export const useExerciseStore = defineStore('exercise', {
     state: () => ({
         exercises: ref([]),
         apiEndpoints: {
-            getExercises: {path: `${EX_B_URL}`, requiresAuth: true, method: 'GET'},
+            getExercises: {path: `${EX_B_URL}?size=1000`, requiresAuth: true, method: 'GET'},
             addExercise: {path: `${EX_B_URL}`, requiresAuth: true, method: 'POST'},
             getExercise: (exerciseId) => ({path: `${EX_B_URL}/${exerciseId}`, requiresAuth: true, method: 'GET'}),
             changeExercise: (exerciseId) => ({path: `${EX_B_URL}/${exerciseId}`, requiresAuth: true, method: 'PUT'}),
@@ -38,14 +38,14 @@ const useExerciseStore = defineStore('exercise', {
             return await makeApiCall(this.apiEndpoints.getExercises, null, useUserStore().token);
         },
         async addExercise(exercise) {
-            const data = {'name': exercise.name, 'detail': exercise.detail};
+            const data = {'name': exercise.name, 'detail': exercise.detail, 'type': exercise.type};
             return await makeApiCall(this.apiEndpoints.addExercise, data, useUserStore().token);
         },
         async getExercise(exerciseId) {
             return await makeApiCall(this.apiEndpoints.getExercise(exerciseId), null, useUserStore().token);
         },
         async changeExercise(exercise) {
-            const data = {'name': exercise.name, 'detail': exercise.detail};
+            const data = {'name': exercise.name, 'detail': exercise.detail, 'type': exercise.type};
             return await makeApiCall(this.apiEndpoints.changeExercise(exercise.id), data, useUserStore().token);
         },
         async deleteExercise(exerciseId) {
@@ -55,12 +55,12 @@ const useExerciseStore = defineStore('exercise', {
         async getExerciseImages(exerciseId) {
             return await makeApiCall(this.apiEndpoints.getExerciseImages(exerciseId), null, useUserStore().token);
         },
-        async addExerciseImage(exerciseId, image) {
-            const data = {'number': image.number, 'url': image.url};
+        async addExerciseImage(exerciseId, exercise) {
+            const data = {'number': exercise.number, 'url': exercise.url};
             return await makeApiCall(this.apiEndpoints.addExerciseImage(exerciseId), data, useUserStore().token);
         },
-        async getExerciseImage(exerciseId, imageId) {
-            return await makeApiCall(this.apiEndpoints.getExerciseImage(exerciseId, imageId), null, useUserStore().token);
+        async getExerciseImage(exercise, imageId) {
+            return await makeApiCall(this.apiEndpoints.getExerciseImage(exercise.id, imageId), null, useUserStore().token);
         },
         async modifyExerciseImage(exerciseId, image) {
             const data = {'number': image.number, 'url': image.url};
