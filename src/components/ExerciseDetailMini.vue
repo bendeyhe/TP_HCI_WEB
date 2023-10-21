@@ -3,8 +3,8 @@
         :loading="loading"
 
         class="mx-auto my-12"
-        width="140"
-        height="200"
+        width="200"
+        height="300"
     >
         <template v-slot:loader="{ isActive }">
             <v-progress-linear
@@ -13,20 +13,23 @@
                 indeterminate
             ></v-progress-linear>
         </template>
-        <div class="cont">
 
-        </div>
-
-        <v-card-item>
-            <v-card-item>
-                <!-- traer dinamicamente de exercise.img-->
+            <div class="cont">
                 <img
                     class="image"
-                    src="routine1.jpg"
-                    alt="Foto del Ejercicio"
-                    height="150"
+                    src="https://media.istockphoto.com/id/1418215624/photo/panoramic-side-view-of-beautiful-young-asian-woman-running-on-treadmill-and-listening-to.webp?b=1&s=170667a&w=0&k=20&c=GFbpktAEzDGZWvMqFDjKPhNlKLrb9h1N6y6_woZ91y4="
+                    alt="Foto del ejercicio"
+                    height="100"
                 />
-            </v-card-item>
+
+                <v-btn
+                    class="edit"
+                    icon="mdi-pencil"
+                    @click="edit(exercise)"
+                ></v-btn>
+
+            </div>
+        <v-card-item>
             <v-card-title> exercise.name </v-card-title>
             <!--<v-card-subtitle>
               <span class="me-1">Local Favorite</span>
@@ -47,10 +50,72 @@
             <div class="overflow"> exercise.description </div>
         </v-card-text>
         <div class="detail">
-
+            <v-card-actions>
+                <div class="container">
+                    <v-btn
+                        icon="mdi-chevron-left"
+                        @click="moveLeft(exercise)"
+                    ></v-btn>
+                    <v-btn
+                        icon="mdi-trash-can-outline"
+                        @click="delete(exercise)"
+                        class="red-hover"
+                    ></v-btn>
+                    <v-btn
+                        icon="mdi-chevron-right"
+                        @click="moveRight(exercise)"
+                    ></v-btn>
+                </div>
+            </v-card-actions>
         </div>
     </v-card>
 </template>
 <script setup>
-
+//todo hay que hacer la función de delete(exercise)
+//todo tambien estaria bueno que se pueda editar el ejercicio y cambiar el orden de los ejercicios, no se bien cómo hacerlo
+import {RouterLink} from "vue-router";
 </script>
+
+<style scoped>
+.cont {
+    position: relative;
+    width: 100%;
+}
+
+.image {
+    width: 100%;
+}
+
+.red-hover:hover {
+    background-color: rgba(255, 0, 0, 0.4);
+}
+
+.container {
+    text-align: center;
+    width: 100%;
+    bottom: 1%;
+    position:absolute;
+}
+
+.cont {
+    position: relative;
+    width: 100%;
+}
+
+.image {
+    width: 100%;
+}
+
+.edit {
+    position: absolute;
+    top: 25%;
+    left: 82%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    color: #000000;
+    padding: 12px 24px;
+    border: none;
+    cursor: pointer;
+}
+
+</style>

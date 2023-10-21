@@ -225,6 +225,7 @@ export default {
     width: 100%;
     position: absolute;
     bottom: 1%;
+    text-align: center;
 }
 
 .v-btn {
@@ -256,6 +257,7 @@ export default {
     text-overflow: ellipsis;
     max-width: 200px;
 }
+
 
 /*array de favs
 getFavs
