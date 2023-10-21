@@ -73,7 +73,7 @@
             </v-row>
         </v-container>
     </v-card>
-    <RoutineByCategories nombreRutina="Favoritas"/>
+    <RoutineByCategories :nombreRutina="Favoritas" :favourite="true"/>
     <v-dialog v-model="showShareDialog" persistent max-width="400">
         <v-card>
             <v-card-title class="headline">
