@@ -83,15 +83,27 @@
       </v-col>
       </v-row>
       <v-spacer></v-spacer>
-      <v-pagination v-if="amountPages > 1"
+      <div class="pagination-container">
+        <v-pagination v-if="amountPages > 1"
                     v-model="pageNumber"
                     :length="amountPages"
                     circle
-                    @next="nextPage"
-                    @previous="previousPage"
                     @input="inputPage"
                     color="secondary"
-      ></v-pagination>
+                    class="mx-auto pagination mx-auto">
+                    <template v-slot:prev>
+                        <v-btn @click="previousPage" :disabled="pageNumber === 1">
+                            <v-icon>mdi-chevron-left</v-icon>
+                        </v-btn>
+                    </template>
+                    <template v-slot:next>
+                        <v-btn @click="nextPage" :disabled="pageNumber === amountPages  ">
+                            <v-icon>mdi-chevron-right</v-icon>
+                        </v-btn>
+                    </template>
+
+         </v-pagination>
+      </div>
     </div>
   </template>
   
@@ -102,11 +114,11 @@ import { ref, watch, computed, onBeforeMount} from 'vue';
 import { useRoutineStore } from '@/stores/routineStore.js';
 
 const page = ref(1);
-const pageNumber = ref(0);
+const pageNumber = ref(1);
 const pageSize = ref(9);
 const visibleRoutines = ref([]);
 const routineArray = ref([]);
-const amountPages = computed(() => Math.ceil(parseInt(routineArray.value.length) / pageSize.value));
+const amountPages = ref(1);
 const loading = ref(false);
 const routineStore = useRoutineStore();
 
@@ -115,10 +127,10 @@ const routineStore = useRoutineStore();
 async function getFavs() {
     loading.value = true;
     const result = await routineStore.getRoutines();
-
-    if (result.success) {
+    debugger;
+    if (result.success && result.data.content) {
         for (let i = 0; i < result.data.totalCount; i++) {
-            if (result.data.content[i].metadata.fav) {
+            if  (result.data.content[i] && result.data.content[i].metadata.fav) {
                 const routine = result.data.content[i];
                 routineStore.addFavoriteRoutine({
                     id: routine.id,
@@ -141,16 +153,29 @@ async function getFavs() {
 }
 
  async function updateVisibleRoutines() {
-    debugger;
     await getFavs();
     visibleRoutines.value = Array.from(routineStore.getfavoriteRoutines()).slice(
-    pageNumber.value * pageSize.value,
-    pageNumber.value * pageSize.value + pageSize.value
+    (pageNumber.value-1) * pageSize.value,
+    pageNumber.value * pageSize.value 
   );
     routineArray.value = Array.from(routineStore.getfavoriteRoutines());
+    amountPages.value = Math.ceil(routineArray.value.length / pageSize.value); 
+    debugger;
   if(visibleRoutines.length === 0 && this.pageNumber > 0){
         updatePage(this.pageNumber - 1)
       }
+}
+
+async function toggle(routine) {
+    if (routine.fav) routineStore.removeFavoriteRoutine(routine);
+    else routineStore.addFavoriteRoutine(routine);
+    routine.fav = !routine.fav;
+    const result = await routineStore.changeRoutine(routine);
+    if (!result.success) {
+        routine.fav = !routine.fav;
+        // todo tirar error
+    }
+    updateVisibleRoutines();
 }
 
 function updatePage(PageNumber) {
@@ -158,19 +183,22 @@ function updatePage(PageNumber) {
   updateVisibleRoutines();
 }
 
-function nextPage() {
-  if (pageNumber.value + 1 <= amountPages.value) {
-    updateVisibleRoutines();
-  }
+async function nextPage() {
+    pageNumber.value = pageNumber.value + 1;
+    await updateVisibleRoutines();
+
 }
 
-function previousPage() {
-    updateVisibleRoutines();
+async function previousPage() {
+
+    pageNumber.value = pageNumber.value - 1;
+    await updateVisibleRoutines();
 
 }
 
 function inputPage(number) {
-  pageNumber.value = number - 1;
+  debugger;
+  pageNumber.value = number ;
   updateVisibleRoutines();
 }
 
@@ -242,6 +270,19 @@ onBeforeMount(() => {
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 200px;
+}
+
+.pagination-container{
+    display: flex;
+  justify-content: center;
+}
+
+.pagination {
+
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  text-align: center;
 }
 
 /*array de favs

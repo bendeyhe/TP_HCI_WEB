@@ -123,7 +123,7 @@ async function getFavs() {
     const result = await routineStore.getRoutines();
     if (result.success) {
         for (let i = 0; i < result.data.totalCount; i++) {
-            if (result.data.content[i].metadata.fav) {
+            if (result.data.content[i] && result.data.content[i].metadata.fav) {
                 const routine = result.data.content[i];
                 routineStore.addFavoriteRoutine({
                     id: routine.id,
@@ -149,6 +149,7 @@ async function getRoutines() {
     const result = await routineStore.getRoutines();
     if (result.success) {
         for (let i = 0; i < result.data.totalCount; i++) {
+            if(result.data.content[i]){
             const routine = result.data.content[i];
             routineStore.addRoutineArray({
                 id: routine.id,
@@ -163,6 +164,7 @@ async function getRoutines() {
                 date: routine.date,
                 score: routine.metadata.score,
             });
+        }
         }
     }
     loading.value = false;

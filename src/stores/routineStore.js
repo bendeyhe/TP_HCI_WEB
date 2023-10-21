@@ -11,7 +11,7 @@ export const useRoutineStore = defineStore('routine', {
         routines: ref([]),
         favoriteRoutines: ref([]),
         apiEndpoints: {
-            getRoutines: {path: `${ROUT_B_URL}`, requiresAuth: true, method: 'GET'},
+            getRoutines: {path: `${ROUT_B_URL}?size=100`, requiresAuth: true, method: 'GET'},
             addRoutine: {path: `${ROUT_B_URL}`, requiresAuth: true, method: 'POST'},
             getRoutine: (routineId) => ({path: `${ROUT_B_URL}/${routineId}`, requiresAuth: true, method: 'GET'}),
             changeRoutine: (routineId) => ({path: `${ROUT_B_URL}/${routineId}`, requiresAuth: true, method: 'PUT'}),
