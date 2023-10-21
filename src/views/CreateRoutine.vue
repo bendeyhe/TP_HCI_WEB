@@ -59,10 +59,14 @@
                                                     <v-text-field
                                                         label="Nombre del ejercicio"
                                                         v-model="newEjercicio.name"
+                                                        maxlength="100"
+                                                        counter
                                                     ></v-text-field>
                                                     <v-text-field
                                                         label="Descripción"
                                                         v-model="newEjercicio.detail"
+                                                        maxlength="200"
+                                                        counter
                                                     ></v-text-field>
                                                     
                                                     <!--
