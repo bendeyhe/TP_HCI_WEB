@@ -144,7 +144,8 @@ async function loginUser() {
             userStore.updateToken(result.data.token, true)
             await showSuccessAlert('Usuario autenticado con éxito');
             const redirectUrl = route.query.redirect || '/'
-            await router.push({path: redirectUrl})
+            
+            await router.push({name: 'home'})
         }
     }
 }
