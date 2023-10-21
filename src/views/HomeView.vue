@@ -1,7 +1,8 @@
 <template>
+    <AppBar/>
     <v-app id="inspire">
 
-        <AppBar/>
+        
 
         <v-carousel cycle show-arrows="hover">
             <v-carousel-item
