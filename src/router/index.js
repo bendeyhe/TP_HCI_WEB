@@ -29,13 +29,32 @@ const routes = [
         path: '/create-routine',
         name: 'create-routine',
         meta: {requiresAuth: true},
-        component: () => import('@/views/CreateRoutine.vue')
+        component: () => import('@/views/CreateOrEditRoutine.vue')
+    },
+    {
+        path: '/edit-routine/:id',
+        name: 'edit-routine',
+        meta: {requiresAuth: true},
+        props: true,
+        component: () => import('@/views/CreateOrEditRoutine.vue'),
     },
     {
         path: '/favourite',
         name: 'favourite',
         meta: {requiresAuth: true},
         component: () => import('@/views/FavouriteView.vue')
+    },
+    {
+        path: '/my-exercises',
+        name: 'my-exercises',
+        meta: {requiresAuth: true},
+        component: () => import('@/views/MyRoutines.vue')
+    },
+    {
+        path: '/my-routines',
+        name: 'my-routines',
+        meta: {requiresAuth: true},
+        component: () => import('@/views/MyRoutines.vue')
     },
     {
         path: '/login',
@@ -73,7 +92,6 @@ const routes = [
             } catch (error) {
                 console.error("Error en la solicitud API:", error);
                 next({ name: "not-found" }); //todo hacer una pantallita de error o algo? o dejar el not found?
-
             }
         }
     },

@@ -1,15 +1,17 @@
 <template>
-    <div >
-      <v-row class="width">
-      <v-col cols="4" v-for="(routine, index) in visibleRoutines"
-             :key="routine.index"
-             v-bind:visibleRoutines="visibleRoutines"
-             v-bind:pageNumber="pageNumber"
-             v-bind:routine="routine"
-      >
-        <v-card
+    <h1 v-if="isFav">Rutinas Favoritas</h1>
+    <h1 v-else>Mis Rutinas</h1>
+    <div v-if="!visibleRoutines.value">
+        <v-row class="width">
+            <v-col cols="4" v-for="(routine, index) in visibleRoutines"
+                   :key="routine.index"
+                   v-bind:visibleRoutines="visibleRoutines"
+                   v-bind:pageNumber="pageNumber"
+                   v-bind:routine="routine"
+            >
+                <v-card
                     :loading="loading"
-                    
+
                     class="mx-auto my-12"
                     width="280"
                     height="400"
@@ -28,26 +30,22 @@
                             alt="Foto de la Rutina"
                             height="150"
                         />
-                        <!-- todo aca queria poner {{ routine.img  }} pero no funciona... ¿como se hace?-->
-                        <v-btn
-                            class="heart"
-                            :icon="
+
+                        <v-btn v-if="isFav"
+                               class="heart"
+                               :icon="
                                 routine.fav ? 'mdi-heart' : 'mdi-heart-outline'
                             "
-                            @click="toggle(routine)"
+                               @click="toggle(routine)"
+                        ></v-btn>
+                        <v-btn v-else
+                               class="heart"
+                               icon="mdi-pencil"
+                               @click="editRoutine(routine)"
                         ></v-btn>
                     </div>
                     <v-card-item>
                         <v-card-title>{{ routine.name }}</v-card-title>
-                        <!--<v-card-subtitle>
-                          <span class="me-1">Local Favorite</span>
-                          <v-icon
-                            color="error"
-                            icon="mdi-fire-circle"
-                            size="small"
-                          ></v-icon>
-                        </v-card-subtitle>
-                        -->
                     </v-card-item>
                     <v-card-text>
                         <v-row allign="center" class="mx-0">
@@ -79,39 +77,48 @@
                             </RouterLink>
                         </v-card-actions>
                     </div>
-        </v-card>
-      </v-col>
-      </v-row>
-      <v-spacer></v-spacer>
-      <div class="pagination-container">
-        <v-pagination v-if="amountPages > 1"
-                    v-model="pageNumber"
-                    :length="amountPages"
-                    circle
-                    @input="inputPage"
-                    color="secondary"
-                    class="mx-auto pagination mx-auto">
-                    <template v-slot:prev>
-                        <v-btn @click="previousPage" :disabled="pageNumber === 1">
-                            <v-icon>mdi-chevron-left</v-icon>
-                        </v-btn>
-                    </template>
-                    <template v-slot:next>
-                        <v-btn @click="nextPage" :disabled="pageNumber === amountPages  ">
-                            <v-icon>mdi-chevron-right</v-icon>
-                        </v-btn>
-                    </template>
+                </v-card>
+            </v-col>
+        </v-row>
+        <v-spacer></v-spacer>
+        <div class="pagination-container">
+            <v-pagination v-if="amountPages > 1"
+                          v-model="pageNumber"
+                          :length="amountPages"
+                          circle
+                          @input="inputPage"
+                          color="secondary"
+                          class="mx-auto pagination mx-auto">
+                <template v-slot:prev>
+                    <v-btn @click="previousPage" :disabled="pageNumber === 1">
+                        <v-icon>mdi-chevron-left</v-icon>
+                    </v-btn>
+                </template>
+                <template v-slot:next>
+                    <v-btn @click="nextPage" :disabled="pageNumber === amountPages  ">
+                        <v-icon>mdi-chevron-right</v-icon>
+                    </v-btn>
+                </template>
 
-         </v-pagination>
-      </div>
+            </v-pagination>
+        </div>
     </div>
-  </template>
-  
-  
-  <script setup>
+    <div v-else>
+        <div v-if="isFav" class="flex-container">
+            <h2>Parece que no has likeado ninguna rutina todavía. Estoy seguro que ya encontrarás una que te encante! ʕ•ᴥ•ʔ</h2>
+        </div>
+        <div v-else class="flex-container">
+            <h2>Todavía no creaste ninguna rutina. Es hora de que empieces a hacer tus rutinas! ʕ•ᴥ•ʔ</h2>
+        </div>
+    </div>
+</template>
 
-import { ref, watch, computed, onBeforeMount} from 'vue';
-import { useRoutineStore } from '@/stores/routineStore.js';
+<script setup>
+
+import {ref, onBeforeMount, toRefs} from 'vue';
+import {useRoutineStore} from '@/stores/routineStore.js';
+import {useUserStore} from "@/stores/userStore";
+import router from "@/router";
 
 const page = ref(1);
 const pageNumber = ref(1);
@@ -121,16 +128,23 @@ const routineArray = ref([]);
 const amountPages = ref(1);
 const loading = ref(false);
 const routineStore = useRoutineStore();
+const userStore = useUserStore();
 
+const props = defineProps({
+    isFav: {
+        type: Boolean,
+        required: true
+    },
+});
 
+const {isFav} = toRefs(props);
 
 async function getFavs() {
     loading.value = true;
     const result = await routineStore.getRoutines();
-    debugger;
     if (result.success && result.data.content) {
         for (let i = 0; i < result.data.totalCount; i++) {
-            if  (result.data.content[i] && result.data.content[i].metadata.fav) {
+            if (result.data.content[i] && result.data.content[i].metadata.fav) {
                 const routine = result.data.content[i];
                 routineStore.addFavoriteRoutine({
                     id: routine.id,
@@ -147,23 +161,61 @@ async function getFavs() {
                 });
             }
         }
-        console.log(routineStore.getfavoriteRoutines());
     }
     loading.value = false;
 }
 
- async function updateVisibleRoutines() {
-    await getFavs();
-    visibleRoutines.value = Array.from(routineStore.getfavoriteRoutines()).slice(
-    (pageNumber.value-1) * pageSize.value,
-    pageNumber.value * pageSize.value 
-  );
-    routineArray.value = Array.from(routineStore.getfavoriteRoutines());
-    amountPages.value = Math.ceil(routineArray.value.length / pageSize.value); 
-    debugger;
-  if(visibleRoutines.length === 0 && this.pageNumber > 0){
-        updatePage(this.pageNumber - 1)
-      }
+async function getMyRoutines() {
+    loading.value = true;
+    let result = await userStore.getCurrentUser();
+    if (result.success) {
+        debugger
+        const user = result.data;
+        result = await userStore.getCurUserRoutines();
+        if (result.success && result.data.content) {
+            for (let i = 0; i < result.data.totalCount; i++) {
+                const routine = result.data.content[i];
+                routineStore.addMyRoutine({
+                    id: routine.id,
+                    name: routine.name,
+                    img: routine.metadata.image,
+                    //category: routine.category,
+                    description: routine.detail,
+                    creator: user,
+                    difficulty: routine.difficulty,
+                    isPublic: routine.isPublic,
+                    fav: routine.metadata.fav,
+                    date: routine.date,
+                    score: routine.metadata.score,
+                });
+            }
+        }
+    }
+    loading.value = false;
+}
+
+async function updateVisibleRoutines() {
+    if (isFav.value) {
+        await getFavs();
+        visibleRoutines.value = Array.from(routineStore.getfavoriteRoutines()).slice(
+            (pageNumber.value - 1) * pageSize.value,
+            pageNumber.value * pageSize.value
+        );
+        routineArray.value = Array.from(routineStore.getfavoriteRoutines());
+        amountPages.value = Math.ceil(routineArray.value.length / pageSize.value);
+        if (visibleRoutines.value.length === 0 && pageNumber.value > 0)
+            updatePage(pageNumber.value - 1)
+    } else {
+        await getMyRoutines();
+        visibleRoutines.value = Array.from(routineStore.getMyRoutines()).slice(
+            (pageNumber.value - 1) * pageSize.value,
+            pageNumber.value * pageSize.value
+        );
+        routineArray.value = Array.from(routineStore.getMyRoutines());
+        amountPages.value = Math.ceil(routineArray.value.length / pageSize.value);
+        if (visibleRoutines.value.length === 0 && pageNumber.value > 0)
+            updatePage(pageNumber.value - 1)
+    }
 }
 
 async function toggle(routine) {
@@ -171,52 +223,46 @@ async function toggle(routine) {
     else routineStore.addFavoriteRoutine(routine);
     routine.fav = !routine.fav;
     const result = await routineStore.changeRoutine(routine);
-    if (!result.success) {
+    if (!result.success)
         routine.fav = !routine.fav;
-        // todo tirar error
-    }
-    updateVisibleRoutines();
+    await updateVisibleRoutines();
+}
+
+async function editRoutine(routine) {
+    await router.push({name: 'edit-routine', params: {id: routine.id}});
 }
 
 function updatePage(PageNumber) {
-  pageNumber.value = PageNumber;
-  updateVisibleRoutines();
+    pageNumber.value = PageNumber;
+    updateVisibleRoutines();
 }
 
 async function nextPage() {
     pageNumber.value = pageNumber.value + 1;
     await updateVisibleRoutines();
-
 }
 
 async function previousPage() {
-
     pageNumber.value = pageNumber.value - 1;
     await updateVisibleRoutines();
 
 }
 
 function inputPage(number) {
-  debugger;
-  pageNumber.value = number ;
-  updateVisibleRoutines();
+    debugger;
+    pageNumber.value = number;
+    updateVisibleRoutines();
 }
 
 onBeforeMount(() => {
-  console.log("creado");
-
-  updateVisibleRoutines();
+    updateVisibleRoutines();
 });
-
-/*watch(page, () => {
-  updateVisibleRoutines();
-});*/
 </script>
 
 <style scoped>
-.titulo {
-    padding-top: 20px;
-    padding-left: 20px;
+h1 {
+    text-align: center;
+    padding-top: 25px;
 }
 
 .cont {
@@ -272,17 +318,16 @@ onBeforeMount(() => {
     max-width: 200px;
 }
 
-.pagination-container{
+.pagination-container {
     display: flex;
-  justify-content: center;
+    justify-content: center;
 }
 
 .pagination {
-
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-  text-align: center;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    text-align: center;
 }
 
 .v-row {
@@ -294,8 +339,4 @@ onBeforeMount(() => {
     flex: 1;
     margin: 40px;
 }
-
-/*array de favs
-getFavs
-*/
 </style>

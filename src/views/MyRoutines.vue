@@ -1,7 +1,7 @@
 <template>
     <AppBar/>
     <div class="width mx-auto">
-        <PaginationGrid :is-fav="true"/>
+        <PaginationGrid :is-fav="false"/>
     </div>
     <footerComponent/>
 </template>

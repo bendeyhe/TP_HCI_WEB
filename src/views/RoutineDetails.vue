@@ -130,7 +130,6 @@ async function getRoutine() {
             // date: result.data.date,
         }
         routine.value = {...routine.value, ...newRoutine};
-        console.log(routine)
     }
 }
 

@@ -22,7 +22,8 @@ export const useUserStore = defineStore('login', {
             getCurrentUser: {path: `${USER_B_URL}/current`, requiresAuth: true, method: 'GET'},
             modifyCurrentUser: {path: `${USER_B_URL}/current`, requiresAuth: true, method: 'PUT'},
             deleteCurrentUser: {path: `${USER_B_URL}/current`, requiresAuth: true, method: 'DELETE'},
-            getRoutineByUser: (userId) => ({path: `${USER_B_URL}/${userId}/routines`, requiresAuth: true, method: 'GET'})
+            getRoutineByUser: (userId) => ({path: `${USER_B_URL}/${userId}/routines`, requiresAuth: true, method: 'GET'}),
+            getCurUserRoutines: {path: `${USER_B_URL}/current/routines`, requiresAuth: true, method: 'GET'},
         }
     }),
     getters: {
@@ -83,6 +84,11 @@ export const useUserStore = defineStore('login', {
         // GET: /users/{userId}/routines
         async getRoutineByUser(userId) {
             return await makeApiCall(this.apiEndpoints.getRoutineByUser(userId), null, this.token);
+        },
+
+        // GET: /users/current/routines
+        async getCurUserRoutines() {
+            return await makeApiCall(this.apiEndpoints.getCurUserRoutines, null, this.token);
         },
 
 

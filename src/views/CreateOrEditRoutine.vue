@@ -186,12 +186,15 @@
 import AppBar from "@/components/AppBar.vue";
 import SearchBarExercise from "@/components/SearchBarExercise.vue";
 import ExerciseDetail from "@/components/ExerciseDetail.vue";
-import {ref, provide} from 'vue';
+import {ref, provide, onBeforeMount} from 'vue';
 import ExerciseDetailMini from "@/components/ExerciseDetailMini.vue";
 import {useExerciseStore} from '@/stores/exerciseStore'
+import {useRoute} from "vue-router";
+import {useRoutineStore} from "@/stores/routineStore";
 
 
 const exerciseStore = useExerciseStore()
+const routineStore = useRoutineStore()
 const routine = ref({});
 const type = ref(1);
 const ejEntCalor = ref([]);
@@ -200,6 +203,7 @@ const ejEnfriamiento = ref([]);
 const contEntCalor = ref(0);
 const contPrincipal = ref(0);
 const contEnfriamiento = ref(0);
+const route = useRoute();
 const newEjercicio = ref({
     name: '',
     detail: '',
@@ -216,6 +220,30 @@ const ejercicioSeleccionado = ref({
 });
 
 provide('selectedExercise', ejercicioSeleccionado);
+
+onBeforeMount(async () => {
+    if (route.params.id) {
+        let result = await routineStore.getRoutine(route.params.id)
+        if(result.success){
+            routine.value = result.data
+            result = await exerciseStore.getExercisesByRoutine(route.params.id)
+            for (let i = 0; i < routine.value.exercises.length; i++) {
+                if (routine.value.exercises[i].type === 'exercise') {
+                    if (routine.value.exercises[i].number === 1) {
+                        ejEntCalor.value.push(routine.value.exercises[i])
+                        contEntCalor.value++
+                    } else if (routine.value.exercises[i].number === 2) {
+                        ejPrincipal.value.push(routine.value.exercises[i])
+                        contPrincipal.value++
+                    } else if (routine.value.exercises[i].number === 3) {
+                        ejEnfriamiento.value.push(routine.value.exercises[i])
+                        contEnfriamiento.value++
+                    }
+                }
+            }
+        }
+    }
+});
 
 function agregarEjercicio() {
     if (ejercicioSeleccionado.value.name === '' || ejercicioSeleccionado.value.detail === '' || ejercicioSeleccionado.value.url === '') {
@@ -257,7 +285,7 @@ async function saveExercise() {
 }
 
 async function saveRutina(){
-
+    // todo guardar rutina
 }
 
 </script>

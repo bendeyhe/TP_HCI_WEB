@@ -10,6 +10,7 @@ export const useRoutineStore = defineStore('routine', {
     state: () => ({
         routines: ref([]),
         favoriteRoutines: ref([]),
+        myRoutines: ref([]),
         apiEndpoints: {
             getRoutines: {path: `${ROUT_B_URL}?size=100`, requiresAuth: true, method: 'GET'},
             addRoutine: {path: `${ROUT_B_URL}`, requiresAuth: true, method: 'POST'},
@@ -49,6 +50,9 @@ export const useRoutineStore = defineStore('routine', {
         getfavoriteRoutines() {
             return this.favoriteRoutines.values();
         },
+        getMyRoutines() {
+            return this.myRoutines.values();
+        },
         addFavoriteRoutine(routine) {
             for (let i = 0; i < this.favoriteRoutines.length; i++) {
                 if (this.favoriteRoutines[i].id === routine.id) {
@@ -56,7 +60,14 @@ export const useRoutineStore = defineStore('routine', {
                 }
             }
             this.favoriteRoutines.push(routine);
-
+        },
+        addMyRoutine(routine) {
+            for (let i = 0; i < this.myRoutines.length; i++) {
+                if (this.myRoutines[i].id === routine.id) {
+                    return;
+                }
+            }
+            this.myRoutines.push(routine);
         },
         getAllRoutines() {
             return this.routines.values();
