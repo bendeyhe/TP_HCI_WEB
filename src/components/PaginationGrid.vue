@@ -76,7 +76,7 @@
                                 <v-btn>Ver Detalle</v-btn>
                             </RouterLink>
                             <v-spacer></v-spacer>
-                            <v-btn v-if="typeRout === 'myRouts'"
+                            <v-btn v-if="typeRout.value === 'myRouts'"
                                 icon="mdi-trash-can-outline"
                                 @click="deleteRout(routine)"
                                 class="red-hover"
@@ -148,10 +148,10 @@ const props = defineProps({
     },
 });
 
-const {typeRout} = toRefs(props);
-let {query} = toRefs(props);
+const { typeRout, query } = toRefs(props);
 
 async function getFavs() {
+    debugger
     loading.value = true;
     const result = await routineStore.getRoutines();
     if (result.success && result.data.content) {
@@ -208,13 +208,13 @@ async function getMyRoutines() {
 async function getRoutines() {
     loading.value = true;
     const result = await routineStore.getRoutines();
-    if(query === undefined || query === null)
-        query = "";
+    if(query.value === undefined || query.value === null)
+        query.value = "";
     if (result.success && result.data.content) {
         for (let i = 0; i < result.data.totalCount; i++) {
             const routine = result.data.content[i];
             if (routine && routine.name) {
-                if(routine.name.toLowerCase().includes(query)){
+                if(routine.name.toLowerCase().includes(query.value)){
                     routineStore.addRoutineArray({
                         id: routine.id,
                         name: routine.name,
@@ -236,7 +236,7 @@ async function getRoutines() {
 }
 
 async function updateVisibleRoutines() {
-    if (typeRout === "fav") {
+    if (typeRout.value === "fav") {
         await getFavs();
         visibleRoutines.value = Array.from(routineStore.getfavoriteRoutines()).slice(
             (pageNumber.value - 1) * pageSize.value,
@@ -246,7 +246,7 @@ async function updateVisibleRoutines() {
         amountPages.value = Math.ceil(routineArray.value.length / pageSize.value);
         if (visibleRoutines.value.length === 0 && pageNumber.value > 0)
             updatePage(pageNumber.value - 1)
-    } else if (typeRout === "myRouts") {
+    } else if (typeRout.value === "myRouts") {
         await getMyRoutines();
         visibleRoutines.value = Array.from(routineStore.getMyRoutines()).slice(
             (pageNumber.value - 1) * pageSize.value,
@@ -314,7 +314,7 @@ function inputPage(number) {
 }
 
 onBeforeMount(() => {
-    if(typeRout !== "fav" && typeRout !== "myRouts")
+    if(typeRout.value !== "fav" && typeRout.value !== "myRouts")
         typeRout.value = "Routs";
     updateVisibleRoutines();
 });
