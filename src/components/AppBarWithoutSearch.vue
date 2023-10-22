@@ -7,7 +7,7 @@
         <template v-slot:perfil>
             <v-menu open-on-hover>
                 <template v-slot:activator="{ props }">
-                    <v-btn prepend-icon="mdi-account-circle" v-bind="props">Ingresar</v-btn>
+                    <v-btn prepend-icon="mdi-account-circle" v-bind="props">Iniciar Sesión</v-btn>
                 </template>
                 <v-list>
                     <v-list-item @click="goTo('/login')">Iniciar sesión</v-list-item>
