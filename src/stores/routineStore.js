@@ -81,9 +81,21 @@ export const useRoutineStore = defineStore('routine', {
             this.routines.push(routine);
         },
         removeFavoriteRoutine(routine) {
-            const index = this.favoriteRoutines.findIndex(favRoutine => favRoutine.id === routine.id);
+            const index = this.favoriteRoutines.findIndex(r => r.id === routine.id);
             if (index !== -1) {
                 this.favoriteRoutines.splice(index, 1);
+            }
+        },
+        removeMyRoutine(routine) {
+            const index = this.myRoutines.findIndex(r => r.id === routine.id);
+            if (index !== -1) {
+                this.myRoutines.splice(index, 1);
+            }
+        },
+        removeRoutines(routine) {
+            const index = this.routines.findIndex(r => r.id === routine.id);
+            if (index !== -1) {
+                this.routines.splice(index, 1);
             }
         },
         async getRoutines() {

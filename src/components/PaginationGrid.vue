@@ -31,7 +31,7 @@
                             height="150"
                         />
 
-                        <v-btn v-if="isFav"
+                        <v-btn v-if="typeRout === 'fav'"
                                class="heart"
                                :icon="
                                 routine.fav ? 'mdi-heart' : 'mdi-heart-outline'
@@ -76,9 +76,9 @@
                                 <v-btn>Ver Detalle</v-btn>
                             </RouterLink>
                             <v-spacer></v-spacer>
-                            <v-btn
+                            <v-btn v-if="typeRout === 'myRouts'"
                                 icon="mdi-trash-can-outline"
-                                @click="delete(exercise)"
+                                @click="deleteRout(routine)"
                                 class="red-hover"
                             ></v-btn>
                         </v-card-actions>
@@ -110,7 +110,7 @@
         </div>
     </div>
     <div v-else>
-        <div v-if="isFav" class="flex-container">
+        <div v-if="typeRout === 'fav'" class="flex-container">
             <h2>Parece que no has likeado ninguna rutina todavía. Estoy seguro que ya encontrarás una que te encante!
                 ʕ•ᴥ•ʔ</h2>
         </div>
@@ -149,7 +149,7 @@ const props = defineProps({
 });
 
 const {typeRout} = toRefs(props);
-const {query} = toRefs(props);
+let {query} = toRefs(props);
 
 async function getFavs() {
     loading.value = true;
@@ -179,6 +179,7 @@ async function getFavs() {
 
 async function getMyRoutines() {
     loading.value = true;
+    debugger
     let result = await userStore.getCurrentUser();
     if (result.success) {
         const user = result.data;
@@ -208,14 +209,13 @@ async function getMyRoutines() {
 async function getRoutines() {
     loading.value = true;
     const result = await routineStore.getRoutines();
-    if(query.value === undefined || query.value === null || query.value === "")
-        query.value = "";
+    if(query === undefined || query === null)
+        query = "";
     if (result.success && result.data.content) {
         for (let i = 0; i < result.data.totalCount; i++) {
-            debugger
             const routine = result.data.content[i];
             if (routine && routine.name) {
-                if(routine.name.toLowerCase().includes(query.toLowerCase)){
+                if(routine.name.toLowerCase().includes(query)){
                     routineStore.addRoutineArray({
                         id: routine.id,
                         name: routine.name,
@@ -238,6 +238,7 @@ async function getRoutines() {
 
 async function updateVisibleRoutines() {
     if (typeRout === "fav") {
+        debugger
         await getFavs();
         visibleRoutines.value = Array.from(routineStore.getfavoriteRoutines()).slice(
             (pageNumber.value - 1) * pageSize.value,
@@ -248,6 +249,7 @@ async function updateVisibleRoutines() {
         if (visibleRoutines.value.length === 0 && pageNumber.value > 0)
             updatePage(pageNumber.value - 1)
     } else if (typeRout === "myRouts") {
+        debugger
         await getMyRoutines();
         visibleRoutines.value = Array.from(routineStore.getMyRoutines()).slice(
             (pageNumber.value - 1) * pageSize.value,
@@ -258,6 +260,7 @@ async function updateVisibleRoutines() {
         if (visibleRoutines.value.length === 0 && pageNumber.value > 0)
             updatePage(pageNumber.value - 1)
     } else {
+        debugger
         await getRoutines();
         visibleRoutines.value = Array.from(routineStore.getAllRoutines()).slice(
             (pageNumber.value - 1) * pageSize.value,
@@ -268,6 +271,7 @@ async function updateVisibleRoutines() {
         if (visibleRoutines.value.length === 0 && pageNumber.value > 0)
             updatePage(pageNumber.value - 1)
     }
+    debugger
 }
 
 async function toggle(routine) {
@@ -282,6 +286,16 @@ async function toggle(routine) {
 
 async function editRoutine(routine) {
     await router.push({name: 'edit-routine', params: {id: routine.id}});
+}
+
+async function deleteRout(routine) {
+    debugger
+    const result = await routineStore.deleteRoutine(routine.id);
+    if (result.success){
+        routineStore.removeMyRoutine(routine);
+        routineStore.removeRoutines(routine)
+        await updateVisibleRoutines()
+    }
 }
 
 function updatePage(PageNumber) {
@@ -306,6 +320,8 @@ function inputPage(number) {
 }
 
 onBeforeMount(() => {
+    if(typeRout !== "fav" && typeRout !== "myRouts")
+        typeRout.value = "Routs";
     updateVisibleRoutines();
 });
 </script>

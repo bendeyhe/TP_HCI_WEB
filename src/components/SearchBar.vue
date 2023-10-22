@@ -23,10 +23,7 @@ const searchQuery = ref('')
 
 function onClick() {
     if (searchQuery.value.trim() !== '') {
-        router.push({
-            name: 'routines',
-            params: {query: searchQuery.value}
-        })
+        router.push({ name: 'routines', params: {query: searchQuery.value}})
     }
 }
 </script>

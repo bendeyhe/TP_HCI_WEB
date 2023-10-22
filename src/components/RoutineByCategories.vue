@@ -16,14 +16,6 @@
                 v-for="routine in favourite ? routineStore.getfavoriteRoutines() : routineStore.getAllRoutines()"
                 :key="routine.id"
             >
-                <!--  <v-card
-                  color="grey-lighten-1"
-                  :class="['ma-4', selectedClass]"
-                  height="200"
-                  width="100"
-                  @click="toggle"
-                  >
-  -->
                 <v-card
                     :loading="loading"
 

@@ -1,7 +1,7 @@
 <template>
     <AppBar/>
     <div class="width mx-auto">
-        <PaginationGrid :typeRout="param"/>
+        <PaginationGrid :typeRout="param" :query="query"/>
     </div>
     <footerComponent/>
 </template>

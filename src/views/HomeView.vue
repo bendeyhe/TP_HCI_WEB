@@ -1,5 +1,6 @@
 <template>
-    <AppBar/>
+    <AppBar v-if="isLogged"/>
+    <AppBarWithoutSearch v-else/>
     <v-app id="inspire">
 
         <v-carousel cycle show-arrows="hover" hide-delimiter-background>
@@ -66,14 +67,18 @@
 </template>
 
 <script setup>
-import {ref} from 'vue'
 import AppBar from "@/components/AppBar.vue";
 import RoutineByCategories from "@/components/RoutineByCategories.vue";
 import FooterComponent from "@/components/FooterComponent.vue";
 import routineByCategories from "../components/RoutineByCategories.vue";
+import {useUserStore} from "@/stores/userStore";
+import AppBarWithoutSearch from "@/components/AppBarWithoutSearch.vue";
 
-const drawer = ref(null)
+const userStore = useUserStore();
 
+function isLogged() {
+    return userStore.getTokenState() !== null && userStore.getTokenState() !== '';
+}
 </script>
 
 <script>

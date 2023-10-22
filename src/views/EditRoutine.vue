@@ -4,7 +4,7 @@
     <h1 v-else>Crear Rutina</h1>
     <v-row>
         <v-col>
-            <v-btn prepend-icon="mdi-content-save" class="save" @click="openFinishDialog"> Finalizar </v-btn>
+            <v-btn prepend-icon="mdi-content-save" class="save" @click="openFinishDialog"> Finalizar</v-btn>
         </v-col>
     </v-row>
 
@@ -29,14 +29,18 @@
                 <v-container fluid class="contenedor">
                     <v-row>
                         <v-col cols="8">
-                            <div  v-if="n===2">
+                            <div v-if="n===2">
                                 <v-row>
-                                    <v-col><h3> Número de ciclo principal: </h3></v-col>
+                                    <v-col><h3> Número de ciclo: </h3></v-col>
                                     <v-col>
                                         <v-autocomplete density="compact" default="1" variant="outlined"
-                                                        :items="['1']"></v-autocomplete>
+                                                        :items="ciclosPrincipal"></v-autocomplete>
                                     </v-col>
-                                    <v-col><v-btn prepend-icon="mdi-plus" class="agregar-principal"> Agregar ciclo principal</v-btn></v-col>
+                                    <v-col>
+                                        <v-btn prepend-icon="mdi-plus" class="agregar-principal" @click="addCycle">
+                                            Agregar ciclo principal
+                                        </v-btn>
+                                    </v-col>
                                 </v-row>
                                 <v-row>
                                     <v-col><h3> Cantidad de repeticiones del ciclo: </h3></v-col>
@@ -173,7 +177,6 @@
     </v-card>
 
 
-
     <v-dialog v-model="finishRoutine" min-width="800">
         <div>
             <v-card
@@ -217,10 +220,8 @@
 
                 <div class="text-subtitle-1">Dificultad de la rutina</div>
 
-
                 <v-autocomplete density="compact" default="1" variant="outlined"
                                 :items="['rookie', 'beginner', 'intermediate', 'advanced', 'expert']"></v-autocomplete>
-
 
                 <v-card-actions>
                     <v-btn
@@ -228,7 +229,7 @@
                         @click="resetForm"
                         class="cancelar"
                     >
-                         Cancelar
+                        Cancelar
                     </v-btn>
                     <v-spacer></v-spacer>
                     <v-btn
@@ -337,9 +338,7 @@ onBeforeMount(async () => {
                 if (result.success) {
                     ejEnfriamiento.value = result.data.content
                 }
-                debugger
             }
-            debugger
         }
     } else {
         isEditing.value = false
@@ -396,11 +395,20 @@ function openFinishDialog() {
     finishRoutine.value = true;
 }
 
+function addCycle() {
+    debugger
+    ciclosPrincipal.value.push({
+        type: 'exercise',
+        number: ciclosPrincipal.value.length + 1,
+        index: ciclosPrincipal.value.length + 1
+    })
+}
+
 </script>
 
 <script>
 export default {
-    data () {
+    data() {
         return {
             column: null,
             inline: null,
