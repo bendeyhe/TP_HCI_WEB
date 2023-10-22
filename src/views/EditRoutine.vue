@@ -34,8 +34,9 @@
                                     <v-col><h3> Número de ciclo principal: </h3></v-col>
                                     <v-col>
                                         <v-autocomplete density="compact" default="1" variant="outlined"
-                                                        :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20']"></v-autocomplete>
+                                                        :items="['1']"></v-autocomplete>
                                     </v-col>
+                                    <v-col><v-btn prepend-icon="mdi-plus" class="agregar-principal"> Agregar ciclo principal</v-btn></v-col>
                                 </v-row>
                                 <v-row>
                                     <v-col><h3> Cantidad de repeticiones del ciclo: </h3></v-col>
@@ -412,8 +413,8 @@ h1 {
 }
 
 .nuevo-ejercicio {
-    background-color: #8efd00;
-    color: #000000;
+    background-color: #000000;
+    color: #8efd00;
     margin-right: 10px;
     margin-top: 20px;
 }
@@ -464,6 +465,11 @@ h2 {
 
 .principal {
     padding-top: 40px;
+}
+
+.agregar-principal {
+    background-color: #000000;
+    color: #8efd00;
 }
 
 </style>

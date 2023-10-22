@@ -251,8 +251,8 @@ export default {
 }
 
 .seleccionar-ejercicio {
-    background-color: #8efd00;
-    color: #000000;
+    background-color: #000000;
+    color: #8efd00;
     margin-right: 10px;
     margin-top: 20px;
 }
