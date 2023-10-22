@@ -2,23 +2,61 @@
     <AppBar/>
     <v-app id="inspire">
 
-        
-
         <v-carousel cycle show-arrows="hover">
             <v-carousel-item
                 src="https://img.asmedia.epimg.net/resizer/3kjYbfgz9L4yg96V8Yb8qKFnI84=/644x362/cloudfront-eu-central-1.images.arcpublishing.com/diarioas/EGRQNQBFYJNNZK2E5LRAJOBULQ.jpg"
                 cover
-            ></v-carousel-item>
+            >
+                <div class="nombre-rutina">
+                    Nombre Rutina
+                </div>
+                <div class="dificultad-rutina">
+                    datos de la rutina
+                </div>
+                <div class="creador-rutina">
+                    creador de la rutina
+                </div>
+                <div class="boton-rutina">
+                    <v-btn class="boton"> Ver Detalle </v-btn>
+                </div>
+
+            </v-carousel-item>
 
             <v-carousel-item
                 src="https://www.muscleandfitness.com/wp-content/uploads/2020/05/Focused-Fit-Man-Running-On-A-Treadmill.jpg?quality=86&strip=all"
                 cover
-            ></v-carousel-item>
+            >
+                <div class="nombre-rutina">
+                    Nombre Rutina
+                </div>
+                <div class="dificultad-rutina">
+                    datos de la rutina
+                </div>
+                <div class="creador-rutina">
+                    creador de la rutina
+                </div>
+                <div class="boton-rutina">
+                    <v-btn class="boton"> Ver Detalle </v-btn>
+                </div>
+            </v-carousel-item>
 
             <v-carousel-item
                 src="https://media.istockphoto.com/id/1418215624/photo/panoramic-side-view-of-beautiful-young-asian-woman-running-on-treadmill-and-listening-to.webp?b=1&s=170667a&w=0&k=20&c=GFbpktAEzDGZWvMqFDjKPhNlKLrb9h1N6y6_woZ91y4="
                 cover
-            ></v-carousel-item>
+            >
+                <div class="nombre-rutina">
+                    Nombre Rutina
+                </div>
+                <div class="dificultad-rutina">
+                    datos de la rutina
+                </div>
+                <div class="creador-rutina">
+                    creador de la rutina
+                </div>
+                <div class="boton-rutina">
+                    <v-btn class="boton"> Ver Detalle </v-btn>
+                </div>
+            </v-carousel-item>
         </v-carousel>
 
 
@@ -38,6 +76,7 @@ import {ref} from 'vue'
 import AppBar from "@/components/AppBar.vue";
 import RoutineByCategories from "@/components/RoutineByCategories.vue";
 import FooterComponent from "@/components/FooterComponent.vue";
+import routineByCategories from "../components/RoutineByCategories.vue";
 
 const drawer = ref(null)
 
@@ -66,5 +105,56 @@ export default {
     color: #8efd00;
     margin-right: 10px;
     margin-left: 10px;
+}
+
+.nombre-rutina {
+    position: absolute;
+    top: 20px; /* Ajusta la posición vertical según tus necesidades */
+    left: 20px; /* Ajusta la posición horizontal según tus necesidades */
+    color: white; /* Color del texto */
+    font-size: 45px; /* Tamaño de la fuente del texto */
+    font-weight: bolder;
+    font-family: Montserrat, sans-serif;
+    padding: 10px; /* Espaciado interior del texto */
+    background-color: black;
+    border-radius: 5px;
+}
+
+.dificultad-rutina {
+    position: absolute;
+    bottom: 50px; /* Ajusta la posición vertical según tus necesidades */
+    left: 20px; /* Ajusta la posición horizontal según tus necesidades */
+    color: white; /* Color del texto */
+    font-size: 20px; /* Tamaño de la fuente del texto */
+    font-family: Montserrat, sans-serif;
+    padding: 10px; /* Espaciado interior del texto */
+
+    /*
+    dificultad
+    nombre creador
+
+    */
+}
+
+.creador-rutina {
+    position: absolute;
+    bottom: 75px; /* Ajusta la posición vertical según tus necesidades */
+    left: 20px; /* Ajusta la posición horizontal según tus necesidades */
+    color: white; /* Color del texto */
+    font-size: 20px; /* Tamaño de la fuente del texto */
+    font-family: Montserrat, sans-serif;
+    padding: 10px; /* Espaciado interior del texto */
+}
+
+.boton-rutina {
+    position: absolute;
+    bottom: 60px; /* Ajusta la posición vertical según tus necesidades */
+    right: 20px; /* Ajusta la posición horizontal según tus necesidades */
+
+}
+
+.boton {
+    background-color: #8efd00;
+    color: #000000;
 }
 </style>
