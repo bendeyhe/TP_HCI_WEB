@@ -11,8 +11,6 @@
             >
                 <div class="nombre-rutina">
                     {{ routine.name }}
-                    <br>
-                    <div class="detalle-rutina">{{ routine.detail }}</div>
                 </div>
                 <div class="detalles-rutina">
                     Creador: {{ routine.user.username }} <br>
@@ -22,45 +20,7 @@
                     <v-btn class="boton" @click="verDetalle(routine)"> Ver Detalle</v-btn>
                 </div>
             </v-carousel-item>
-
-            <!--
-            <v-carousel-item
-                v-if="topRoutines[1] && topRoutines[1].metadata"
-                :src="topRoutines[1].metadata.image"
-                cover
-            >
-                <div class="nombre-rutina">
-                    {{topRoutines[1].name}}
-                </div>
-                <div class="detalles-rutina">
-                    Creador: {{ topRoutines[1].user.username}} <br>
-                    Dificultad: {{ topRoutines[1].difficulty }}
-                </div>
-                <div class="boton-rutina">
-                    <v-btn class="boton" @click="verDetalle(topRoutines[0])"> Ver Detalle </v-btn>
-                </div>
-            </v-carousel-item>
-
-            <v-carousel-item
-                v-if="topRoutines[2] && topRoutines[2].metadata"
-                :src="topRoutines[2].metadata.image"
-                cover
-            >
-                <div class="nombre-rutina">
-                    {{topRoutines[2].name}}
-                </div>
-                <div class="detalles-rutina">
-                    Creador: {{ topRoutines[2].user.username }} <br>
-                    Dificultad:  {{ topRoutines[2].difficulty }}
-                </div>
-                <div class="boton-rutina">
-                    <v-btn class="boton" @click="verDetalle(topRoutines[0])"> Ver Detalle </v-btn>
-                </div>
-            </v-carousel-item>
-            -->
         </v-carousel>
-
-
         <v-main>
             <!--todo quizas aca esta bueno hacer un v-for?-->
             <RoutineByCategories :nombreRutina="category1" :favourite="false"/>
@@ -68,7 +28,6 @@
             <RoutineByCategories :nombreRutina="category3" :favourite="false"/>
             <RoutineByCategories :nombreRutina="category4" :favourite="true"/>
             <RoutineByCategories :nombreRutina="category5" :favourite="false"/>
-
         </v-main>
     </v-app>
     <footer-component/>
@@ -109,7 +68,7 @@ onBeforeMount(async () => {
 });
 
 function verDetalle(routine) {
-    router.push({name: 'edit-routine', params: {id: routine.id}});
+    router.push({name: 'routine-details', params: {id: routine.id}});
 }
 </script>
 

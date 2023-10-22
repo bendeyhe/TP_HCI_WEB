@@ -29,8 +29,8 @@
                 <v-container fluid class="contenedor">
                     <v-row>
                         <v-col cols="8">
-                            <div v-if="n===2">
-                                <v-row>
+                            <div>
+                                <v-row v-if="n===2">
                                     <v-col><h3> Número de ciclo: </h3></v-col>
                                     <v-col>
                                         <v-autocomplete density="compact" default="1" variant="outlined"
@@ -243,7 +243,8 @@
                         </v-row>
                         <v-row v-else-if="n===2">
                             <!-- ExerciseDetailMini para Principal -->
-                            <h2 class="principal" v-if="ejPrincipal[cicloSeleccionado]?.length > 0">Principal:</h2>
+                            <h2 class="principal" v-if="ejPrincipal[cicloSeleccionado]?.length > 0">Principal
+                                {{ cicloSeleccionado }}:</h2>
                             <div v-for="ej in ejPrincipal[cicloSeleccionado]" :key="'principal-' + n">
                                 <ExerciseDetailMini :exercise="ej"/>
                             </div>
@@ -458,7 +459,7 @@ onBeforeMount(async () => {
     } else {
         isEditing.value = false
         cantCiclosPrincipal.value.push(1)
-        if(!dataPrincipal.value[1])
+        if (!dataPrincipal.value[1])
             dataPrincipal.value[1] = []
         dataPrincipal.value[1].push({
             cantSeries: 0,
@@ -477,10 +478,10 @@ function agregarEjercicio() {
         if (type.value === 1) {
             ejEntCalor.value.push(ejercicioSeleccionado);
         } else if (type.value === 2) {
-            debugger
-            if (!ejPrincipal.value[cicloSeleccionado.value])
+            if (ejPrincipal.value[cicloSeleccionado.value] == null)
                 ejPrincipal.value[cicloSeleccionado.value] = []
             ejPrincipal.value[cicloSeleccionado.value].push(ejercicioSeleccionado.value);
+            console.log(ejPrincipal.value)
         } else if (type.value === 3) {
             ejEnfriamiento.value.push(ejercicioSeleccionado);
         }
@@ -525,12 +526,13 @@ function openFinishDialog() {
 }
 
 function addCycle() {
+    cicloSeleccionado.value = ciclosPrincipal.value.length + 2
     ciclosPrincipal.value.push({
         type: 'exercise',
         number: ciclosPrincipal.value.length + 1,
         index: ciclosPrincipal.value.length + 1
     })
-    if(!dataPrincipal.value[cicloSeleccionado.value])
+    if (!dataPrincipal.value[cicloSeleccionado.value])
         dataPrincipal.value[cicloSeleccionado.value] = []
     dataPrincipal.value[cicloSeleccionado.value].push({
         cantSeries: 0,
