@@ -511,12 +511,12 @@ async function saveExercise() {
             newEjercicio.value = {
                 name: '',
                 detail: '',
-                url: 'https://www.feda.net/wp-content/uploads/2018/08/circuit-training.jpeg',
+                url: '',
                 type: '',
                 number: user.data.metadata.exercises.length,
                 index: 0
             }
-            myExercises.value = await user.data.metadata.exercises
+            myExercises.value = user.data.metadata.exercises
         }
     }
 }
