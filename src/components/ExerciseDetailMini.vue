@@ -3,8 +3,8 @@
         :loading="loading"
 
         class="mx-auto my-12"
-        width="200"
-        height="300"
+        width="280"
+        height="475"
     >
         <template v-slot:loader="{ isActive }">
             <v-progress-linear
@@ -19,7 +19,7 @@
                     class="image"
                     src="https://media.istockphoto.com/id/1418215624/photo/panoramic-side-view-of-beautiful-young-asian-woman-running-on-treadmill-and-listening-to.webp?b=1&s=170667a&w=0&k=20&c=GFbpktAEzDGZWvMqFDjKPhNlKLrb9h1N6y6_woZ91y4="
                     alt="Foto del ejercicio"
-                    height="100"
+                    height="150"
                 />
 
                 <v-btn
@@ -29,9 +29,7 @@
                 ></v-btn>
 
             </div>
-        <v-card-item>
-            <v-card-title> {{ exercise.name }} </v-card-title>
-        </v-card-item>
+            <v-card-text class="titulo"> {{ exercise.name }} </v-card-text>
         <v-card-text>
             <v-row allign="center" class="mx-0">
 
@@ -116,6 +114,17 @@ const { exercise } = toRefs(props);
     padding: 12px 24px;
     border: none;
     cursor: pointer;
+}
+
+.titulo {
+    font-size: 20px;
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 700px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+
 }
 
 </style>

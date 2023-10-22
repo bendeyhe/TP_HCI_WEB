@@ -68,7 +68,7 @@
                                                         maxlength="200"
                                                         counter
                                                     ></v-text-field>
-                                                    
+
                                                     <!--
                                                     <v-text-field
                                                         label="Duración"
@@ -87,9 +87,9 @@
                                                         label="Imagen"
                                                         v-model="newEjercicio.url"
                                                     ></v-text-field>
-                                                   
+
                                                     <!-- agregar alerta string maximo 274-->
-                                                    
+
                                                 </v-card-text>
 
                                                 <v-card-actions>
@@ -207,14 +207,14 @@ const route = useRoute();
 const newEjercicio = ref({
     name: '',
     detail: '',
-    url: '',
+    url: 'https://www.feda.net/wp-content/uploads/2018/08/circuit-training.jpeg',
     type: '',
     number: 1
 });
 const ejercicioSeleccionado = ref({
     name: '',
     detail: '',
-    url: '',
+    url: 'https://www.feda.net/wp-content/uploads/2018/08/circuit-training.jpeg',
     type: '',
     number: 1
 });
@@ -276,7 +276,7 @@ async function saveExercise() {
             newEjercicio.value = {
                 name: '',
                 detail: '',
-                url: '',
+                url: 'https://www.feda.net/wp-content/uploads/2018/08/circuit-training.jpeg',
                 type: '',
                 number: 1
             }

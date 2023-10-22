@@ -39,32 +39,38 @@
                                             {{ exercise.name }}
                                         </v-card-text>
 
-                                    <v-card-actions>
-                                        <v-btn
-                                            color="primary"
-                                            variant="text"
-                                            @click="$event.stopPropagation(); show[index] = !show[index]"
-                                        >
-                                            Ver Detalle
-                                        </v-btn>
 
-                                        <v-spacer></v-spacer>
+                                    <div v-if="exercise.detail.length > 100">
+                                        <v-card-actions>
+                                            <v-btn
+                                                color="secondary"
+                                                variant="text"
+                                                :append-icon="show[index] ? 'mdi-chevron-up' : 'mdi-chevron-down'"
+                                                @click="$event.stopPropagation(); show[index] = !show[index]"
+                                            >
+                                                Ver Detalle
+                                            </v-btn>
 
-                                        <v-btn
-                                            :icon="show[index] ? 'mdi-chevron-up' : 'mdi-chevron-down'"
-                                            @click="$event.stopPropagation(); show[index] = !show[index]"
-                                        ></v-btn>
-                                    </v-card-actions>
+                                            <v-spacer></v-spacer>
 
-                                    <v-expand-transition>
-                                        <div v-show="show[index]">
-                                            <v-divider></v-divider>
+                                        </v-card-actions>
 
-                                            <v-card-text class="detalle">
-                                                {{ exercise.detail }}
-                                            </v-card-text>
-                                        </div>
-                                    </v-expand-transition>
+                                        <v-expand-transition>
+                                            <div v-show="show[index]">
+                                                <v-divider></v-divider>
+
+                                                <v-card-text class="detalle">
+                                                    {{ exercise.detail }}
+                                                </v-card-text>
+                                            </div>
+                                        </v-expand-transition>
+                                    </div>
+                                    <div v-else>
+                                        <v-card-text class="detalle">
+                                            {{ exercise.detail }}
+                                        </v-card-text>
+                                    </div>
+
                                 </v-col>
                             </v-row>
                         </v-card>
@@ -186,13 +192,21 @@ export default {
 }
 
 .titulo {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
     padding-bottom: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 700px;
+    display: -webkit-box;
+    -webkit-line-clamp: 5; /* number of lines to show */
+    -webkit-box-orient: vertical;
+
 }
 
 .detalle {
     padding-top: 5px;
 }
+
 </style>
 
