@@ -29,14 +29,14 @@ const routes = [
         path: '/create-routine',
         name: 'create-routine',
         meta: {requiresAuth: true},
-        component: () => import('@/views/CreateOrEditRoutine.vue')
+        component: () => import('@/views/CreateRoutine.vue')
     },
     {
         path: '/edit-routine/:id',
         name: 'edit-routine',
         meta: {requiresAuth: true},
         props: true,
-        component: () => import('@/views/CreateOrEditRoutine.vue'),
+        component: () => import('@/views/EditRoutine.vue'),
     },
     {
         path: '/favourite',
@@ -83,7 +83,7 @@ const routes = [
         beforeEnter: async (to, from, next) => {
             const routineId = to.params.id;
             const result = await useRoutineStore().getRoutine(routineId);
-            try{
+            try {
                 if (result.success) {
                     next();
                 } else {
@@ -91,7 +91,7 @@ const routes = [
                 }
             } catch (error) {
                 console.error("Error en la solicitud API:", error);
-                next({ name: "not-found" }); //todo hacer una pantallita de error o algo? o dejar el not found?
+                next({name: "not-found"}); //todo hacer una pantallita de error o algo? o dejar el not found?
             }
         }
     },
@@ -118,7 +118,6 @@ const router = createRouter({
 
 
 router.beforeEach((to, from, next) => {
-
     if (to.matched.some(route => route.meta.requiresAuth)) {
         if (useUserStore().getTokenState === null || useUserStore().getTokenState === undefined || useUserStore().getTokenState === '') {
             next({name: 'login', query: {redirect: to.fullPath}})

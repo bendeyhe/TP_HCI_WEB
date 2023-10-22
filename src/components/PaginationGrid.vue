@@ -169,7 +169,6 @@ async function getMyRoutines() {
     loading.value = true;
     let result = await userStore.getCurrentUser();
     if (result.success) {
-        debugger
         const user = result.data;
         result = await userStore.getCurUserRoutines();
         if (result.success && result.data.content) {
@@ -249,7 +248,6 @@ async function previousPage() {
 }
 
 function inputPage(number) {
-    debugger;
     pageNumber.value = number;
     updateVisibleRoutines();
 }

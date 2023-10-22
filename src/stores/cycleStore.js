@@ -6,11 +6,11 @@ import {API_BASE_URL} from "@/stores/apiUtils";
 
 const CY_B_URL = `${API_BASE_URL}/cycles`;
 
-const useExerciseStore = defineStore('cycles', {
+export const useCycleStore = defineStore('cycles', {
     state: () => ({
         cycles: ref([]),
         apiEndpoints: {
-            getExsByCycle: (cycleId) => ({path: `${CY_B_URL}/${cycleId}`, requiresAuth: true, method: 'GET'}),
+            getExsByCycle: (cycleId) => ({path: `${CY_B_URL}/${cycleId}/exercises`, requiresAuth: true, method: 'GET'}),
             getExByCycle: (cycleId, exerciseId) => ({path: `${CY_B_URL}/${cycleId}/exercises/${exerciseId}`, requiresAuth: true, method: 'GET'}),
             addExToCycle: (cycleId, exerciseId) => ({path: `${CY_B_URL}/${cycleId}/exercises/${exerciseId}`, requiresAuth: true, method: 'POST'}),
             modifyExForCycle: (cycleId, exerciseId) => ({path: `${CY_B_URL}/${cycleId}/exercises/${exerciseId}`, requiresAuth: true, method: 'PUT'}),

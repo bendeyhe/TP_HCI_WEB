@@ -8,7 +8,7 @@
         <slot name="search">
             <SearchBar/>
         </slot>
-        <RouterLink to="/create-routine">
+        <RouterLink :to="{ name: 'create-routine' }">
             <v-btn>Crear Rutina</v-btn>
         </RouterLink>
 

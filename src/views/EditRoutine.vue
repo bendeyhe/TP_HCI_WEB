@@ -1,6 +1,7 @@
 <template>
     <AppBar/>
-    <h1>Crear Rutina</h1>
+    <h1 v-if="isEditing">Editar Rutina</h1>
+    <h1 v-else>Crear Rutina</h1>
     <v-row>
         <v-col cols="9">
             <h3 class="nombre-rutina"> Nombre de la rutina: </h3>
@@ -191,19 +192,21 @@ import ExerciseDetailMini from "@/components/ExerciseDetailMini.vue";
 import {useExerciseStore} from '@/stores/exerciseStore'
 import {useRoute} from "vue-router";
 import {useRoutineStore} from "@/stores/routineStore";
-
+import {useCycleStore} from "@/stores/cycleStore";
+import router from "@/router";
 
 const exerciseStore = useExerciseStore()
 const routineStore = useRoutineStore()
+const cycleStore = useCycleStore()
 const routine = ref({});
 const type = ref(1);
 const ejEntCalor = ref([]);
 const ejPrincipal = ref([]);
 const ejEnfriamiento = ref([]);
-const contEntCalor = ref(0);
-const contPrincipal = ref(0);
-const contEnfriamiento = ref(0);
 const route = useRoute();
+const cicloEntCalor = ref({});
+const ciclosPrincipal = ref([]);
+const cicloEnfriamiento = ref([]);
 const newEjercicio = ref({
     name: '',
     detail: '',
@@ -218,30 +221,51 @@ const ejercicioSeleccionado = ref({
     type: '',
     number: 1
 });
+const isEditing = ref(false);
 
 provide('selectedExercise', ejercicioSeleccionado);
 
 onBeforeMount(async () => {
     if (route.params.id) {
+        isEditing.value = true
         let result = await routineStore.getRoutine(route.params.id)
-        if(result.success){
+        if (result.success) {
             routine.value = result.data
-            result = await exerciseStore.getExercisesByRoutine(route.params.id)
-            for (let i = 0; i < routine.value.exercises.length; i++) {
-                if (routine.value.exercises[i].type === 'exercise') {
-                    if (routine.value.exercises[i].number === 1) {
-                        ejEntCalor.value.push(routine.value.exercises[i])
-                        contEntCalor.value++
-                    } else if (routine.value.exercises[i].number === 2) {
-                        ejPrincipal.value.push(routine.value.exercises[i])
-                        contPrincipal.value++
-                    } else if (routine.value.exercises[i].number === 3) {
-                        ejEnfriamiento.value.push(routine.value.exercises[i])
-                        contEnfriamiento.value++
+            result = await routineStore.getCyclesByRoutine(route.params.id)
+            if (result.success) {
+                for (let i = 0; i < result.data.totalCount; i++) {
+                    if (result.data.content[i].type === 'warmup')
+                        cicloEntCalor.value = result.data.content[i]
+                    else if (result.data.content[i].type === 'exercise')
+                        ciclosPrincipal.value.push(result.data.content[i])
+                    else if (result.data.content[i].type === 'cooldown')
+                        cicloEnfriamiento.value = result.data.content[i]
+                }
+            }
+            if(cicloEntCalor.value.id) {
+                result = await cycleStore.getExercisesByCycle(cicloEntCalor.value.id)
+                if (result.success) {
+                    ejEntCalor.value = result.data.content
+                }
+            }
+            if(ciclosPrincipal.value.length > 0) {
+                for (let i = 0; i < ciclosPrincipal.value.length; i++) {
+                    result = await cycleStore.getExercisesByCycle(ciclosPrincipal.value[i].id)
+                    if (result.success) {
+                        ejPrincipal.value.push(result.data.content)
                     }
                 }
             }
+            if(cicloEnfriamiento.value.id) {
+                result = await cycleStore.getExercisesByCycle(cicloEnfriamiento.value.id)
+                if (result.success) {
+                    ejEnfriamiento.value = result.data.content
+                }
+            }
+            debugger
         }
+    } else {
+        isEditing.value = false
     }
 });
 
@@ -251,19 +275,15 @@ function agregarEjercicio() {
     } else {
         if (type.value === 1) {
             ejEntCalor.value.push(ejercicioSeleccionado);
-            contEntCalor.value++;
         } else if (type.value === 2) {
             ejPrincipal.value.push(ejercicioSeleccionado);
-            contPrincipal.value++;
         } else if (type.value === 3) {
             ejEnfriamiento.value.push(ejercicioSeleccionado);
-            contEnfriamiento.value++;
         }
     }
 }
 
 async function saveExercise() {
-    debugger
     if (type.value === 3)
         newEjercicio.value.type = 'rest'
     else
@@ -284,7 +304,7 @@ async function saveExercise() {
     }
 }
 
-async function saveRutina(){
+async function saveRutina() {
     // todo guardar rutina
 }
 
