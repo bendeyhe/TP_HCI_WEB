@@ -30,20 +30,50 @@
         <div v-else>
             <v-card-text>Seleccione o cree un ejercicio para agregar a la rutina</v-card-text>
         </div>
+        <v-card-actions class="actions">
+                    <v-btn class="actions-btn" @click="editExercise(exercise)">Editar</v-btn>
+                    <v-btn class="actions-btn" @click="deleteExercise(exercise)">Eliminar</v-btn>
+        </v-card-actions>
     </v-card>
 </template>
 
 <script setup>
 import { toRefs } from 'vue';
+import { useExerciseStore } from '@/stores/exerciseStore';
+import {useUserStore} from '@/stores/userStore';
 
+const exerciseStore = useExerciseStore();
+const userStore = useUserStore();
 const props = defineProps({
     exercise: {
         type: Object,
         required: true,
     },
+
+    myExercises: {
+        type: Array,
+        required: true,
+    }
 });
 
+const {myExercises} = toRefs(props);
 const { exercise } = toRefs(props);
+
+async function deleteExercise(exercise) {
+    const result = await exerciseStore.deleteExercise(exercise.index);
+    if (result) {
+        exercise.value = {}
+        const user = await userStore.getCurrentUser();
+        debugger
+        if (user) {
+            user.data.metadata.exercises.splice(exercise.index-1, 1);
+            myExercises.value.splice(exercise.index-1, 1);
+            const result = await userStore.modifyCurrentUser(user.data.fistName, user.data.lastName, user.data.gender, user.data.metadata);
+        }
+    }
+    }
+
+
 </script>
 
 <style scoped>
@@ -70,6 +100,22 @@ const { exercise } = toRefs(props);
 
 .image {
     width: 100%
+}
+
+.actions {
+    display: flex;
+    align-items: flex-end;
+    /*quiero que los botones aparezcan en lo mas bajo de la card */
+    bottom: 0;
+
+}
+
+.actions-btn {
+    color: #000000;
+    background-color: #8efd00;
+    margin: 0 5px;
+    font-weight: bold;
+
 }
 </style>
 

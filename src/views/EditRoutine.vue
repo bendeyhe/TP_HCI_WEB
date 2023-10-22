@@ -286,14 +286,16 @@ const newEjercicio = ref({
     detail: '',
     url: 'https://www.feda.net/wp-content/uploads/2018/08/circuit-training.jpeg',
     type: '',
-    number: 1
+    number: 1,
+    index: 0
 });
 const ejercicioSeleccionado = ref({
     name: '',
     detail: '',
     url: 'https://www.feda.net/wp-content/uploads/2018/08/circuit-training.jpeg',
     type: '',
-    number: 1
+    number: 1,
+    index: 0
 });
 const isEditing = ref(false);
 
@@ -365,6 +367,7 @@ async function saveExercise() {
         newEjercicio.value.type = 'exercise'
     let result = await exerciseStore.addExercise(newEjercicio.value);
     if (result.success) {
+        newEjercicio.value.index = result.data.id
         result = await exerciseStore.addExerciseImage(result.data.id, newEjercicio.value)
         const user = await userStore.getCurrentUser()
         if (user.success) {
@@ -382,7 +385,8 @@ async function saveExercise() {
                 detail: '',
                 url: 'https://www.feda.net/wp-content/uploads/2018/08/circuit-training.jpeg',
                 type: '',
-                number: 1
+                number: 1,
+                index: 0
             }
         }
     }
