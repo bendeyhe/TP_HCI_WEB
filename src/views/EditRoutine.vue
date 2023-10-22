@@ -69,28 +69,11 @@
                                                         maxlength="200"
                                                         counter
                                                     ></v-text-field>
-
-                                                    <!--
-                                                    <v-text-field
-                                                        label="Duración"
-                                                        v-model="duration"
-                                                    ></v-text-field>
-                                                    <v-text-field
-                                                        label="Dificultad"
-                                                        v-model="difficulty"
-                                                    ></v-text-field>
-                                                    <v-text-field
-                                                        label="Equipamiento"
-                                                        v-model="equipment"
-                                                    ></v-text-field>
-                                                    -->
                                                     <v-text-field
                                                         label="Imagen"
                                                         v-model="newEjercicio.url"
                                                     ></v-text-field>
-
-                                                    <!-- agregar alerta string maximo 274-->
-
+                                                    <!-- todo agregar alerta string maximo 274-->
                                                 </v-card-text>
 
                                                 <v-card-actions>
@@ -193,7 +176,6 @@ import {useExerciseStore} from '@/stores/exerciseStore'
 import {useRoute} from "vue-router";
 import {useRoutineStore} from "@/stores/routineStore";
 import {useCycleStore} from "@/stores/cycleStore";
-import router from "@/router";
 
 const exerciseStore = useExerciseStore()
 const routineStore = useRoutineStore()
@@ -261,6 +243,7 @@ onBeforeMount(async () => {
                 if (result.success) {
                     ejEnfriamiento.value = result.data.content
                 }
+                debugger
             }
             debugger
         }
