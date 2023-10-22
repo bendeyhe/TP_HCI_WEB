@@ -176,7 +176,9 @@ import {useExerciseStore} from '@/stores/exerciseStore'
 import {useRoute} from "vue-router";
 import {useRoutineStore} from "@/stores/routineStore";
 import {useCycleStore} from "@/stores/cycleStore";
+import {useUserStore} from "@/stores/userStore";
 
+const userStore = useUserStore()
 const exerciseStore = useExerciseStore()
 const routineStore = useRoutineStore()
 const cycleStore = useCycleStore()
@@ -274,6 +276,15 @@ async function saveExercise() {
     let result = await exerciseStore.addExercise(newEjercicio.value);
     if (result.success) {
         result = await exerciseStore.addExerciseImage(result.data.id, newEjercicio.value)
+        const user = await userStore.getCurrentUser()
+            if (user.success){
+            if(!userStore.user.metadata)
+                userStore.user.metadata = {}
+            if(!userStore.user.metadata.exercises)
+                userStore.user.metadata.exercises = []
+            user.data.metadata.exercises.push(newEjercicio.value)
+            await userStore.modifyCurrentUser(user.data.firstName, user.data.lastName, user.data.gender, user.data.metadata)
+            }
         if (result.success) {
             ejercicioSeleccionado.value = newEjercicio.value;
             newEjercicio.value = {
