@@ -1,4 +1,3 @@
-
 <template>
     <v-footer>
         <v-row>
@@ -30,5 +29,9 @@ function getImageUrl(name){
 img{
     width: 120px;
     height: 50px;
+}
+
+.v-footer {
+    background-color: rgba(0,0,0,0.47);
 }
 </style>

@@ -1,21 +1,31 @@
 <template>
-    <v-text-field
-        :loading="loading"
-        density="compact"
-        variant="outlined"
-        label="Buscar ejercicio..."
-        append-inner-icon="mdi-magnify"
-        single-line
-        hide-details
-        @click:append-inner="openModal"
-        @keydown.enter="openModal"
-        v-model="searchQuery"
-    ></v-text-field>
+    <v-btn block class="seleccionar-ejercicio" @click="openModal">
+
+        <template v-if="loadingButton">
+            <v-progress-circular indeterminate size="20" color="white"/>
+        </template>
+        <template v-else> Seleccionar ejercicio existente</template>
+    </v-btn>
 
     <v-dialog v-model="showModal" max-width="600">
+
         <v-card>
-            <v-card-title>Resultados de búsqueda</v-card-title>
-            <v-card-text>
+            <v-card-title>Seleccione un ejercicio</v-card-title>
+            <v-text-field
+                :loading="loading"
+                density="compact"
+                variant="outlined"
+                label="Buscar ejercicio..."
+                append-inner-icon="mdi-magnify"
+                single-line
+                hide-details
+                @click:append-inner="search"
+                @keydown.enter="search"
+                v-model="searchQuery"
+                :disabled="loading"
+                class="busqueda"
+            ></v-text-field>
+            <v-card-text v-if="!loading">
                 <v-row v-if="exercises.length > 0">
                     <v-col
                         v-for="(exercise, index) in exercises"
@@ -23,6 +33,7 @@
                     >
                         <v-card
                             class="exercise-card"
+                            min-width="550px"
                             @click="selectExercise(exercise)"
                         >
                             <v-row>
@@ -35,9 +46,9 @@
                                     />
                                 </v-col>
                                 <v-col cols="6">
-                                        <v-card-text class="titulo">
-                                            {{ exercise.name }}
-                                        </v-card-text>
+                                    <v-card-text class="titulo">
+                                        {{ exercise.name }}
+                                    </v-card-text>
 
 
                                     <div v-if="exercise.detail.length > 100">
@@ -97,9 +108,10 @@
 <script setup>
 import {ref, inject} from 'vue'
 import {useExerciseStore} from '@/stores/exerciseStore'
-import { toRefs } from 'vue';
+import {toRefs} from 'vue';
 
 const loaded = ref(false)
+const loadingButton = ref(false)
 const loading = ref(false)
 const searchQuery = ref('')
 const showModal = ref(false);
@@ -108,18 +120,41 @@ const exerciseStore = useExerciseStore()
 const selectedExercise = inject('selectedExercise');
 
 const props = defineProps({
-    isRest : {
+    isRest: {
         type: Boolean,
         required: true
     },
 });
 
-const { isRest } = toRefs(props);
+const {isRest} = toRefs(props);
 
 // Crear una matriz show para controlar cada tarjeta
 const show = ref([])
 
 async function openModal() {
+    loadingButton.value = true;
+    const result = await exerciseStore.getExercises()
+    if (result.success) {
+        const allExercises = result.data.content
+        exercises.value = allExercises.filter(exercise => {
+            return true;
+        })
+
+        // Inicializa la matriz show con valores falsos para cada tarjeta
+        show.value = new Array(exercises.value.length).fill(false)
+
+
+        for (const exercise of exercises.value) {
+            const result2 = await exerciseStore.getExerciseImage(exercise, 1);
+            if (result2.success)
+                exercise.img = result2.data.url;
+        }
+    }
+    showModal.value = true;
+    loadingButton.value = false;
+}
+
+async function search() {
     loading.value = true;
     const result = await exerciseStore.getExercises()
     if (result.success) {
@@ -206,6 +241,22 @@ export default {
 
 .detalle {
     padding-top: 5px;
+}
+
+.exercise-card {
+    width: 100%;
+}
+
+.seleccionar-ejercicio {
+    background-color: #8efd00;
+    color: #000000;
+    margin-right: 10px;
+    margin-top: 20px;
+}
+
+.busqueda {
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 </style>
