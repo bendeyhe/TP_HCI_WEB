@@ -3,55 +3,61 @@
     <AppBarWithoutSearch v-else/>
     <v-app id="inspire">
 
-        <v-carousel cycle show-arrows="hover" hide-delimiter-background>
+        <v-carousel cycle show-arrows="hover" hide-delimiter-background v-if="!loading">
             <v-carousel-item
-                src="https://img.asmedia.epimg.net/resizer/3kjYbfgz9L4yg96V8Yb8qKFnI84=/644x362/cloudfront-eu-central-1.images.arcpublishing.com/diarioas/EGRQNQBFYJNNZK2E5LRAJOBULQ.jpg"
+                v-for="routine in topRoutines.values()"
+                :src="routine.metadata.image"
                 cover
             >
                 <div class="nombre-rutina">
-                    Nombre Rutina
+                    {{ routine.name }}
+                    <br>
+                    <div class="detalle-rutina">{{ routine.detail }}</div>
                 </div>
                 <div class="detalles-rutina">
-                    Creador: creador de la rutina <br>
-                    Dificultad:  dificultad de la rutina
+                    Creador: {{ routine.user.username }} <br>
+                    Dificultad: {{ routine.difficulty }}
                 </div>
                 <div class="boton-rutina">
-                    <v-btn class="boton"> Ver Detalle </v-btn>
+                    <v-btn class="boton" @click="verDetalle(routine)"> Ver Detalle</v-btn>
                 </div>
-
             </v-carousel-item>
 
+            <!--
             <v-carousel-item
-                src="https://www.muscleandfitness.com/wp-content/uploads/2020/05/Focused-Fit-Man-Running-On-A-Treadmill.jpg?quality=86&strip=all"
+                v-if="topRoutines[1] && topRoutines[1].metadata"
+                :src="topRoutines[1].metadata.image"
                 cover
             >
                 <div class="nombre-rutina">
-                    Nombre Rutina
+                    {{topRoutines[1].name}}
                 </div>
                 <div class="detalles-rutina">
-                    Creador: creador de la rutina <br>
-                    Dificultad:  dificultad de la rutina
+                    Creador: {{ topRoutines[1].user.username}} <br>
+                    Dificultad: {{ topRoutines[1].difficulty }}
                 </div>
                 <div class="boton-rutina">
-                    <v-btn class="boton"> Ver Detalle </v-btn>
+                    <v-btn class="boton" @click="verDetalle(topRoutines[0])"> Ver Detalle </v-btn>
                 </div>
             </v-carousel-item>
 
             <v-carousel-item
-                src="https://media.istockphoto.com/id/1418215624/photo/panoramic-side-view-of-beautiful-young-asian-woman-running-on-treadmill-and-listening-to.webp?b=1&s=170667a&w=0&k=20&c=GFbpktAEzDGZWvMqFDjKPhNlKLrb9h1N6y6_woZ91y4="
+                v-if="topRoutines[2] && topRoutines[2].metadata"
+                :src="topRoutines[2].metadata.image"
                 cover
             >
                 <div class="nombre-rutina">
-                    Nombre Rutina
+                    {{topRoutines[2].name}}
                 </div>
                 <div class="detalles-rutina">
-                    Creador: creador de la rutina <br>
-                    Dificultad:  dificultad de la rutina
+                    Creador: {{ topRoutines[2].user.username }} <br>
+                    Dificultad:  {{ topRoutines[2].difficulty }}
                 </div>
                 <div class="boton-rutina">
-                    <v-btn class="boton"> Ver Detalle </v-btn>
+                    <v-btn class="boton" @click="verDetalle(topRoutines[0])"> Ver Detalle </v-btn>
                 </div>
             </v-carousel-item>
+            -->
         </v-carousel>
 
 
@@ -74,14 +80,39 @@ import RoutineByCategories from "@/components/RoutineByCategories.vue";
 import FooterComponent from "@/components/FooterComponent.vue";
 import routineByCategories from "../components/RoutineByCategories.vue";
 import {useUserStore} from "@/stores/userStore";
+import {useRoutineStore} from "@/stores/routineStore";
 import AppBarWithoutSearch from "@/components/AppBarWithoutSearch.vue";
+import {onBeforeMount, ref} from "vue";
+import router from "@/router";
 
 const userStore = useUserStore();
+const routineStore = useRoutineStore();
+const topRoutines = ref([]);
+const loading = ref(false);
 
 function isLogged() {
     return userStore.getTokenState() !== null && userStore.getTokenState() !== '';
 }
+
+onBeforeMount(async () => {
+    loading.value = true;
+    const result = await routineStore.getRoutines();
+    if (result.success) {
+        for (let i = 0; i < 10; i++) {
+            const routine = result.data.content[i];
+            if (routine && routine.metadata?.image) {
+                topRoutines.value.push(routine);
+            }
+        }
+    }
+    loading.value = false;
+});
+
+function verDetalle(routine) {
+    router.push({name: 'edit-routine', params: {id: routine.id}});
+}
 </script>
+
 
 <script>
 export default {
@@ -132,6 +163,14 @@ export default {
     padding: 10px; /* Espaciado interior del texto */
     background-color: black;
     border-radius: 5px;
+}
+
+
+.detalle-rutina {
+    color: white; /* Color del texto */
+    font-size: 20px; /* Tamaño de la fuente del texto */
+    font-family: Montserrat, sans-serif;
+    background-color: black;
 }
 
 .boton-rutina {
