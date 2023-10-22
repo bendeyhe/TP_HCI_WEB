@@ -1,7 +1,7 @@
 <template>
     <h1 v-if="isFav">Rutinas Favoritas</h1>
     <h1 v-else>Mis Rutinas</h1>
-    <div v-if="!visibleRoutines.value">
+    <div v-if="visibleRoutines.length > 0">
         <v-row class="width">
             <v-col cols="4" v-for="(routine, index) in visibleRoutines"
                    :key="routine.index"
