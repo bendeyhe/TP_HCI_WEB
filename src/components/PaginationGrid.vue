@@ -179,7 +179,6 @@ async function getFavs() {
 
 async function getMyRoutines() {
     loading.value = true;
-    debugger
     let result = await userStore.getCurrentUser();
     if (result.success) {
         const user = result.data;
@@ -238,7 +237,6 @@ async function getRoutines() {
 
 async function updateVisibleRoutines() {
     if (typeRout === "fav") {
-        debugger
         await getFavs();
         visibleRoutines.value = Array.from(routineStore.getfavoriteRoutines()).slice(
             (pageNumber.value - 1) * pageSize.value,
@@ -249,7 +247,6 @@ async function updateVisibleRoutines() {
         if (visibleRoutines.value.length === 0 && pageNumber.value > 0)
             updatePage(pageNumber.value - 1)
     } else if (typeRout === "myRouts") {
-        debugger
         await getMyRoutines();
         visibleRoutines.value = Array.from(routineStore.getMyRoutines()).slice(
             (pageNumber.value - 1) * pageSize.value,
@@ -260,7 +257,6 @@ async function updateVisibleRoutines() {
         if (visibleRoutines.value.length === 0 && pageNumber.value > 0)
             updatePage(pageNumber.value - 1)
     } else {
-        debugger
         await getRoutines();
         visibleRoutines.value = Array.from(routineStore.getAllRoutines()).slice(
             (pageNumber.value - 1) * pageSize.value,
@@ -271,7 +267,6 @@ async function updateVisibleRoutines() {
         if (visibleRoutines.value.length === 0 && pageNumber.value > 0)
             updatePage(pageNumber.value - 1)
     }
-    debugger
 }
 
 async function toggle(routine) {
@@ -289,7 +284,6 @@ async function editRoutine(routine) {
 }
 
 async function deleteRout(routine) {
-    debugger
     const result = await routineStore.deleteRoutine(routine.id);
     if (result.success){
         routineStore.removeMyRoutine(routine);

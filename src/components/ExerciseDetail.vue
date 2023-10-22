@@ -64,7 +64,6 @@ async function deleteExercise(exercise) {
     if (result) {
         exercise.value = {}
         const user = await userStore.getCurrentUser();
-        debugger
         if (user) {
             user.data.metadata.exercises.splice(exercise.index-1, 1);
             myExercises.value.splice(exercise.index-1, 1);

@@ -396,7 +396,6 @@ function openFinishDialog() {
 }
 
 function addCycle() {
-    debugger
     ciclosPrincipal.value.push({
         type: 'exercise',
         number: ciclosPrincipal.value.length + 1,
