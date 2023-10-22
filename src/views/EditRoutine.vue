@@ -3,18 +3,8 @@
     <h1 v-if="isEditing">Editar Rutina</h1>
     <h1 v-else>Crear Rutina</h1>
     <v-row>
-        <v-col cols="9">
-            <h3 class="nombre-rutina"> Nombre de la rutina: </h3>
-            <v-text-field
-                class="nombre-rutina"
-                density="compact"
-                placeholder="Elija un nombre descriptivo"
-                variant="outlined"
-                v-model="routine.name"
-            ></v-text-field>
-        </v-col>
         <v-col>
-            <v-btn prepend-icon="mdi-content-save" class="save" @click="saveRutina"> Guardar Rutina</v-btn>
+            <v-btn prepend-icon="mdi-content-save" class="save" @click="openFinishDialog"> Finalizar </v-btn>
         </v-col>
     </v-row>
 
@@ -36,9 +26,26 @@
                 :key="n"
                 :value="n"
             >
-                <v-container fluid>
+                <v-container fluid class="contenedor">
                     <v-row>
                         <v-col cols="8">
+                            <div  v-if="n===2">
+                                <v-row>
+                                    <v-col><h3> Número de ciclo principal: </h3></v-col>
+                                    <v-col>
+                                        <v-autocomplete density="compact" default="1" variant="outlined"
+                                                        :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20']"></v-autocomplete>
+                                    </v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col><h3> Cantidad de repeticiones del ciclo: </h3></v-col>
+                                    <v-col>
+                                        <v-autocomplete density="compact" default="1" variant="outlined"
+                                                        :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20']"></v-autocomplete>
+                                    </v-col>
+                                </v-row>
+                                <v-divider></v-divider>
+                            </div>
                             <v-row>
                                 <v-col>
                                     <SearchBarExercise @exercise-selected="ejercicioSeleccionado" :is-rest="true"
@@ -73,7 +80,6 @@
                                                         label="Imagen"
                                                         v-model="newEjercicio.url"
                                                     ></v-text-field>
-                                                    <!-- todo agregar alerta string maximo 274-->
                                                 </v-card-text>
 
                                                 <v-card-actions>
@@ -140,21 +146,21 @@
                             <ExerciseDetail :exercise="ejercicioSeleccionado"/>
                         </v-col>
                         <v-row v-if="n===1">   <!-- ExerciseDetailMini para Entrada en Calor -->
-                            <h2>Entrada en calor:</h2>
+                            <h2 v-if="ejEntCalor.length > 0">Entrada en calor:</h2>
                             <div v-for="ej in ejEntCalor" :key="'entrada-calor-' + n">
                                 <ExerciseDetailMini :exercise="ej"/>
                             </div>
                         </v-row>
                         <v-row v-else-if="n===2">
                             <!-- ExerciseDetailMini para Principal -->
-                            <h2>Principal:</h2>
+                            <h2 class="principal" v-if="ejPrincipal.length > 0">Principal:</h2>
                             <div v-for="ej in ejPrincipal" :key="'principal-' + n">
                                 <ExerciseDetailMini :exercise="ej"/>
                             </div>
                         </v-row>
                         <v-row v-else>
                             <!-- ExerciseDetailMini para Enfriamiento -->
-                            <h2>Enfriamiento:</h2>
+                            <h2 v-if="ejEnfriamiento.length > 0">Enfriamiento:</h2>
                             <div v-for="ej in ejEnfriamiento" :key="'enfriamiento-' + n">
                                 <ExerciseDetailMini :exercise="ej"/>
                             </div>
@@ -164,6 +170,88 @@
             </v-window-item>
         </v-window>
     </v-card>
+
+
+
+    <v-dialog v-model="finishRoutine" min-width="800">
+        <div>
+            <v-card
+                class="mx-auto pa-6 pt-6 pb-8"
+                elevation="8"
+                max-width="448"
+                rounded="lg"
+            >
+                <div class="text-subtitle-1">Nombre de la rutina</div>
+                <v-text-field
+                    density="compact"
+                    variant="outlined"
+                    v-model="routine.name"
+                    maxlength="100"
+                    counter
+                ></v-text-field>
+
+                <div class="text-subtitle-1">Descripción de la rutina</div>
+                <v-text-field
+                    density="compact"
+                    variant="outlined"
+                    v-model="routine.description"
+                    maxlength="200"
+                    counter
+                ></v-text-field>
+
+                <div class="text-subtitle-1">Visibilidad de la rutina</div>
+                <v-radio-group
+                    v-model="inline"
+                    inline
+                >
+                    <v-radio
+                        label="Rutina privada"
+                        value="radio-1"
+                    ></v-radio>
+                    <v-radio
+                        label="Rutina pública"
+                        value="radio-2"
+                    ></v-radio>
+                </v-radio-group>
+
+                <div class="text-subtitle-1">Dificultad de la rutina</div>
+
+
+                <v-autocomplete density="compact" default="1" variant="outlined"
+                                :items="['rookie', 'beginner', 'intermediate', 'advanced', 'expert']"></v-autocomplete>
+
+
+                <v-card-actions>
+                    <v-btn
+                        variant="text"
+                        @click="resetForm"
+                        class="cancelar"
+                    >
+                         Cancelar
+                    </v-btn>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                        class="confirmar"
+                        variant="text"
+                        @click="saveRoutine"
+                    >
+                        <template v-if="loading">
+                            <v-progress-circular
+                                indeterminate
+                                size="20"
+                                color="white"
+                            ></v-progress-circular>
+                        </template>
+                        <template v-else>
+                            Finalizar
+                        </template>
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </div>
+    </v-dialog>
+
+
 </template>
 
 <script setup>
@@ -173,7 +261,7 @@ import ExerciseDetail from "@/components/ExerciseDetail.vue";
 import {ref, provide, onBeforeMount} from 'vue';
 import ExerciseDetailMini from "@/components/ExerciseDetailMini.vue";
 import {useExerciseStore} from '@/stores/exerciseStore'
-import {useRoute} from "vue-router";
+import {RouterLink, useRoute} from "vue-router";
 import {useRoutineStore} from "@/stores/routineStore";
 import {useCycleStore} from "@/stores/cycleStore";
 import {useUserStore} from "@/stores/userStore";
@@ -191,6 +279,7 @@ const route = useRoute();
 const cicloEntCalor = ref({});
 const ciclosPrincipal = ref([]);
 const cicloEnfriamiento = ref([]);
+const finishRoutine = ref(false);
 const newEjercicio = ref({
     name: '',
     detail: '',
@@ -298,10 +387,21 @@ async function saveExercise() {
     }
 }
 
-async function saveRutina() {
-    // todo guardar rutina
+function openFinishDialog() {
+    finishRoutine.value = true;
 }
 
+</script>
+
+<script>
+export default {
+    data () {
+        return {
+            column: null,
+            inline: null,
+        }
+    },
+}
 </script>
 
 <style scoped>
@@ -327,10 +427,6 @@ h1 {
     left: 20%;
 }
 
-.nombre-rutina {
-    width: 400px;
-    padding-left: 20px;
-}
 
 .o {
     padding-left: 25px;
@@ -359,6 +455,15 @@ h2 {
 .save {
     background-color: #8efd00;
     color: #000000;
-    margin-top: 40px;
+    margin: 25px;
 }
+
+.contenedor {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.principal {
+    padding-top: 40px;
+}
+
 </style>
