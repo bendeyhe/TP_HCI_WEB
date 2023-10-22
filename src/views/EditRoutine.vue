@@ -34,7 +34,8 @@
                                     <v-col><h3> Número de ciclo: </h3></v-col>
                                     <v-col>
                                         <v-autocomplete density="compact" default="1" variant="outlined"
-                                                        :items="ciclosPrincipal"></v-autocomplete>
+                                                        :items="cantCiclosPrincipal"
+                                                        v-model="cicloSeleccionado"></v-autocomplete>
                                     </v-col>
                                     <v-col>
                                         <v-btn prepend-icon="mdi-plus" class="agregar-principal" @click="addCycle">
@@ -106,43 +107,127 @@
                                     </v-dialog>
                                 </v-col>
                             </v-row>
-                            <v-row>
-                                <v-col><h3> Cantidad de series: </h3></v-col>
-                                <v-col>
-                                    <v-autocomplete density="compact" default="1" variant="outlined"
-                                                    :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20']"></v-autocomplete>
-                                </v-col>
-                            </v-row>
-                            <v-row>
-                                <v-col><h3> Duración (repeticiones o tiempo): </h3></v-col>
-                                <v-col cols="2">
-                                    <v-autocomplete density="compact" default="1" variant="outlined"
-                                                    :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '61', '62', '63', '64', '65', '66', '67', '68', '69', '70', '71', '72', '73', '74', '75', '76', '77', '78', '79', '80', '81', '82', '83', '84', '85', '86', '87', '88', '89', '90']"></v-autocomplete>
-                                </v-col>
-                                <v-col>
-                                    <v-autocomplete density="compact" default="repeticiones" variant="outlined"
-                                                    :items="['repeticiones', 'segundos', 'minutos']"></v-autocomplete>
-                                </v-col>
-                            </v-row>
-                            <v-row>
-                                <v-col><h3> Tiempo de descanso: </h3></v-col>
-                                <v-col cols="2">
-                                    <v-autocomplete density="compact" default="1" variant="outlined"
-                                                    :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '61', '62', '63', '64', '65', '66', '67', '68', '69', '70', '71', '72', '73', '74', '75', '76', '77', '78', '79', '80', '81', '82', '83', '84', '85', '86', '87', '88', '89', '90']"></v-autocomplete>
-                                </v-col>
-                                <v-col>
-                                    <v-autocomplete density="compact" default="repeticiones" variant="outlined"
-                                                    :items="['segundos', 'minutos']"></v-autocomplete>
-                                </v-col>
-                            </v-row>
+
+                            <div v-if="n===1">
+                                <v-row>
+                                    <v-col><h3> Cantidad de series: </h3></v-col>
+                                    <v-col>
+                                        <v-autocomplete density="compact" default="1" variant="outlined"
+                                                        v-model="dataEntCalor.cantSeries"
+                                                        :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20']"></v-autocomplete>
+                                    </v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col><h3> Duración (repeticiones o tiempo): </h3></v-col>
+                                    <v-col cols="2">
+                                        <v-autocomplete density="compact" default="1" variant="outlined"
+                                                        v-model="dataEntCalor.duracion"
+                                                        :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '61', '62', '63', '64', '65', '66', '67', '68', '69', '70', '71', '72', '73', '74', '75', '76', '77', '78', '79', '80', '81', '82', '83', '84', '85', '86', '87', '88', '89', '90']"></v-autocomplete>
+                                    </v-col>
+                                    <v-col>
+                                        <v-autocomplete density="compact" default="repeticiones" variant="outlined"
+                                                        v-model="dataEntCalor.typeDuracion"
+                                                        :items="['repeticiones', 'segundos', 'minutos']"></v-autocomplete>
+                                    </v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col><h3> Tiempo de descanso: </h3></v-col>
+                                    <v-col cols="2">
+                                        <v-autocomplete density="compact" default="1" variant="outlined"
+                                                        v-model="dataEntCalor.descanso"
+                                                        :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '61', '62', '63', '64', '65', '66', '67', '68', '69', '70', '71', '72', '73', '74', '75', '76', '77', '78', '79', '80', '81', '82', '83', '84', '85', '86', '87', '88', '89', '90']"></v-autocomplete>
+                                    </v-col>
+                                    <v-col>
+                                        <v-autocomplete density="compact" default="repeticiones" variant="outlined"
+                                                        v-model="dataEntCalor.typeDescanso"
+                                                        :items="['segundos', 'minutos']"></v-autocomplete>
+                                    </v-col>
+                                </v-row>
+                            </div>
+
+                            <div v-if="n===2">
+                                <v-row>
+                                    <v-col><h3> Cantidad de series: </h3></v-col>
+                                    <v-col>
+                                        <v-autocomplete density="compact" default="1" variant="outlined"
+                                                        v-model="dataPrincipal[cicloSeleccionado].cantSeries"
+                                                        :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20']"></v-autocomplete>
+                                    </v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col><h3> Duración (repeticiones o tiempo): </h3></v-col>
+                                    <v-col cols="2">
+                                        <v-autocomplete density="compact" default="1" variant="outlined"
+                                                        v-model="dataPrincipal[cicloSeleccionado].duracion"
+                                                        :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '61', '62', '63', '64', '65', '66', '67', '68', '69', '70', '71', '72', '73', '74', '75', '76', '77', '78', '79', '80', '81', '82', '83', '84', '85', '86', '87', '88', '89', '90']"></v-autocomplete>
+                                    </v-col>
+                                    <v-col>
+                                        <v-autocomplete density="compact" default="repeticiones" variant="outlined"
+                                                        v-model="dataPrincipal[cicloSeleccionado].typeDuracion"
+                                                        :items="['repeticiones', 'segundos', 'minutos']"></v-autocomplete>
+                                    </v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col><h3> Tiempo de descanso: </h3></v-col>
+                                    <v-col cols="2">
+                                        <v-autocomplete density="compact" default="1" variant="outlined"
+                                                        v-model="dataPrincipal[cicloSeleccionado].descanso"
+                                                        :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '61', '62', '63', '64', '65', '66', '67', '68', '69', '70', '71', '72', '73', '74', '75', '76', '77', '78', '79', '80', '81', '82', '83', '84', '85', '86', '87', '88', '89', '90']"></v-autocomplete>
+                                    </v-col>
+                                    <v-col>
+                                        <v-autocomplete density="compact" default="repeticiones" variant="outlined"
+                                                        v-model="dataPrincipal[cicloSeleccionado].typeDescanso"
+                                                        :items="['segundos', 'minutos']"></v-autocomplete>
+                                    </v-col>
+                                </v-row>
+                            </div>
+
+                            <div v-if="n===3">
+                                <v-row>
+                                    <v-col><h3> Cantidad de series: </h3></v-col>
+                                    <v-col>
+                                        <v-autocomplete density="compact" default="1" variant="outlined"
+                                                        v-model="dataEntCalor.cantSeries"
+                                                        :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20']"></v-autocomplete>
+                                    </v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col><h3> Duración (repeticiones o tiempo): </h3></v-col>
+                                    <v-col cols="2">
+                                        <v-autocomplete density="compact" default="1" variant="outlined"
+                                                        v-model="dataEnf.duracion"
+                                                        :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '61', '62', '63', '64', '65', '66', '67', '68', '69', '70', '71', '72', '73', '74', '75', '76', '77', '78', '79', '80', '81', '82', '83', '84', '85', '86', '87', '88', '89', '90']"></v-autocomplete>
+                                    </v-col>
+                                    <v-col>
+                                        <v-autocomplete density="compact" default="repeticiones" variant="outlined"
+                                                        v-model="dataEnf.typeDuracion"
+                                                        :items="['repeticiones', 'segundos', 'minutos']"></v-autocomplete>
+                                    </v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col><h3> Tiempo de descanso: </h3></v-col>
+                                    <v-col cols="2">
+                                        <v-autocomplete density="compact" default="1" variant="outlined"
+                                                        v-model="dataEnf.descanso"
+                                                        :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '61', '62', '63', '64', '65', '66', '67', '68', '69', '70', '71', '72', '73', '74', '75', '76', '77', '78', '79', '80', '81', '82', '83', '84', '85', '86', '87', '88', '89', '90']"></v-autocomplete>
+                                    </v-col>
+                                    <v-col>
+                                        <v-autocomplete density="compact" default="repeticiones" variant="outlined"
+                                                        v-model="dataEnf.typeDescanso"
+                                                        :items="['segundos', 'minutos']"></v-autocomplete>
+                                    </v-col>
+                                </v-row>
+                            </div>
+
                             <v-row>
                                 <v-btn v-if="n===1" class="boton" prepend-icon="mdi-plus" @click="agregarEjercicio">
                                     Agregar Ejercicio a Entrada en Calor
                                 </v-btn>
                                 <v-btn v-else-if="n===2" class="boton" prepend-icon="mdi-plus"
-                                       @click="agregarEjercicio">Agregar Ejercicio a Principal
+                                       @click="agregarEjercicio()">Agregar Ejercicio a Principal
                                 </v-btn>
-                                <v-btn v-else class="boton" prepend-icon="mdi-plus" @click="agregarEjercicio"> Agregar
+                                <v-btn v-else class="boton" prepend-icon="mdi-plus" @click="agregarEjercicio">
+                                    Agregar
                                     Ejercicio a Enfriamiento
                                 </v-btn>
                             </v-row>
@@ -158,8 +243,8 @@
                         </v-row>
                         <v-row v-else-if="n===2">
                             <!-- ExerciseDetailMini para Principal -->
-                            <h2 class="principal" v-if="ejPrincipal.length > 0">Principal:</h2>
-                            <div v-for="ej in ejPrincipal" :key="'principal-' + n">
+                            <h2 class="principal" v-if="ejPrincipal[cicloSeleccionado]?.length > 0">Principal:</h2>
+                            <div v-for="ej in ejPrincipal[cicloSeleccionado]" :key="'principal-' + n">
                                 <ExerciseDetailMini :exercise="ej"/>
                             </div>
                         </v-row>
@@ -175,7 +260,6 @@
             </v-window-item>
         </v-window>
     </v-card>
-
 
     <v-dialog v-model="finishRoutine" min-width="800">
         <div>
@@ -282,8 +366,18 @@ const ejEnfriamiento = ref([]);
 const route = useRoute();
 const cicloEntCalor = ref({});
 const ciclosPrincipal = ref([]);
-const cicloEnfriamiento = ref([]);
+const cantCiclosPrincipal = ref([]);
+const cicloEnfriamiento = ref({});
 const finishRoutine = ref(false);
+const cicloSeleccionado = ref(1);
+const ejDescanso = ref({
+    name: 'Descanso',
+    detail: 'Descanso',
+    url: 'https://www.feda.net/wp-content/uploads/2018/08/circuit-training.jpeg',
+    type: 'rest',
+    number: 0,
+    index: 0
+});
 const newEjercicio = ref({
     name: '',
     detail: '',
@@ -301,6 +395,21 @@ const ejercicioSeleccionado = ref({
     index: 0
 });
 const isEditing = ref(false);
+const dataEntCalor = ref({
+    cantSeries: 0,
+    duracion: 0,
+    typeDuracion: '',
+    descanso: 0,
+    typeDescanso: ''
+})
+const dataPrincipal = ref([])
+const dataEnf = ref({
+    cantSeries: 0,
+    duracion: 0,
+    typeDuracion: '',
+    descanso: 0,
+    typeDescanso: ''
+})
 
 provide('selectedExercise', ejercicioSeleccionado);
 
@@ -329,9 +438,13 @@ onBeforeMount(async () => {
             }
             if (ciclosPrincipal.value.length > 0) {
                 for (let i = 0; i < ciclosPrincipal.value.length; i++) {
+                    cantCiclosPrincipal.value.push(i + 1)
                     result = await cycleStore.getExercisesByCycle(ciclosPrincipal.value[i].id)
                     if (result.success) {
-                        ejPrincipal.value.push(result.data.content)
+                        if (!ejPrincipal.value[i])
+                            ejPrincipal.value[i] = []
+                        ejPrincipal.value[i] = result.data.content
+                        console.log(ejPrincipal.value[i].length)
                     }
                 }
             }
@@ -344,6 +457,16 @@ onBeforeMount(async () => {
         }
     } else {
         isEditing.value = false
+        cantCiclosPrincipal.value.push(1)
+        if(!dataPrincipal.value[1])
+            dataPrincipal.value[1] = []
+        dataPrincipal.value[1].push({
+            cantSeries: 0,
+            duracion: 0,
+            typeDuracion: '',
+            descanso: 0,
+            typeDescanso: ''
+        })
     }
 });
 
@@ -354,7 +477,10 @@ function agregarEjercicio() {
         if (type.value === 1) {
             ejEntCalor.value.push(ejercicioSeleccionado);
         } else if (type.value === 2) {
-            ejPrincipal.value.push(ejercicioSeleccionado);
+            debugger
+            if (!ejPrincipal.value[cicloSeleccionado.value])
+                ejPrincipal.value[cicloSeleccionado.value] = []
+            ejPrincipal.value[cicloSeleccionado.value].push(ejercicioSeleccionado.value);
         } else if (type.value === 3) {
             ejEnfriamiento.value.push(ejercicioSeleccionado);
         }
@@ -404,6 +530,16 @@ function addCycle() {
         number: ciclosPrincipal.value.length + 1,
         index: ciclosPrincipal.value.length + 1
     })
+    if(!dataPrincipal.value[cicloSeleccionado.value])
+        dataPrincipal.value[cicloSeleccionado.value] = []
+    dataPrincipal.value[cicloSeleccionado.value].push({
+        cantSeries: 0,
+        duracion: 0,
+        typeDuracion: '',
+        descanso: 0,
+        typeDescanso: ''
+    })
+    cantCiclosPrincipal.value.push(ciclosPrincipal.value.length + 1)
 }
 
 </script>
