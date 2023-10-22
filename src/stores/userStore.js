@@ -131,7 +131,7 @@ export const useUserStore = defineStore('login', {
         },
 
         // PUT: /users/current
-        async modifyCurrentUser(firstName, lastName, gender) {
+        async modifyCurrentUser(firstName, lastName, gender, metadata) {
             const data = {};
             if (firstName != null)
                 data['firstName'] = firstName;
@@ -139,6 +139,8 @@ export const useUserStore = defineStore('login', {
                 data['lastName'] = lastName;
             if (gender != null && gender !== "")
                 data['gender'] = gender;
+            if (metadata != null)
+                data['metadata'] = metadata;
             if(Object.keys(data).length === 0)
                 return null;
             return await makeApiCall(this.apiEndpoints.modifyCurrentUser, data, this.token);

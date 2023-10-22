@@ -48,7 +48,7 @@ const routes = [
         path: '/my-exercises',
         name: 'my-exercises',
         meta: {requiresAuth: true},
-        component: () => import('@/views/MyRoutines.vue')
+        component: () => import('@/views/MyExercisesView.vue')
     },
     {
         path: '/my-routines',
