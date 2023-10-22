@@ -226,13 +226,13 @@ onBeforeMount(async () => {
                         cicloEnfriamiento.value = result.data.content[i]
                 }
             }
-            if(cicloEntCalor.value.id) {
+            if (cicloEntCalor.value.id) {
                 result = await cycleStore.getExercisesByCycle(cicloEntCalor.value.id)
                 if (result.success) {
                     ejEntCalor.value = result.data.content
                 }
             }
-            if(ciclosPrincipal.value.length > 0) {
+            if (ciclosPrincipal.value.length > 0) {
                 for (let i = 0; i < ciclosPrincipal.value.length; i++) {
                     result = await cycleStore.getExercisesByCycle(ciclosPrincipal.value[i].id)
                     if (result.success) {
@@ -240,7 +240,7 @@ onBeforeMount(async () => {
                     }
                 }
             }
-            if(cicloEnfriamiento.value.id) {
+            if (cicloEnfriamiento.value.id) {
                 result = await cycleStore.getExercisesByCycle(cicloEnfriamiento.value.id)
                 if (result.success) {
                     ejEnfriamiento.value = result.data.content
@@ -277,14 +277,14 @@ async function saveExercise() {
     if (result.success) {
         result = await exerciseStore.addExerciseImage(result.data.id, newEjercicio.value)
         const user = await userStore.getCurrentUser()
-            if (user.success){
-            if(!userStore.user.metadata)
-                userStore.user.metadata = {}
-            if(!userStore.user.metadata.exercises)
-                userStore.user.metadata.exercises = []
+        if (user.success) {
+            if (!user.data.metadata)
+                user.data.metadata = {}
+            if (!user.data.metadata.exercises)
+                user.data.metadata.exercises = []
             user.data.metadata.exercises.push(newEjercicio.value)
             await userStore.modifyCurrentUser(user.data.firstName, user.data.lastName, user.data.gender, user.data.metadata)
-            }
+        }
         if (result.success) {
             ejercicioSeleccionado.value = newEjercicio.value;
             newEjercicio.value = {
