@@ -128,12 +128,6 @@ export default {
     font-size: 20px; /* Tamaño de la fuente del texto */
     font-family: Montserrat, sans-serif;
     padding: 10px; /* Espaciado interior del texto */
-
-    /*
-    dificultad
-    nombre creador
-
-    */
 }
 
 .creador-rutina {

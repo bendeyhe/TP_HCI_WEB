@@ -70,11 +70,17 @@
                         <div class="overflow">{{ routine.description }}</div>
                     </v-card-text>
                     <div class="detail">
-                        <v-divider></v-divider>
+
                         <v-card-actions>
                             <RouterLink :to="{ name: 'routine-details', params: { id: routine.id } }">
                                 <v-btn>Ver Detalle</v-btn>
                             </RouterLink>
+                            <v-spacer></v-spacer>
+                            <v-btn
+                                icon="mdi-trash-can-outline"
+                                @click="delete(exercise)"
+                                class="red-hover"
+                            ></v-btn>
                         </v-card-actions>
                     </div>
                 </v-card>
@@ -321,8 +327,8 @@ h1 {
 
 .heart {
     position: absolute;
-    top: 17%;
-    left: 85%;
+    top: 20%;
+    left: 88%;
     transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
     color: #000000;
@@ -384,4 +390,9 @@ h1 {
     flex: 1;
     margin: 40px;
 }
+
+.red-hover:hover {
+    background-color: rgba(255, 0, 0, 0.4);
+}
+
 </style>
