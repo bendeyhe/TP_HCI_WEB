@@ -211,8 +211,8 @@ export default {
 
 .heart {
     position: absolute;
-    top: 17%;
-    left: 85%;
+    top: 20%;
+    left: 88%;
     transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
     color: #000000;

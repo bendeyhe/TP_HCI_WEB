@@ -124,7 +124,6 @@ const { exercise } = toRefs(props);
     max-width: 700px;
     display: -webkit-box;
     -webkit-box-orient: vertical;
-
 }
 
 </style>
