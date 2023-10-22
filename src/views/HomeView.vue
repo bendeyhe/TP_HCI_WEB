@@ -2,7 +2,7 @@
     <AppBar/>
     <v-app id="inspire">
 
-        <v-carousel cycle show-arrows="hover">
+        <v-carousel cycle show-arrows="hover" hide-delimiter-background>
             <v-carousel-item
                 src="https://img.asmedia.epimg.net/resizer/3kjYbfgz9L4yg96V8Yb8qKFnI84=/644x362/cloudfront-eu-central-1.images.arcpublishing.com/diarioas/EGRQNQBFYJNNZK2E5LRAJOBULQ.jpg"
                 cover
@@ -10,11 +10,9 @@
                 <div class="nombre-rutina">
                     Nombre Rutina
                 </div>
-                <div class="dificultad-rutina">
-                    datos de la rutina
-                </div>
-                <div class="creador-rutina">
-                    creador de la rutina
+                <div class="detalles-rutina">
+                    Creador: creador de la rutina <br>
+                    Dificultad:  dificultad de la rutina
                 </div>
                 <div class="boton-rutina">
                     <v-btn class="boton"> Ver Detalle </v-btn>
@@ -29,11 +27,9 @@
                 <div class="nombre-rutina">
                     Nombre Rutina
                 </div>
-                <div class="dificultad-rutina">
-                    datos de la rutina
-                </div>
-                <div class="creador-rutina">
-                    creador de la rutina
+                <div class="detalles-rutina">
+                    Creador: creador de la rutina <br>
+                    Dificultad:  dificultad de la rutina
                 </div>
                 <div class="boton-rutina">
                     <v-btn class="boton"> Ver Detalle </v-btn>
@@ -47,11 +43,9 @@
                 <div class="nombre-rutina">
                     Nombre Rutina
                 </div>
-                <div class="dificultad-rutina">
-                    datos de la rutina
-                </div>
-                <div class="creador-rutina">
-                    creador de la rutina
+                <div class="detalles-rutina">
+                    Creador: creador de la rutina <br>
+                    Dificultad:  dificultad de la rutina
                 </div>
                 <div class="boton-rutina">
                     <v-btn class="boton"> Ver Detalle </v-btn>
@@ -120,29 +114,21 @@ export default {
     border-radius: 5px;
 }
 
-.dificultad-rutina {
+.detalles-rutina {
     position: absolute;
-    bottom: 50px; /* Ajusta la posición vertical según tus necesidades */
+    bottom: 20px; /* Ajusta la posición vertical según tus necesidades */
     left: 20px; /* Ajusta la posición horizontal según tus necesidades */
     color: white; /* Color del texto */
     font-size: 20px; /* Tamaño de la fuente del texto */
     font-family: Montserrat, sans-serif;
     padding: 10px; /* Espaciado interior del texto */
-}
-
-.creador-rutina {
-    position: absolute;
-    bottom: 75px; /* Ajusta la posición vertical según tus necesidades */
-    left: 20px; /* Ajusta la posición horizontal según tus necesidades */
-    color: white; /* Color del texto */
-    font-size: 20px; /* Tamaño de la fuente del texto */
-    font-family: Montserrat, sans-serif;
-    padding: 10px; /* Espaciado interior del texto */
+    background-color: black;
+    border-radius: 5px;
 }
 
 .boton-rutina {
     position: absolute;
-    bottom: 60px; /* Ajusta la posición vertical según tus necesidades */
+    bottom: 30px; /* Ajusta la posición vertical según tus necesidades */
     right: 20px; /* Ajusta la posición horizontal según tus necesidades */
 
 }
@@ -151,4 +137,5 @@ export default {
     background-color: #8efd00;
     color: #000000;
 }
+
 </style>
