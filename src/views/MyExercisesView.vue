@@ -1,6 +1,6 @@
 <template>
     <AppBar />
-    <div class="mx-auto">
+    <div class="mx-auto mydiv">
         <h1 class="text-center">Mis ejercicios</h1>
         <div class="mx-auto">
         <v-dialog width="500" class="mx-auto">
@@ -31,21 +31,8 @@
                             maxlength="200"
                             counter
                         ></v-text-field>
+                        <v-autocomplete density="compact" variant="outlined" label="Tipo" v-model="type" :items="['Ejercicio', 'Descanso']" default="Ejercicio"></v-autocomplete>
 
-                        <!--
-                                                    <v-text-field
-                                                        label="Duración"
-                                                        v-model="duration"
-                                                    ></v-text-field>
-                                                    <v-text-field
-                                                        label="Dificultad"
-                                                        v-model="difficulty"
-                                                    ></v-text-field>
-                                                    <v-text-field
-                                                        label="Equipamiento"
-                                                        v-model="equipment"
-                                                    ></v-text-field>
-                                                    -->
                         <v-text-field
                             label="Imagen"
                             v-model="newEjercicio.url"
@@ -53,6 +40,7 @@
 
                         <!-- agregar alerta string maximo 274-->
                     </v-card-text>
+                
 
                     <v-card-actions>
                         <v-spacer></v-spacer>
@@ -85,6 +73,8 @@
 
     <v-row class="width">
         <v-col cols="4" v-for="exercise in myExercises">
+            <ExerciseDetail :exercise="exercise" :myExercises="myExercises" />
+            <!--
             <v-card>
                 <v-img
                     :src="exercise.url"
@@ -102,6 +92,7 @@
                     <v-btn color="primary" @click="deleteExercise(exercise)">Eliminar</v-btn>
                 </v-card-actions>
             </v-card>
+        -->
 
 
         </v-col>
@@ -189,18 +180,24 @@ import FooterComponent from "@/components/FooterComponent.vue";
 import { ref } from "vue";
 import { useUserStore } from "@/stores/userStore";
 import { onBeforeMount } from "vue";
+import ExerciseDetail from "@/components/ExerciseDetail.vue";
+import { useExerciseStore } from "@/stores/exerciseStore";
 
+const exerciseStore = useExerciseStore();
 const userStore = useUserStore();
 const myExercises = ref([]);
+const type = ref(1);
 
 const newEjercicio = ref({
     name: "",
     detail: "",
     url: "",
+    type: "",
+    number: 1,
+    index: 0
 });
 
 onBeforeMount(async () => {
-    debugger;
     const user = await userStore.getCurrentUser();
     if (user.success) {
         if (user.data.metadata.exercises) {
@@ -210,22 +207,42 @@ onBeforeMount(async () => {
     }
 });
 
+async function updateMyExercises() {
+    const user = await userStore.getCurrentUser();
+    if (user.success) {
+        if (user.data.metadata.exercises) {
+            myExercises.value = user.data.metadata.exercises;
+        }
+    }
+}
+
 async function saveExercise(){
-    if (type.value === 3)
+    if (type.value === 'Descanso')
         newEjercicio.value.type = 'rest'
     else
         newEjercicio.value.type = 'exercise'
     let result = await exerciseStore.addExercise(newEjercicio.value);
     if (result.success) {
+        newEjercicio.value.index = result.data.id
+        const user = await userStore.getCurrentUser()
+            if (user.success){
+                if(!user.data.metadata)
+                    user.data.metadata = {}
+                if(!user.data.metadata.exercises)
+                    user.data.metadata.exercises = []
+                user.data.metadata.exercises.push(newEjercicio.value)
+                await userStore.modifyCurrentUser(user.data.firstName, user.data.lastName, user.data.gender, user.data.metadata)
+                myExercises.value = user.data.metadata.exercises;
+            }
         result = await exerciseStore.addExerciseImage(result.data.id, newEjercicio.value)
         if (result.success) {
-            ejercicioSeleccionado.value = newEjercicio.value;
             newEjercicio.value = {
                 name: '',
                 detail: '',
                 url: '',
                 type: '',
-                number: 1
+                number: 1,
+                index: 0
             }
         }
     }
@@ -250,14 +267,7 @@ h1 {
     margin-bottom: 5    0px;
 }
 
-.boton {
-    background-color: #8efd00;
-    color: #000000;
-    margin-right: 10px;
-    margin-top: 20px;
-    position: absolute;
-    left: 20%;
-}
+
 
 .nombre-rutina {
     width: 400px;
@@ -286,6 +296,10 @@ h1 {
 h2 {
     padding-left: 25px;
     padding-bottom: 35px;
+}
+
+.mydiv{
+    margin-bottom: 50px;
 }
 
 .save {
