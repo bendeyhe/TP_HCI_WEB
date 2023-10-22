@@ -57,6 +57,12 @@ const routes = [
         component: () => import('@/views/MyRoutines.vue')
     },
     {
+        path: '/routines',
+        name: 'routines',
+        meta: {requiresAuth: true},
+        component: () => import('@/views/Routines.vue')
+    },
+    {
         path: '/login',
         name: 'login',
         meta: {requiresAuth: false},

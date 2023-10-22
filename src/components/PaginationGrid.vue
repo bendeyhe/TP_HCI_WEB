@@ -1,6 +1,6 @@
 <template>
-    <h1 v-if="isFav">Rutinas Favoritas</h1>
-    <h1 v-else>Mis Rutinas</h1>
+    <h1 v-if="typeRout === 'fav'">Rutinas Favoritas</h1>
+    <h1 v-if="typeRout === 'myRouts'">Mis Rutinas</h1>
     <div v-if="visibleRoutines.length > 0">
         <v-row class="width">
             <v-col cols="4" v-for="(routine, index) in visibleRoutines"
@@ -105,7 +105,8 @@
     </div>
     <div v-else>
         <div v-if="isFav" class="flex-container">
-            <h2>Parece que no has likeado ninguna rutina todavía. Estoy seguro que ya encontrarás una que te encante! ʕ•ᴥ•ʔ</h2>
+            <h2>Parece que no has likeado ninguna rutina todavía. Estoy seguro que ya encontrarás una que te encante!
+                ʕ•ᴥ•ʔ</h2>
         </div>
         <div v-else class="flex-container">
             <h2>Todavía no creaste ninguna rutina. Es hora de que empieces a hacer tus rutinas! ʕ•ᴥ•ʔ</h2>
@@ -131,13 +132,18 @@ const routineStore = useRoutineStore();
 const userStore = useUserStore();
 
 const props = defineProps({
-    isFav: {
-        type: Boolean,
+    typeRout: {
+        type: String,
         required: true
+    },
+    query: {
+        type: String,
+        required: false
     },
 });
 
-const {isFav} = toRefs(props);
+const {typeRout} = toRefs(props);
+const {query} = toRefs(props);
 
 async function getFavs() {
     loading.value = true;
@@ -193,8 +199,39 @@ async function getMyRoutines() {
     loading.value = false;
 }
 
+async function getRoutines() {
+    loading.value = true;
+    const result = await routineStore.getRoutines();
+    if(query.value === undefined || query.value === null || query.value === "")
+        query.value = "";
+    if (result.success && result.data.content) {
+        for (let i = 0; i < result.data.totalCount; i++) {
+            debugger
+            const routine = result.data.content[i];
+            if (routine && routine.name) {
+                if(routine.name.toLowerCase().includes(query.toLowerCase)){
+                    routineStore.addRoutineArray({
+                        id: routine.id,
+                        name: routine.name,
+                        img: routine.metadata.image,
+                        category: routine.category,
+                        description: routine.detail,
+                        creator: routine.user,
+                        difficulty: routine.difficulty,
+                        isPublic: routine.isPublic,
+                        fav: routine.metadata.fav,
+                        date: routine.date,
+                        score: routine.metadata.score,
+                    });
+                }
+            }
+        }
+    }
+    loading.value = false;
+}
+
 async function updateVisibleRoutines() {
-    if (isFav.value) {
+    if (typeRout === "fav") {
         await getFavs();
         visibleRoutines.value = Array.from(routineStore.getfavoriteRoutines()).slice(
             (pageNumber.value - 1) * pageSize.value,
@@ -204,13 +241,23 @@ async function updateVisibleRoutines() {
         amountPages.value = Math.ceil(routineArray.value.length / pageSize.value);
         if (visibleRoutines.value.length === 0 && pageNumber.value > 0)
             updatePage(pageNumber.value - 1)
-    } else {
+    } else if (typeRout === "myRouts") {
         await getMyRoutines();
         visibleRoutines.value = Array.from(routineStore.getMyRoutines()).slice(
             (pageNumber.value - 1) * pageSize.value,
             pageNumber.value * pageSize.value
         );
         routineArray.value = Array.from(routineStore.getMyRoutines());
+        amountPages.value = Math.ceil(routineArray.value.length / pageSize.value);
+        if (visibleRoutines.value.length === 0 && pageNumber.value > 0)
+            updatePage(pageNumber.value - 1)
+    } else {
+        await getRoutines();
+        visibleRoutines.value = Array.from(routineStore.getAllRoutines()).slice(
+            (pageNumber.value - 1) * pageSize.value,
+            pageNumber.value * pageSize.value
+        );
+        routineArray.value = Array.from(routineStore.getAllRoutines());
         amountPages.value = Math.ceil(routineArray.value.length / pageSize.value);
         if (visibleRoutines.value.length === 0 && pageNumber.value > 0)
             updatePage(pageNumber.value - 1)
@@ -329,11 +376,11 @@ h1 {
 }
 
 .v-row {
-  display: flex;
-  flex-wrap: wrap;
+    display: flex;
+    flex-wrap: wrap;
 }
 
-.v-col{
+.v-col {
     flex: 1;
     margin: 40px;
 }

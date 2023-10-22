@@ -17,6 +17,9 @@
                 variant="outlined"
                 v-model="firstName"
                 :disabled="loading"
+                :rules="[(v) => /^[a-zA-Z\s]+$/.test(v) || 'solo puede contener letras']"
+                maxlength="50"
+                counter
             ></v-text-field>
 
             <div class="text-subtitle-1 text-medium-emphasis">Apellido</div>
@@ -27,6 +30,9 @@
                 variant="outlined"
                 v-model="lastName"
                 :disabled="loading"
+                :rules="[(v) => /^[a-zA-Z\s]+$/.test(v) || 'solo puede contener letras']"
+                maxlength="50"
+                counter
             ></v-text-field>
 
             <div class="text-subtitle-1 text-medium-emphasis">Nombre de Usuario</div>

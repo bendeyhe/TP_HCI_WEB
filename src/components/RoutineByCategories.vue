@@ -123,20 +123,20 @@ async function getFavs() {
     const result = await routineStore.getRoutines();
     if (result.success) {
         for (let i = 0; i < result.data.totalCount; i++) {
-            if (result.data.content[i] && result.data.content[i].metadata.fav) {
+            if (result.data.content[i] && result.data.content[i].metadata?.fav) {
                 const routine = result.data.content[i];
                 routineStore.addFavoriteRoutine({
                     id: routine.id,
                     name: routine.name,
-                    img: routine.metadata.image,
+                    img: routine.metadata?.image,
                     category: routine.category,
                     description: routine.detail,
                     creator: routine.user,
                     difficulty: routine.difficulty,
                     isPublic: routine.isPublic,
-                    fav: routine.metadata.fav,
+                    fav: routine.metadata?.fav,
                     date: routine.date,
-                    score: routine.metadata.score,
+                    score: routine.metadata?.score,
                 });
             }
         }
@@ -154,15 +154,15 @@ async function getRoutines() {
             routineStore.addRoutineArray({
                 id: routine.id,
                 name: routine.name,
-                img: routine.metadata.image,
+                img: routine.metadata?.image,
                 category: routine.category,
                 description: routine.detail,
                 creator: routine.user,
                 difficulty: routine.difficulty,
                 isPublic: routine.isPublic,
-                fav: routine.metadata.fav,
+                fav: routine.metadata?.fav,
                 date: routine.date,
-                score: routine.metadata.score,
+                score: routine.metadata?.score,
             });
         }
         }
