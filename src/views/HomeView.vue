@@ -58,8 +58,10 @@
         <v-main>
             <!--todo quizas aca esta bueno hacer un v-for?-->
             <RoutineByCategories :nombreRutina="category1" :favourite="false"/>
-            <RoutineByCategories :nombreRutina="category3" :favourite="true"/>
-            <RoutineByCategories :nombreRutina="category4" :favourite="false"/>
+            <RoutineByCategories :nombreRutina="category2" :favourite="false"/>
+            <RoutineByCategories :nombreRutina="category3" :favourite="false"/>
+            <RoutineByCategories :nombreRutina="category4" :favourite="true"/>
+            <RoutineByCategories :nombreRutina="category5" :favourite="false"/>
 
         </v-main>
     </v-app>
@@ -84,10 +86,11 @@ function isLogged() {
 <script>
 export default {
     data: () => ({
-        category1: "Vistas recientemente",
-        category2: "Destacadas",
-        category3: "Favoritas",
-        category4: "Otras",
+        category1: "Dificultad fácil",
+        category2: "Dificultad media",
+        category3: "Dificultad difícil",
+        category4: "Favoritas",
+        category5: "Otras",
         drawer: null,
     }),
 }
