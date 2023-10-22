@@ -137,7 +137,10 @@ async function openModal() {
     if (result.success) {
         const allExercises = result.data.content
         exercises.value = allExercises.filter(exercise => {
-            return true;
+            if(isRest.value)
+                return exercise.type === 'rest'
+            else
+                return exercise.type !== 'rest'
         })
 
         // Inicializa la matriz show con valores falsos para cada tarjeta
