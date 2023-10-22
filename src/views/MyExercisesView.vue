@@ -73,7 +73,7 @@
 
     <v-row class="width">
         <v-col cols="4" v-for="exercise in myExercises">
-            <ExerciseDetail :exercise="exercise" :myExercises="myExercises" />
+            <ExerciseDetail :exercise="exercise" :myExercises="myExercises" :myPage="true" />
             <!--
             <v-card>
                 <v-img
@@ -191,9 +191,9 @@ const type = ref(1);
 const newEjercicio = ref({
     name: "",
     detail: "",
-    url: "",
+    url: 'https://www.feda.net/wp-content/uploads/2018/08/circuit-training.jpeg',
     type: "",
-    number: 1,
+    number: 0,
     index: 0
 });
 
@@ -241,14 +241,12 @@ async function saveExercise(){
                 detail: '',
                 url: '',
                 type: '',
-                number: 1,
+                number: myExercises.value.length,
                 index: 0
             }
         }
     }
 };
-
-
 
 </script>
 

@@ -225,4 +225,3 @@ async function editExercise(exercise) {
     font-weight: bold;
 }
 </style>
-

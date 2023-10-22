@@ -56,7 +56,7 @@ export const useExerciseStore = defineStore('exercise', {
             return await makeApiCall(this.apiEndpoints.getExerciseImages(exerciseId), null, useUserStore().token);
         },
         async addExerciseImage(exerciseId, exercise) {
-            const data = {'number': exercise.number, 'url': exercise.url};
+            const data = {'number': 1, 'url': exercise.url};
             return await makeApiCall(this.apiEndpoints.addExerciseImage(exerciseId), data, useUserStore().token);
         },
         async getExerciseImage(exercise, imageId) {

@@ -148,7 +148,7 @@
                             </v-row>
                         </v-col>
                         <v-col cols="4">
-                            <ExerciseDetail :exercise="ejercicioSeleccionado"/>
+                            <ExerciseDetail :exercise="ejercicioSeleccionado" :myExercises="myExercises"/>
                         </v-col>
                         <v-row v-if="n===1">   <!-- ExerciseDetailMini para Entrada en Calor -->
                             <h2 v-if="ejEntCalor.length > 0">Entrada en calor:</h2>
@@ -267,7 +267,9 @@ import {RouterLink, useRoute} from "vue-router";
 import {useRoutineStore} from "@/stores/routineStore";
 import {useCycleStore} from "@/stores/cycleStore";
 import {useUserStore} from "@/stores/userStore";
+import myExercisesView from "@/views/MyExercisesView.vue";
 
+const myExercises = ref([])
 const userStore = useUserStore()
 const exerciseStore = useExerciseStore()
 const routineStore = useRoutineStore()
@@ -287,7 +289,7 @@ const newEjercicio = ref({
     detail: '',
     url: 'https://www.feda.net/wp-content/uploads/2018/08/circuit-training.jpeg',
     type: '',
-    number: 1,
+    number: 0,
     index: 0
 });
 const ejercicioSeleccionado = ref({
@@ -295,7 +297,7 @@ const ejercicioSeleccionado = ref({
     detail: '',
     url: 'https://www.feda.net/wp-content/uploads/2018/08/circuit-training.jpeg',
     type: '',
-    number: 1,
+    number: 0,
     index: 0
 });
 const isEditing = ref(false);
@@ -384,9 +386,10 @@ async function saveExercise() {
                 detail: '',
                 url: 'https://www.feda.net/wp-content/uploads/2018/08/circuit-training.jpeg',
                 type: '',
-                number: 1,
+                number: user.data.metadata.exercises.length,
                 index: 0
             }
+            myExercises.value = await user.data.metadata.exercises
         }
     }
 }
