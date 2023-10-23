@@ -1,80 +1,129 @@
 <template>
     <AppBar/>
+    <h1> Detalle de la Rutina</h1>
     <v-card class="routine-card" v-if="routine">
         <v-container fluid>
-            <v-row dense>
-                <v-row>
-                    <v-col>
-                        <v-row>
-                            <h1 class="titulo"> {{ routine.name }}</h1>
-                        </v-row>
-                        <v-row>
-                            <v-col>
-                                <v-card width="100%">
-                                    <div class="cont">
-                                        <v-img
-                                            :src=routine.img
-                                            height="300px"
-                                            cover=""/>
-                                        <v-btn class="heart"
-                                               :icon="routine.fav ? 'mdi-heart' : 'mdi-heart-outline'"
-                                               @click="toggle()">
-                                        </v-btn>
-                                    </div>
-                                </v-card>
-                            </v-col>
-                            <v-col>
-                                <div class="texto">
-                                    <v-row class="filastext">
-                                        <v-icon icon="mdi-account" color="black"></v-icon>
-                                        <h3> • Creador: {{ routine.creator?.username }}</h3></v-row>
-                                    <v-row class="filastext">
-                                        <v-icon icon="mdi-star" color="black"></v-icon>
-                                        <h3> • Puntuación:
-                                            <v-rating
-                                                :model-value="routine.score"
-                                                color="black"
-                                                density="compact"
-                                                half-increments
-                                                active-color="black"
-                                                readonly
-                                                size="small"
-                                            ></v-rating>
-                                        </h3>
-                                    </v-row>
-                                    <v-row class="filastext">
-                                        <v-icon icon="mdi-alarm" color="black"></v-icon>
-                                        <h3> • Duración: {{ formatDuration(routine.duration) }} </h3></v-row>
-                                    <v-row class="filastext">
-                                        <v-icon icon="mdi-dumbbell" color="black"></v-icon>
-                                        <h3> • Equipamiento necesario: NO TENEMOS ESTO HECHO</h3>
-                                    </v-row>
-                                    <v-row class="filastext">
-                                        <v-icon icon="mdi-chart-line" color="black"></v-icon>
-                                        <h3> • Dificultad: {{ routine.difficulty }}</h3></v-row>
+            <v-row>
+                <v-col cols="4">
+                    <v-card
+                        :loading="loading"
+                        width="280"
+                        class="card"
+                        height="400"
+                    >
+                        <template v-slot:loader="{ isActive }">
+                            <v-progress-linear
+                                :active="isActive"
+                                height="4"
+                                indeterminate
+                            ></v-progress-linear>
+                        </template>
+                        <div class="cont">
+                            <img
+                                class="image"
+                                :src="routine.img"
+                                alt="Foto de la Rutina"
+                                height="150"
+                            />
+                            <v-btn
+                                class="heart"
+                                :icon="
+                                routine.fav ? 'mdi-heart' : 'mdi-heart-outline'
+                            "
+                                @click="toggle(routine)"
+                            ></v-btn>
+                        </div>
+                        <v-card-item>
+                            <v-card-title>{{ routine.name }}</v-card-title>
+                        </v-card-item>
+                        <v-card-text>
+                            <div class="creator my-4 text-subtitle-1">
+                                <v-icon icon="mdi-account"></v-icon>
+                                <div class="creator-text">
+                                    • {{ routine.creator.username }}
                                 </div>
-                                <div>
-                                    <v-row class="botones" align="center" justify="center">
-                                        <v-col cols="12" sm="6" class="text-center">
-                                            <v-btn class="compartir" @click="shareRoutine"
-                                                   prepend-icon="mdi-share-variant"> Compartir
-                                            </v-btn>
-                                        </v-col>
-                                        <v-col cols="12" sm="6" class="text-center">
-                                            <v-btn class="comenzar" prepend-icon="mdi-play-circle-outline"> Comenzar
-                                            </v-btn>
-                                        </v-col>
-                                    </v-row>
-                                </div>
-                            </v-col>
-                        </v-row>
-                    </v-col>
-                </v-row>
+                            </div>
+                            <div class="overflow">{{ routine.description }}</div>
+                        </v-card-text>
+                        <div class="detail">
+                        </div>
+                    </v-card>
+                </v-col>
+
+
+                <v-col cols="2">
+                    <v-autocomplete  placeholder="Seleccione el ciclo" variant="outlined"
+                                     v-model="selectedCiclo"
+                                    :items="['Entrada en Calor', 'Principal', 'Enfriamiento']"></v-autocomplete>
+                </v-col>
+
+                <v-col cols="6">
+                    <v-row>
+                        <div class="tabla">
+                            <v-table height="400px">
+                                <thead>
+                                <tr>
+                                    <th class="text-left"> <!-- v-for="ciclo in ciclos" -->
+                                        Ciclo ciclo.name
+                                    </th>
+
+                                </tr>
+                                </thead>
+                                <thead>
+                                <tr>
+                                    <th class="text-left"> <!-- v-for="ciclo in ciclos" -->
+                                        Ejercicio
+                                    </th>
+                                    <th class="text-left">
+                                        Repeticiones/ Tiempo
+                                    </th>
+                                    <th class="text-left">
+                                        Repeticiones del ciclo
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr
+                                    v-for="item in exercises"
+                                    :key="item.name"
+                                >
+                                    <td>{{ item.name }}</td>
+                                    <td>{{ item.calories }}</td>
+                                </tr>
+                                </tbody>
+                            </v-table>
+                        </div>
+
+
+                    </v-row>
+
+                    <v-row class="fila3">
+                        <v-col>
+                            <v-btn class="compartir" @click="shareRoutine"
+                                   prepend-icon="mdi-share-variant"> Compartir
+                            </v-btn>
+                        </v-col>
+                        <v-col>
+                            <v-btn class="editar" prepend-icon="mdi-pencil"> Editar rutina
+                            </v-btn>
+                        </v-col>
+                    </v-row>
+
+                </v-col>
+
             </v-row>
         </v-container>
     </v-card>
-    <RoutineByCategories :nombreRutina="Favoritas" :favourite="true"/>
-    <v-dialog v-model="showShareDialog" persistent max-width="400">
+
+    <RoutineByCategories nombreRutina="Dificultad fácil" :favourite="false"/>
+    <RoutineByCategories nombreRutina="Dificultad media" :favourite="false"/>
+    <RoutineByCategories nombreRutina="Dificultad difícil" :favourite="false"/>
+    <RoutineByCategories nombreRutina="Favoritas" :favourite="true"/>
+    <RoutineByCategories nombreRutina="Otras" :favourite="false"/>
+
+    <FooterComponent/>
+
+    <v-dialog v-model="showShareDialog" max-width="400">
         <v-card>
             <v-card-title class="headline">
                 Compartir Rutina
@@ -99,6 +148,7 @@ import {RouterLink, useRoute, useRouter} from "vue-router";
 import RoutineByCategories from "@/components/RoutineByCategories.vue";
 import {onBeforeMount, ref} from "vue";
 import {useRoutineStore} from "@/stores/routineStore";
+import FooterComponent from "@/components/FooterComponent.vue";
 
 const route = useRoute()
 const router = useRouter()
@@ -186,6 +236,59 @@ function formatDuration(durationInSeconds) {
 
 </script>
 
+
+<script>
+export default {
+    data() {
+        return {
+            exercises: [
+                {
+                    name: 'Frozen Yogurt',
+                    calories: 159,
+                },
+                {
+                    name: 'Ice cream sandwich',
+                    calories: 237,
+                },
+                {
+                    name: 'Eclair',
+                    calories: 262,
+                },
+                {
+                    name: 'Cupcake',
+                    calories: 305,
+                },
+                {
+                    name: 'Gingerbread',
+                    calories: 356,
+                },
+                {
+                    name: 'Jelly bean',
+                    calories: 375,
+                },
+                {
+                    name: 'Lollipop',
+                    calories: 392,
+                },
+                {
+                    name: 'Honeycomb',
+                    calories: 408,
+                },
+                {
+                    name: 'Donut',
+                    calories: 452,
+                },
+                {
+                    name: 'KitKat',
+                    calories: 518,
+                },
+            ],
+        }
+    },
+}
+
+</script>
+
 <style scoped>
 
 .titulo {
@@ -193,20 +296,9 @@ function formatDuration(durationInSeconds) {
     font-weight: bolder;
     font-size: 200%;
     color: #000000;
-    padding: 20px;
+    padding-top: 10px;
+    padding-left: 20px;
     display: inline-block;
-}
-
-.fondo {
-    padding-bottom: 50px;
-}
-
-.comenzar {
-
-    color: #000000;
-    background-color: #8efd00;
-    margin-right: 10px;
-    margin-left: 10px;
 }
 
 .compartir {
@@ -221,22 +313,19 @@ function formatDuration(durationInSeconds) {
     width: 100%;
 }
 
-.image {
-    width: 100%;
-    height: auto;
-}
-
 .routine-card {
     background-color: lightgray;
     margin: 20px auto;
-    max-width: 1200px;
     border-radius: 10px;
+    width: 95%;
+    height: 530px;
+    padding-top:20px;
 }
 
 .heart {
     position: absolute;
-    top: 10%;
-    left: 95%;
+    top: 20%;
+    left: 88%;
     transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
     color: #000000;
@@ -245,26 +334,66 @@ function formatDuration(durationInSeconds) {
     cursor: pointer;
 }
 
-.texto {
-    padding-top: 20px;
-    padding-left: 20px;
+.cont {
+    position: relative;
+    width: 100%;
 }
 
-.botones {
-    position: absolute;
-    left: 70%;
-    top: 75%;
+.image {
+    width: 100%;
+}
+
+.creator {
+    display: flex;
+    align-items: center;
+}
+
+.creator-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
 }
 
 h3 {
     font-family: Montserrat, sans-serif;
-
     font-size: 100%;
     color: #000000;
     display: inline-block;
 }
 
-.filastext {
+.tabla {
+    padding-left: 20px;
+    padding-top:15px;
+}
+
+.v-table {
+    width: auto;
+}
+
+.editar {
+
+    color: #000000;
+    background-color: #8efd00;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+.overflow {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 700px;
+    display: -webkit-box;
+    -webkit-line-clamp: 6; /* number of lines to show */
+    -webkit-box-orient: vertical;
+}
+
+h1 {
+    text-align: center;
+    padding-top: 25px;
+}
+
+.fila3 {
     padding-top: 15px;
 }
 

@@ -59,19 +59,6 @@
                         -->
                     </v-card-item>
                     <v-card-text>
-                        <v-row allign="center" class="mx-0">
-                            <v-rating
-                                :model-value="routine.score"
-                                color="amber"
-                                density="compact"
-                                half-increments
-                                readonly
-                                size="small"
-                            ></v-rating>
-                            <div class="text-grey ms-4">
-                                {{ routine.score }}
-                            </div>
-                        </v-row>
                         <div class="creator my-4 text-subtitle-1">
                             <v-icon icon="mdi-account"></v-icon>
                             <div class="creator-text">
@@ -83,7 +70,7 @@
                     <div class="detail">
                         <v-card-actions>
                             <RouterLink :to="{ name: 'routine-details', params: { id: routine.id } }">
-                                <v-btn variant="tonal">Ver Detalle</v-btn>
+                                <v-btn>Ver Detalle</v-btn>
                             </RouterLink>
                         </v-card-actions>
                     </div>
@@ -154,7 +141,6 @@ async function getRoutines() {
                 isPublic: routine.isPublic,
                 fav: routine.metadata?.fav,
                 date: routine.date,
-                score: routine.metadata?.score,
             });
         }
         }
@@ -240,7 +226,6 @@ export default {
 .creator {
     display: flex;
     align-items: center;
-    margin-top: 10px;
 }
 
 .creator-text {
@@ -250,8 +235,4 @@ export default {
     max-width: 200px;
 }
 
-
-/*array de favs
-getFavs
-*/
 </style>
