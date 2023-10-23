@@ -31,7 +31,7 @@
         </div>
         <div class="actions">
             <v-card-actions v-if="myPage == true" class="actions">
-                <v-btn class="trashbtn" @click="deleteExercise(exercise)" prepend-icon="mdi-trash-can"
+                <v-btn class="trashbtn" @click="deleteExercise(props.exercise)" prepend-icon="mdi-trash-can"
                 >Eliminar</v-btn>
                 <v-spacer></v-spacer>
                 <v-btn class="editar" @click="openEditDialog" v-bind="props" prepend-icon="mdi-pencil"
@@ -146,24 +146,27 @@ const { myPage } = toRefs(props);
 
 async function deleteExercise(exercise) {
     debugger;
-    const result = await exerciseStore.deleteExercise(exercise.index);
-    if (result) {
-        const user = await userStore.getCurrentUser();
-        if (user) {
-            user.data.metadata.exercises.splice(exercise.number, 1);
-            myExercises.value.splice(exercise.number, 1);
-            for (let i=exercise.number; i<user.data.metadata.exercises.length; i++){
-                if (user.data.metadata.exercises[i].number > 0)
-                    user.data.metadata.exercises[i].number--;
-                if (myExercises.value[i].number > 0)
-                    myExercises.value[i].number--;
+    const index = myExercises.value.findIndex(e => e === exercise);
+    if (index !== -1) {
+        const result = await exerciseStore.deleteExercise(exercise.index);
+        if (result) {
+            const user = await userStore.getCurrentUser();
+            if (user) {
+                user.data.metadata.exercises.splice(index, 1);
+                myExercises.value.splice(index, 1);
+                for (let i = index; i < user.data.metadata.exercises.length; i++) {
+                    if (user.data.metadata.exercises[i].number > 0)
+                        user.data.metadata.exercises[i].number--;
+                    if (myExercises.value[i].number > 0)
+                        myExercises.value[i].number--;
+                }
+                await userStore.modifyCurrentUser(
+                    user.data.firstName,
+                    user.data.lastName,
+                    user.data.gender,
+                    user.data.metadata
+                );
             }
-            await userStore.modifyCurrentUser(
-                user.data.fistName,
-                user.data.lastName,
-                user.data.gender,
-                user.data.metadata
-            );
         }
     }
 }
@@ -193,6 +196,7 @@ async function editExercise(exercise) {
     //const result = await exerciseStore.changeExercise(exercise);
 }
 async function openEditDialog() {
+    newEjercicio.value = { ...exercise.value };
     editDialog.value = true;
 }
 </script>
