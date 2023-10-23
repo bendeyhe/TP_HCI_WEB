@@ -147,8 +147,10 @@ async function deleteExercise(exercise) {
             user.data.metadata.exercises.splice(exercise.number, 1);
             myExercises.value.splice(exercise.number, 1);
             for (let i=exercise.number; i<user.data.metadata.exercises.length; i++){
-                user.data.metadata.exercises[i].number--;
-                myExercises.value[i].number--;
+                if (user.data.metadata.exercises[i].number > 0)
+                    user.data.metadata.exercises[i].number--;
+                if (myExercises.value[i].number > 0)
+                    myExercises.value[i].number--;
             }
             await userStore.modifyCurrentUser(
                 user.data.fistName,

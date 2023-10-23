@@ -265,7 +265,7 @@
                                 <v-btn v-if="n===1" class="boton" prepend-icon="mdi-plus" @click="agregarEjercicio">
                                     Agregar Ejercicio a Entrada en Calor
                                 </v-btn>
-                                <v-btn v-else-if="n===2" class="boton" prepend-icon="mdi-plus" @click="agregarEjercicio()">
+                                <v-btn v-else-if="n===2" class="boton" prepend-icon="mdi-plus" @click="agregarEjercicio">
                                     Agregar Ejercicio a Principal
                                 </v-btn>
                                 <v-btn v-else class="boton" prepend-icon="mdi-plus" @click="agregarEjercicio">
@@ -617,25 +617,26 @@ async function agregarEjercicio() {
                 await showErrorAlert2('Debe seleccionar un tipo de descanso')
                 return;
             }
-            ejEntCalor.value.push(ejercicioSeleccionado);
+            ejEntCalor.value.push(ejercicioSeleccionado.value);
         } else if (type.value === 2) {
-            if(dataPrincipal[cicloSeleccionado.value].cantSeries === 0){
+            debugger;
+            if(dataPrincipal.value[cicloSeleccionado.value].cantSeries === 0){
                 await showErrorAlert2('La cantidad de series no puede ser 0')
                 return;
             }
-            if(dataPrincipal[cicloSeleccionado.value].duracion === 0){
+            if(dataPrincipal.value[cicloSeleccionado.value].duracion === 0){
                 await showErrorAlert2('La duración no puede ser 0')
                 return;
             }
-            if(dataPrincipal[cicloSeleccionado.value].descanso === 0){
+            if(dataPrincipal.value[cicloSeleccionado.value].descanso === 0){
                 await showErrorAlert2('El tiempo de descanso no puede ser 0')
                 return;
             }
-            if(dataPrincipal[cicloSeleccionado.value].typeDuracion === ''){
+            if(dataPrincipal.value[cicloSeleccionado.value].typeDuracion === ''){
                 await showErrorAlert2('Debe seleccionar un tipo de duración')
                 return;
             }
-            if(dataPrincipal[cicloSeleccionado.value].typeDescanso === ''){
+            if(dataPrincipal.value[cicloSeleccionado.value].typeDescanso === ''){
                 await showErrorAlert2('Debe seleccionar un tipo de descanso')
                 return;
             }
@@ -664,8 +665,9 @@ async function agregarEjercicio() {
                 await showErrorAlert2('Debe seleccionar un tipo de descanso')
                 return;
             }
-            ejEnfriamiento.value.push(ejercicioSeleccionado);
+            ejEnfriamiento.value.push(ejercicioSeleccionado.value);
         }
+
     }
 }
 
