@@ -111,9 +111,9 @@
         </v-container>
     </v-card>
 
-    <RoutineByCategories nombreRutina="Dificultad fácil" :favourite="false"/>
-    <RoutineByCategories nombreRutina="Dificultad media" :favourite="false"/>
-    <RoutineByCategories nombreRutina="Dificultad difícil" :favourite="false"/>
+    <RoutineByCategories nombreRutina="Dificultad Fácil" :favourite="false"/>
+    <RoutineByCategories nombreRutina="Dificultad Media" :favourite="false"/>
+    <RoutineByCategories nombreRutina="Dificultad Difícil" :favourite="false"/>
     <RoutineByCategories nombreRutina="Favoritas" :favourite="true"/>
     <RoutineByCategories nombreRutina="Otras" :favourite="false"/>
 

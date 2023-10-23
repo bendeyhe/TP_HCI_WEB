@@ -148,9 +148,9 @@ watch(originDisabled, val => {
 <script>
 export default {
     data: () => ({
-        category1: "Dificultad fácil",
-        category2: "Dificultad media",
-        category3: "Dificultad difícil",
+        category1: "Dificultad Fácil",
+        category2: "Dificultad Media",
+        category3: "Dificultad Difícil",
         category4: "Favoritas",
         category5: "Otras",
         drawer: null,
