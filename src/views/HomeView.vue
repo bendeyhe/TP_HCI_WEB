@@ -1,6 +1,7 @@
 <template>
     <AppBar v-if="isLogged"/>
     <AppBarWithoutSearch v-else/>
+    <div class="gg">
     <v-app id="inspire">
 
         <v-carousel cycle show-arrows="hover" hide-delimiter-background v-if="!loading">
@@ -63,6 +64,7 @@
             <RoutineByCategories :nombreRutina="category5" :favourite="false" dif="todas"/>
         </v-main>
     </v-app>
+    </div>
     <footer-component/>
 </template>
 
@@ -205,6 +207,10 @@ export default {
     bottom: 30px; /* Ajusta la posición vertical según tus necesidades */
     right: 25px; /* Ajusta la posición horizontal según tus necesidades */
 
+}
+
+.gg{
+    margin-bottom: 100px;
 }
 
 .boton {
