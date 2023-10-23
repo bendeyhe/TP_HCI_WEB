@@ -4,6 +4,12 @@
                                 <h1 class="titulo">Favoritas</h1>
         </RouterLink>
         <h1 v-else class="titulo">{{ nombreRutina }}</h1>
+        <RouterLink :to="{ name: 'favourite-routines' }" v-if="nombreRutina==='Favoritas'">
+                                <a class="titulo link">Ver todas las favoritas</a>
+        </RouterLink>
+        <RouterLink :to="{ name: 'all-routines' }" v-else >
+                                <a class="titulo link">Ver todas las rutinas</a>
+        </RouterLink>
         <v-slide-group
             v-model="model"
             multiple
@@ -228,6 +234,14 @@ export default {
     align-items: center;
 }
 
+.link {
+    text-decoration: none;
+    color: blue
+}
+
+.link:hover {
+    cursor: pointer 
+}
 .creator-text {
     white-space: nowrap;
     overflow: hidden;
