@@ -213,29 +213,39 @@ async function deleteExercise(exercise) {
 }
 
 async function editExercise(exercise) {
-    debugger
+    debugger;
     const result = await exerciseStore.getExercise(exercise.index);
     if (result) {
-        if (newEjercicio.value.name != "")
-            result.data.name = newEjercicio.value.name;
-        if (newEjercicio.value.detail != "")
-            result.data.detail = newEjercicio.value.detail;
-        if (newEjercicio.value.url.length > 0)
-            result.data.url = newEjercicio.value.url;
-        if (newEjercicio.value.type != "")
-            result.data.type = newEjercicio.value.type;
-        const result2 = await exerciseStore.changeExercise(result.data);
-        if (result2) {
-            myExercises.value[exercise.number] = result.data;
-            const user = await userStore.getCurrentUser();
-            user.data.metadata.exercises[exercise.number] = result.data;
-            const aux = await userStore.modifyCurrentUser(user.data.firstName, user.data.lastName, user.data.gender, user.data.metadata);
-            debugger
+        // Busca el ejercicio por su nombre (asegúrate de que los nombres sean únicos)
+        const name=exercise.name;
+        const exerciseToUpdate = myExercises.value.find(e => e.name === exercise.name);
 
+        if (exerciseToUpdate) {
+            // Valida que el nuevo nombre no sea igual al nombre de otro ejercicio existente
+            const newName = newEjercicio.value.name.trim(); // Elimina espacios en blanco al principio y al final
+            if (newName !== "" && (newName===name || !myExercises.value.some(e => e.name === newName))) {
+                exerciseToUpdate.name = newName;
+                if (newEjercicio.value.detail !== "")
+                    exerciseToUpdate.detail = newEjercicio.value.detail;
+                if (newEjercicio.value.url.length > 0)
+                    exerciseToUpdate.url = newEjercicio.value.url;
+                if (newEjercicio.value.type !== "")
+                    exerciseToUpdate.type = newEjercicio.value.type;
+
+                const result2 = await exerciseStore.changeExercise(exerciseToUpdate);
+                if (result2) {
+                    const user = await userStore.getCurrentUser();
+                    // No es necesario buscar el ejercicio en user.data.metadata.exercises
+                    // Ya que estamos actualizando el mismo objeto que está en myExercises
+                    const aux = await userStore.modifyCurrentUser(user.data.firstName, user.data.lastName, user.data.gender, user.data.metadata);
+                    debugger;
+                }
+            }
         }
     }
-    //const result = await exerciseStore.changeExercise(exercise);
 }
+    //const result = await exerciseStore.changeExercise(exercise);
+
 
 async function openEditDialog() {
     newEjercicio.value = {...exercise.value};
