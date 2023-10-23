@@ -27,9 +27,7 @@
                             />
                             <v-btn
                                 class="heart"
-                                :icon="
-                                routine.fav ? 'mdi-heart' : 'mdi-heart-outline'
-                            "
+                                :icon="routine.fav ? 'mdi-heart' : 'mdi-heart-outline'"
                                 @click="toggle(routine)"
                             ></v-btn>
                         </div>
@@ -39,9 +37,11 @@
                         <v-card-text>
                             <div class="creator my-4 text-subtitle-1">
                                 <v-icon icon="mdi-account"></v-icon>
+                                <!--
                                 <div class="creator-text">
                                     • {{ routine.creator.username }}
                                 </div>
+                                -->
                             </div>
                             <div class="overflow">{{ routine.description }}</div>
                         </v-card-text>
@@ -50,11 +50,10 @@
                     </v-card>
                 </v-col>
 
-
                 <v-col cols="2">
-                    <v-autocomplete  placeholder="Seleccione el ciclo" variant="outlined"
-                                     v-model="selectedCiclo"
-                                    :items="['Entrada en Calor', 'Principal', 'Enfriamiento']"></v-autocomplete>
+                    <v-autocomplete placeholder="Seleccione el ciclo" variant="outlined"
+                                    v-model="selectedCiclo" @click=updateCiclo()
+                                    :items="Object.values(cycles).map(cycle => cycle.name)"></v-autocomplete>
                 </v-col>
 
                 <v-col cols="6">
@@ -63,40 +62,39 @@
                             <v-table height="400px">
                                 <thead>
                                 <tr>
-                                    <th class="text-left"> <!-- v-for="ciclo in ciclos" -->
-                                        Ciclo ciclo.name
+                                    <th class="text-left">
+                                        {{ selectedCiclo }}
                                     </th>
-
                                 </tr>
                                 </thead>
                                 <thead>
                                 <tr>
-                                    <th class="text-left"> <!-- v-for="ciclo in ciclos" -->
+                                    <th class="text-left">
+                                        Repeticiones del ciclo
+                                    </th>
+                                    <th class="text-left">
                                         Ejercicio
                                     </th>
                                     <th class="text-left">
                                         Repeticiones/ Tiempo
                                     </th>
-                                    <th class="text-left">
-                                        Repeticiones del ciclo
-                                    </th>
                                 </tr>
                                 </thead>
                                 <tbody>
+                                <tr>
+                                    <td rowspan="0">{{ cicloToShow?.repetitions }}</td>
+                                </tr>
                                 <tr
-                                    v-for="item in exercises"
+                                    v-for="item in cicloToShow?.exercises"
                                     :key="item.name"
                                 >
                                     <td>{{ item.name }}</td>
-                                    <td>{{ item.calories }}</td>
+                                    <td>{{ item.cant + ' ' + item.type }}</td>
                                 </tr>
                                 </tbody>
                             </v-table>
                         </div>
-
-
                     </v-row>
-
                     <v-row class="fila3">
                         <v-col>
                             <v-btn class="compartir" @click="shareRoutine"
@@ -104,13 +102,11 @@
                             </v-btn>
                         </v-col>
                         <v-col>
-                            <v-btn class="editar" prepend-icon="mdi-pencil"> Editar rutina
+                            <v-btn class="editar" prepend-icon="mdi-pencil" @click="editarRoutina()"> Editar rutina
                             </v-btn>
                         </v-col>
                     </v-row>
-
                 </v-col>
-
             </v-row>
         </v-container>
     </v-card>
@@ -146,40 +142,88 @@
 import AppBar from "@/components/AppBar.vue";
 import {RouterLink, useRoute, useRouter} from "vue-router";
 import RoutineByCategories from "@/components/RoutineByCategories.vue";
-import {onBeforeMount, ref} from "vue";
+import {onBeforeMount, ref, watch} from "vue";
 import {useRoutineStore} from "@/stores/routineStore";
+import {useExerciseStore} from "@/stores/exerciseStore";
+import {useCycleStore} from "@/stores/cycleStore";
 import FooterComponent from "@/components/FooterComponent.vue";
 
 const route = useRoute()
 const router = useRouter()
 const isSelected = ref(false)
 const routineStore = useRoutineStore()
+const exerciseStore = useExerciseStore()
+const cycleStore = useCycleStore()
 let routine = ref({})
 let showShareDialog = ref(false);
+const cycles = ref([])
+const selectedCiclo = ref('')
+let cicloToShow = ref({})
+const exercises = ref([])
 
+watch(() => selectedCiclo, () => {
+    updateCiclo();
+});
 
 onBeforeMount(async () => {
     await getRoutine()
 });
 
+async function editarRoutina() {
+    await router.push({name: 'edit-routine', params: {id: route.params.id}});
+}
+function updateCiclo() {
+    for (let i = 0; i < cycles.value.length; i++) {
+        if (cycles.value[i].name === selectedCiclo.value){
+            exercises.value = cycles.value[i].exercises
+            cicloToShow.value = cycles.value[i]
+            return
+        } else{
+            console.log('1 ' + selectedCiclo.value)
+            console.log('2 ' + cycles.value[i].name)
+        }
+    }
+}
 async function getRoutine() {
-    const result = await routineStore.getRoutine(route.params.id)
-    if (result.success) {
+    const result0 = await routineStore.getRoutine(route.params.id)
+    if (result0.success) {
         const newRoutine = {
-            id: result.data.id,
-            name: result.data.name,
-            img: result.data.metadata.image,
-            category: result.data.category,
-            description: result.data.detail,
-            creator: result.data.user,
-            difficulty: result.data.difficulty,
-            isPublic: result.data.isPublic,
-            fav: result.data.metadata.fav,
-            score: result.data.score,
-            duration: result.data.metadata.duration,
-            // date: result.data.date,
+            id: result0.data.id,
+            name: result0.data.name,
+            img: result0.data.metadata.image,
+            category: result0.data.category,
+            description: result0.data.detail,
+            creator: result0.data.user,
+            difficulty: result0.data.difficulty,
+            isPublic: result0.data.isPublic,
+            fav: result0.data.metadata.fav,
+            score: result0.data.score,
+            duration: result0.data.metadata.duration
         }
         routine.value = {...routine.value, ...newRoutine};
+        const result = await routineStore.getCyclesByRoutine(route.params.id)
+        if (result.success) {
+            for (let i = 0; i < result.data.totalCount; i++) {
+                const newCycle = {
+                    name: result.data.content[i].name,
+                    repetitions: result.data.content[i].repetitions,
+                    exercises: []
+                }
+                cycles.value.push(newCycle)
+                let result2 = await cycleStore.getExercisesByCycle(result.data.content[i].id)
+                if (result2.success) {
+                    for (let j = 0; j < result2.data.totalCount; j++) {
+                        const newExercise = {
+                            name: result2.data.content[j].exercise.name,
+                            detail: result2.data.content[j].exercise.detail,
+                            type: (result2.data.content[j].duration.value > 0) ? 'duration' : 'repetitions',
+                            cant: (result2.data.content[j].duration.value > 0) ? result2.data.content[j].duration : result2.data.content[j].repetitions,
+                        }
+                        cycles.value[i].exercises.push(newExercise)
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -236,59 +280,6 @@ function formatDuration(durationInSeconds) {
 
 </script>
 
-
-<script>
-export default {
-    data() {
-        return {
-            exercises: [
-                {
-                    name: 'Frozen Yogurt',
-                    calories: 159,
-                },
-                {
-                    name: 'Ice cream sandwich',
-                    calories: 237,
-                },
-                {
-                    name: 'Eclair',
-                    calories: 262,
-                },
-                {
-                    name: 'Cupcake',
-                    calories: 305,
-                },
-                {
-                    name: 'Gingerbread',
-                    calories: 356,
-                },
-                {
-                    name: 'Jelly bean',
-                    calories: 375,
-                },
-                {
-                    name: 'Lollipop',
-                    calories: 392,
-                },
-                {
-                    name: 'Honeycomb',
-                    calories: 408,
-                },
-                {
-                    name: 'Donut',
-                    calories: 452,
-                },
-                {
-                    name: 'KitKat',
-                    calories: 518,
-                },
-            ],
-        }
-    },
-}
-
-</script>
-
 <style scoped>
 
 .titulo {
@@ -319,7 +310,7 @@ export default {
     border-radius: 10px;
     width: 95%;
     height: 530px;
-    padding-top:20px;
+    padding-top: 20px;
 }
 
 .heart {
@@ -364,7 +355,7 @@ h3 {
 
 .tabla {
     padding-left: 20px;
-    padding-top:15px;
+    padding-top: 15px;
 }
 
 .v-table {

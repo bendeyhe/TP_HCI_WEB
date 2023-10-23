@@ -114,8 +114,11 @@
             <h2>Parece que no has likeado ninguna rutina todavía. Estoy seguro que ya encontrarás una que te encante!
                 ʕ•ᴥ•ʔ</h2>
         </div>
-        <div v-else class="flex-container">
+        <div v-else-if="typeRout === 'MyRouts'" class="flex-container">
             <h2>Todavía no creaste ninguna rutina. Es hora de que empieces a hacer tus rutinas! ʕ•ᴥ•ʔ</h2>
+        </div>
+        <div v-else class="flex-container">
+            <h2>No se han encontrado resultados</h2>
         </div>
     </div>
 </template>
@@ -209,11 +212,14 @@ async function getRoutines() {
     const result = await routineStore.getRoutines();
     if(query.value === undefined || query.value === null)
         query.value = "";
+    debugger
     if (result.success && result.data.content) {
         for (let i = 0; i < result.data.totalCount; i++) {
             const routine = result.data.content[i];
             if (routine && routine.name) {
-                if(routine.name.toLowerCase().includes(query.value)){
+                const routineNameLower = routine.name.toLowerCase();
+                const queryLower = query.value.toLowerCase();
+                if(routeNameLower.includes(queryLower)){
                     routineStore.addRoutineArray({
                         id: routine.id,
                         name: routine.name,
