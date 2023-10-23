@@ -145,12 +145,13 @@ async function openModal() {
 
         // Inicializa la matriz show con valores falsos para cada tarjeta
         show.value = new Array(exercises.value.length).fill(false)
+        debugger;
 
 
         for (const exercise of exercises.value) {
-            const result2 = await exerciseStore.getExerciseImage(exercise, 1);
-            if (result2.success)
-                exercise.img = result2.data.url;
+            const array = await exerciseStore.getExerciseImages(exercise.id);
+            if (array.success)
+                exercise.img = array.data.content[0].url;
         }
     }
     showModal.value = true;
