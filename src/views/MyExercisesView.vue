@@ -1,187 +1,135 @@
 <template>
-    <AppBar />
+    <AppBar/>
     <div class="mx-auto mydiv">
         <h1 class="text-center">Mis Ejercicios</h1>
         <div class="mx-auto">
-        <v-dialog width="500" class="mx-auto">
-            <template v-slot:activator="{ props }">
-                <v-btn
-                    class="nuevo-ejercicio"
-                    v-bind="props"
-                    text="Open Dialog"
-                    @click="showDialog = true"
-                    style="margin: 0 auto; display: block;"
-                >
-                <v-icon left>mdi-plus</v-icon>
-                    Crear Nuevo Ejercicio
-                </v-btn>
-            </template>
-            <template v-slot:default="{ isActive }">
-                <v-card title="Crear Nuevo Ejercicio">
-                    <v-card-text>
-                        <v-text-field
-                            label="Nombre del ejercicio"
-                            v-model="newEjercicio.name"
-                            maxlength="100"
-                            counter
-                        ></v-text-field>
-                        <v-text-field
-                            label="Descripción"
-                            v-model="newEjercicio.detail"
-                            maxlength="200"
-                            counter
-                        ></v-text-field>
-                        <v-autocomplete density="compact" variant="outlined" label="Tipo" v-model="type" :items="['Ejercicio', 'Descanso']" default="Ejercicio"></v-autocomplete>
-
-                        <v-text-field
-                            label="Imagen"
-                            v-model="newEjercicio.url"
-                        ></v-text-field>
-
-                        <!-- agregar alerta string maximo 274-->
-                    </v-card-text>
-
-
-                    <v-card-actions>
-                        <v-spacer></v-spacer>
-
-                        <v-btn
-                            text="cancelar"
-                            class="cancelar"
-                            @click="
-                                () => {
-                                    isActive.value = false;
-                                }
-                            "
-                        ></v-btn>
-                        <v-btn
-                            class="confirmar"
-                            text="Confirmar"
-                            @click="
-                                () => {
-                                    isActive.value = false;
-                                    saveExercise();
-                                }
-                            "
-                        ></v-btn>
-                    </v-card-actions>
-                </v-card>
-            </template>
-        </v-dialog>
-    </div>
-
-
-    <v-row class="width">
-        <v-col cols="3" v-for="exercise in myExercises">
-            <ExerciseDetail :exercise="exercise" :myExercises="myExercises" :myPage="true" />
-            <!--
-            <v-card>
-                <v-img
-                    :src="exercise.url"
-                    height="200px"
-                    class="grey lighten-2"
-                ></v-img>
-                <v-card-title>
-                    <h2>{{ exercise.name }}</h2>
-                </v-card-title>
-                <v-card-text>
-                    <p>{{ exercise.detail }}</p>
-                </v-card-text>
-                <v-card-actions>
-                    <v-btn color="primary" @click="editExercise(exercise)">Editar</v-btn>
-                    <v-btn color="primary" @click="deleteExercise(exercise)">Eliminar</v-btn>
-                </v-card-actions>
-            </v-card>
-        -->
-
-
-        </v-col>
-    </v-row>
-        <!-- <div class="text-center">
-            <v-btn color="primary" class="mx-auto" @click="showDialog = true">Agregar ejercicio</v-btn>
-        </div>
-        <v-dialog v-model="showDialog" max-width="500px">
-            <v-card>
-                <v-card-title>
-                    <span class="headline">Agregar ejercicio</span>
-                </v-card-title>
-                <v-card-text>
-                    <v-text-field label="Nombre" v-model="name"></v-text-field>
-                    <v-text-field label="Descripción" v-model="description"></v-text-field>
-                    <v-text-field label="Link" v-model="link"></v-text-field>
-                </v-card-text>
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="showDialog = false">Cancelar</v-btn>
-                    <v-btn color="blue darken-1" text @click="addExercise">Agregar</v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
-        <v-data-table
-            :headers="headers"
-            :items="exercises"
-            :search="search"
-            sort-by="name"
-            class="elevation-1"
-        >
-            <template v-slot:top>
-                <v-toolbar flat>
-                    <v-toolbar-title>My Exercises</v-toolbar-title>
-                    <v-divider
-                        class="mx-4"
-                        inset
-                        vertical
-                    ></v-divider>
-                    <v-spacer></v-spacer>
-                    <v-dialog v-model="dialog" max-width="500px">
-                        <template v-slot:activator="{ on }">
-                            <v-btn color="primary" dark class="mb-2" v-on="on">New Item</v-btn>
-                        </template>
-                        <v-card>
-                            <v-card-title>
-                                <span class="headline">{{ formTitle }}</span>
-                            </v-card-title>
-                            <v-card-text>
-                                <v-container>
-                                    <v-row>
-                                        <v-col cols="12" sm="6" md="4">
-                                            <v-text-field v-model="editedItem.name" label="Name"></v-text-field>
-                                        </v-col>
-                                        <v-col cols="12" sm="6" md="4">
-                                            <v-text-field v-model="editedItem.calories" label="Calories"></v-text-field>
-                                        </v-col>
-                                        </v-row>
-                                    </v-container>
-                                </v-card-text>
-                                <v-card-actions>
-                                    <v-spacer></v-spacer>
-                                    <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                                    <v-btn color="blue darken-1" text @click="save">Save</v-btn>
-                                </v-card-actions>
-                            </v-card>
-                        </v-dialog>
-                        <v-snackbar v-model="snackbar" :timeout="6000" :top="true" multi-line>
-                            {{ snackbarText }}
-                            <v-btn color="pink" text @click="snackbar = false">Close</v-btn>
-                        </v-snackbar>
-                    </v-toolbar>
+            <v-dialog width="500" class="mx-auto">
+                <template v-slot:activator="{ props }">
+                    <v-btn
+                        class="nuevo-ejercicio"
+                        v-bind="props"
+                        text="Open Dialog"
+                        style="margin: 0 auto; display: block;"
+                    >
+                        <v-icon left>mdi-plus</v-icon>
+                        Crear Nuevo Ejercicio
+                    </v-btn>
                 </template>
-                </v-data-table>
+                <template v-slot:default="{ isActive }">
+                    <v-card title="Crear Nuevo Ejercicio">
+                        <v-card-text>
+                            <v-text-field
+                                label="Nombre del ejercicio"
+                                v-model="newEjercicio.name"
+                                maxlength="100"
+                                counter
+                                variant="outlined"
+                            ></v-text-field>
+                            <v-text-field
+                                label="Descripción"
+                                v-model="newEjercicio.detail"
+                                maxlength="200"
+                                counter
+                                variant="outlined"
+                            ></v-text-field>
+                            <v-autocomplete density="compact" variant="outlined" label="Tipo" v-model="type"
+                                            :items="['Ejercicio', 'Descanso']" default="Ejercicio"></v-autocomplete>
 
-            -->
+                            <v-text-field
+                                label="Imagen"
+                                v-model="newEjercicio.url"
+                                variant="outlined"
+                            ></v-text-field>
+
+                            <v-alert
+                                v-if="successAlert"
+                                color="success"
+                                icon="$success"
+                                :text=successMessage
+                            ></v-alert>
+                            <v-alert
+                                v-if="errorAlert"
+                                color="error"
+                                icon="$error"
+                                :text=errorMessage
+                            ></v-alert>
+                        </v-card-text>
+
+
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+
+                            <v-btn
+                                text="cancelar"
+                                class="cancelar"
+                                @click="
+                                () => {
+                                    isActive.value = false;
+                                }
+                            "
+                            ></v-btn>
+                            <v-btn
+                                class="confirmar"
+                                text="Confirmar"
+                                @click="
+                                async() => {
+                                    if((await saveExercise()) === true)
+                                        isActive.value = false;
+                                }
+                            "
+                            ></v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </template>
+            </v-dialog>
+        </div>
+        <v-row class="width">
+            <v-col cols="3" v-for="exercise in myExercises">
+                <ExerciseDetail :exercise="exercise" :myExercises="myExercises" :myPage="true"/>
+            </v-col>
+        </v-row>
     </div>
-
-    <FooterComponent />
+    <FooterComponent/>
 </template>
 
 <script setup>
 import AppBar from "@/components/AppBar.vue";
 import FooterComponent from "@/components/FooterComponent.vue";
-import { ref } from "vue";
-import { useUserStore } from "@/stores/userStore";
-import { onBeforeMount } from "vue";
+import {ref} from "vue";
+import {useUserStore} from "@/stores/userStore";
+import {onBeforeMount} from "vue";
 import ExerciseDetail from "@/components/ExerciseDetail.vue";
-import { useExerciseStore } from "@/stores/exerciseStore";
+import {useExerciseStore} from "@/stores/exerciseStore";
+
+const successAlert = ref(false)
+const errorAlert = ref(false)
+const successMessage = ref('')
+const errorMessage = ref('')
+
+async function showSuccessAlert(message = 'Usuario registrado con éxito') {
+    successMessage.value = message
+    successAlert.value = true
+
+    await new Promise(resolve => {
+        setTimeout(() => {
+            successAlert.value = false;
+            resolve();
+        }, 3000);
+    });
+}
+
+async function showErrorAlert(message = 'Error el registrar usuario') {
+    errorMessage.value = message
+    errorAlert.value = true
+
+    await new Promise(resolve => {
+        setTimeout(() => {
+            errorAlert.value = false;
+            resolve();
+        }, 5000);
+    });
+}
+
 
 const exerciseStore = useExerciseStore();
 const userStore = useUserStore();
@@ -216,7 +164,25 @@ async function updateMyExercises() {
     }
 }
 
-async function saveExercise(){
+async function saveExercise() {
+    if (!newEjercicio.value.name) {
+        await showErrorAlert('El nombre del ejercicio es obligatorio')
+        return false
+    } else if (!newEjercicio.value.detail) {
+        newEjercicio.value.detail = ''
+    } else if (!newEjercicio.value.url) {
+        await showErrorAlert('Es obligatorio añadir una imagen al ejercicio mediante una url')
+        return false
+    } else if (!type.value) {
+        await showErrorAlert('El tipo del ejercicio es obligatorio')
+        return false
+    }
+    for (let i = 0; i < myExercises.value.length; i++) {
+        if (myExercises.value[i].name === newEjercicio.value.name) {
+            await showErrorAlert('Ya existe un ejercicio con ese nombre')
+            return false
+        }
+    }
     if (type.value === 'Descanso')
         newEjercicio.value.type = 'rest'
     else
@@ -225,15 +191,15 @@ async function saveExercise(){
     if (result.success) {
         newEjercicio.value.index = result.data.id
         const user = await userStore.getCurrentUser()
-            if (user.success){
-                if(!user.data.metadata)
-                    user.data.metadata = {}
-                if(!user.data.metadata.exercises)
-                    user.data.metadata.exercises = []
-                user.data.metadata.exercises.push(newEjercicio.value)
-                await userStore.modifyCurrentUser(user.data.firstName, user.data.lastName, user.data.gender, user.data.metadata)
-                myExercises.value = user.data.metadata.exercises;
-            }
+        if (user.success) {
+            if (!user.data.metadata)
+                user.data.metadata = {}
+            if (!user.data.metadata.exercises)
+                user.data.metadata.exercises = []
+            user.data.metadata.exercises.push(newEjercicio.value)
+            await userStore.modifyCurrentUser(user.data.firstName, user.data.lastName, user.data.gender, user.data.metadata)
+            myExercises.value = user.data.metadata.exercises;
+        }
         result = await exerciseStore.addExerciseImage(result.data.id, newEjercicio.value)
         if (result.success) {
             newEjercicio.value = {
@@ -245,8 +211,13 @@ async function saveExercise(){
                 index: 0
             }
         }
+        return true
+    } else {
+        await showErrorAlert('Error al crear el ejercicio')
+        return false
     }
-};
+    return true
+}
 
 </script>
 
@@ -264,7 +235,6 @@ h1 {
     text-align: center;
     margin-bottom: 50px;
 }
-
 
 
 .nombre-rutina {
@@ -296,7 +266,7 @@ h2 {
     padding-bottom: 35px;
 }
 
-.mydiv{
+.mydiv {
     margin-bottom: 50px;
 }
 
