@@ -217,6 +217,7 @@ async function updateMyExercises() {
 }
 
 async function saveExercise(){
+    debugger;
     if (type.value === 'Descanso')
         newEjercicio.value.type = 'rest'
     else
