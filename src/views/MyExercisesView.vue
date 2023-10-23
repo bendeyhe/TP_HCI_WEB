@@ -130,7 +130,6 @@ async function showErrorAlert(message = 'Error el registrar usuario') {
     });
 }
 
-
 const exerciseStore = useExerciseStore();
 const userStore = useUserStore();
 const myExercises = ref([]);
@@ -165,6 +164,10 @@ async function updateMyExercises() {
 }
 
 async function saveExercise() {
+    if (type.value === 'Descanso')
+        newEjercicio.value.type = 'rest'
+    else
+        newEjercicio.value.type = 'exercise'
     if (!newEjercicio.value.name) {
         await showErrorAlert('El nombre del ejercicio es obligatorio')
         return false
@@ -173,7 +176,7 @@ async function saveExercise() {
     } else if (!newEjercicio.value.url) {
         await showErrorAlert('Es obligatorio añadir una imagen al ejercicio mediante una url')
         return false
-    } else if (!type.value) {
+    } else if (!newEjercicio.value.type) {
         await showErrorAlert('El tipo del ejercicio es obligatorio')
         return false
     }
@@ -183,10 +186,6 @@ async function saveExercise() {
             return false
         }
     }
-    if (type.value === 'Descanso')
-        newEjercicio.value.type = 'rest'
-    else
-        newEjercicio.value.type = 'exercise'
     let result = await exerciseStore.addExercise(newEjercicio.value);
     if (result.success) {
         newEjercicio.value.index = result.data.id

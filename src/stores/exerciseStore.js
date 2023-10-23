@@ -46,7 +46,7 @@ export const useExerciseStore = defineStore('exercise', {
         },
         async changeExercise(exercise) {
             const data = {'name': exercise.name, 'detail': exercise.detail, 'type': exercise.type};
-            return await makeApiCall(this.apiEndpoints.changeExercise(exercise.id), data, useUserStore().token);
+            return await makeApiCall(this.apiEndpoints.changeExercise(exercise.index), data, useUserStore().token);
         },
         async deleteExercise(exerciseId) {
             return await makeApiCall(this.apiEndpoints.deleteExercise(exerciseId), null, useUserStore().token);

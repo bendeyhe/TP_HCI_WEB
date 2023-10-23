@@ -107,7 +107,7 @@
                         density="compact"
                         variant="outlined"
                         label="Tipo de ejercicio"
-                        v-model="type"
+                        v-model="newEjercicio.type"
                         :items="['Ejercicio', 'Descanso']"
                         default="Ejercicio"
                     ></v-autocomplete>
@@ -118,7 +118,18 @@
                         variant="outlined"
                     ></v-text-field>
 
-                    <!-- agregar alerta string maximo 274-->
+                    <v-alert
+                        v-if="successAlert"
+                        color="success"
+                        icon="$success"
+                        :text=successMessage
+                    ></v-alert>
+                    <v-alert
+                        v-if="errorAlert"
+                        color="error"
+                        icon="$error"
+                        :text=errorMessage
+                    ></v-alert>
                 </v-card-text>
 
                 <v-card-actions>
@@ -137,12 +148,12 @@
                         class="confirmar"
                         text="Confirmar"
                         newEjercicio.index="exercise.index"
-                        @click="
-                                    () => {
-                                        isActive.value = false;
-                                        editExercise(exercise);
-                                    }
-                                "
+                        @click="async () => {
+                            if((await editExercise(exercise)) === true)
+                                isActive.value = false;
+                            else
+                                isActive.value = true;
+                        }"
                     ></v-btn>
                 </v-card-actions>
             </v-card>
@@ -188,8 +199,37 @@ const {myExercises} = toRefs(props);
 const {exercise} = toRefs(props);
 const {myPage} = toRefs(props);
 
+const successAlert = ref(false)
+const errorAlert = ref(false)
+const successMessage = ref('')
+const errorMessage = ref('')
+
+async function showSuccessAlert(message = 'Usuario registrado con éxito') {
+    successMessage.value = message
+    successAlert.value = true
+
+    await new Promise(resolve => {
+        setTimeout(() => {
+            successAlert.value = false;
+            resolve();
+        }, 3000);
+    });
+}
+
+async function showErrorAlert(message = 'Error el registrar usuario') {
+    errorMessage.value = message
+    errorAlert.value = true
+
+    await new Promise(resolve => {
+        setTimeout(() => {
+            errorAlert.value = false;
+            resolve();
+        }, 5000);
+    });
+}
+
+
 async function deleteExercise(exercise) {
-    debugger;
     const index = myExercises.value.findIndex(e => e === exercise);
     if (index !== -1) {
         const result = await exerciseStore.deleteExercise(exercise.index);
@@ -216,42 +256,72 @@ async function deleteExercise(exercise) {
 }
 
 async function editExercise(exercise) {
-    debugger;
+    if (!newEjercicio.value.name) {
+        await showErrorAlert('El nombre del ejercicio es obligatorio')
+        return false
+    } else if (!newEjercicio.value.detail) {
+        newEjercicio.value.detail = ''
+    } else if (!newEjercicio.value.url) {
+        await showErrorAlert('Es obligatorio añadir una imagen al ejercicio mediante una url')
+        return false
+    } else if (!newEjercicio.value.type) {
+        await showErrorAlert('El tipo del ejercicio es obligatorio')
+        return false
+    }
+    if (newEjercicio.value.type === 'Descanso')
+        newEjercicio.value.type = 'rest'
+    else
+        newEjercicio.value.type = 'exercise'
     const result = await exerciseStore.getExercise(exercise.index);
-    if (result) {
-        // Busca el ejercicio por su nombre (asegúrate de que los nombres sean únicos)
-        const name=exercise.name;
+    if (result.success) {
+        const name = exercise.name;
         const exerciseToUpdate = myExercises.value.find(e => e.name === exercise.name);
-
         if (exerciseToUpdate) {
             // Valida que el nuevo nombre no sea igual al nombre de otro ejercicio existente
             const newName = newEjercicio.value.name.trim(); // Elimina espacios en blanco al principio y al final
-            if (newName !== "" && (newName===name || !myExercises.value.some(e => e.name === newName))) {
+            if (newName !== "" && (newName === name || !myExercises.value.some(e => e.name === newName))) {
                 exerciseToUpdate.name = newName;
-                if (newEjercicio.value.detail !== "")
-                    exerciseToUpdate.detail = newEjercicio.value.detail;
+                exerciseToUpdate.detail = newEjercicio.value.detail;
                 if (newEjercicio.value.url.length > 0)
                     exerciseToUpdate.url = newEjercicio.value.url;
                 if (newEjercicio.value.type !== "")
                     exerciseToUpdate.type = newEjercicio.value.type;
-
                 const result2 = await exerciseStore.changeExercise(exerciseToUpdate);
-                if (result2) {
+                if (result2.success) {
                     const user = await userStore.getCurrentUser();
-                    // No es necesario buscar el ejercicio en user.data.metadata.exercises
-                    // Ya que estamos actualizando el mismo objeto que está en myExercises
-                    const aux = await userStore.modifyCurrentUser(user.data.firstName, user.data.lastName, user.data.gender, user.data.metadata);
-                    debugger;
+                    if(!user.success){
+                        await showErrorAlert('Error al editar el ejercicio4')
+                        return false
+                    }
+                    const index = user.data.metadata.exercises.findIndex(e => e.index === exercise.index);
+                    user.data.metadata.exercises[index] = exerciseToUpdate;
+                    const result3 = await userStore.modifyCurrentUser(user.data.firstName, user.data.lastName, user.data.gender, user.data.metadata);
+                    if(!result3.success) {
+                        await showErrorAlert('Error al editar el ejercicio5')
+                        return false
+                    }
+                } else {
+                    await showErrorAlert('Error al editar el ejercicio1')
+                    return false
                 }
             }
+        } else {
+            await showErrorAlert('Error al editar el ejercicio2')
+            return false
         }
+    } else {
+        await showErrorAlert('Error al editar el ejercicio3')
+        return false
     }
+    return true
 }
-    //const result = await exerciseStore.changeExercise(exercise);
-
 
 async function openEditDialog() {
     newEjercicio.value = {...exercise.value};
+    if (newEjercicio.value.type === 'rest')
+        newEjercicio.value.type = 'Descanso'
+    else
+        newEjercicio.value.type = 'Ejercicio'
     editDialog.value = true;
 }
 
