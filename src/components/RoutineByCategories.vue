@@ -6,7 +6,6 @@
         <h1 v-else class="titulo">{{ nombreRutina }}</h1>
         <v-slide-group
             multiple
-            class="pa-4"
             selected-class="bg-primary"
             show-arrows
             :max-visible="1"
@@ -22,7 +21,7 @@
             >
                 <v-card
                     :loading="loading"
-                    class="mx-4 my-12"
+                    class="mx-4 my-6"
                     width="280"
                     height="400"
                 >

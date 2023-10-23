@@ -58,8 +58,8 @@
     </div>
     <div v-if="visibleRoutines.length > 0">
         <h1 v-if="typeRout === 'All'" class="titulo">Todas las Rutinas</h1>
-        <v-row class="width">
-            <v-col cols="4" v-for="(routine, index) in visibleRoutines"
+        <v-row>
+            <v-col v-for="(routine, index) in visibleRoutines"
                    :key="routine.index"
                    v-bind:visibleRoutines="visibleRoutines"
                    v-bind:pageNumber="pageNumber"
@@ -67,8 +67,7 @@
             >
                 <v-card
                     :loading="loading"
-
-                    class="mx-auto my-12"
+                    class="mx-2 my-2"
                     width="280"
                     height="400"
                 >
@@ -533,16 +532,6 @@ h1 {
     align-items: center;
     margin-top: 20px;
     text-align: center;
-}
-
-.v-row {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.v-col {
-    flex: 1;
-    margin: 40px;
 }
 
 .red-hover:hover {
