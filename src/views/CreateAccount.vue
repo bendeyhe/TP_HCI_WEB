@@ -103,6 +103,7 @@
                         href="#"
                         rel="noopener noreferrer"
                         target="_blank"
+                        class="link"
                     >
                         Ya tengo cuenta
                         <v-icon icon="mdi-chevron-right"></v-icon>
@@ -111,15 +112,17 @@
             </RouterLink>
 
             <v-card-actions>
-                <v-btn
-                    variant="text"
-                    @click="resetForm"
-                    style="background-color: lightgray; border-color: #8efd00; color: #000000;"
-                >
-                    <v-icon>mdi-cancel</v-icon>
-                    &nbsp;
-                    Cancelar
-                </v-btn>
+                <RouterLink to="/login">
+                    <v-btn
+                        variant="text"
+                        @click="resetForm"
+                        style="background-color: lightgray; border-color: #8efd00; color: #000000;"
+                    >
+                        <v-icon>mdi-cancel</v-icon>
+                        &nbsp;
+                        Cancelar
+                    </v-btn>
+                </RouterLink>
                 <v-spacer></v-spacer>
                 <v-btn
                     class="registrarse"
@@ -288,6 +291,11 @@ h1 {
 
 .register-box {
     padding-top: 2%;
+}
+
+.link {
+    color: black;
+    text-decoration: none;
 }
 
 </style>
