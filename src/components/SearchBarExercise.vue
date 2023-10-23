@@ -145,7 +145,6 @@ async function openModal() {
 
         // Inicializa la matriz show con valores falsos para cada tarjeta
         show.value = new Array(exercises.value.length).fill(false)
-        debugger;
 
 
         for (const exercise of exercises.value) {

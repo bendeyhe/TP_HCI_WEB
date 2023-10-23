@@ -139,6 +139,7 @@ const { exercise } = toRefs(props);
 const { myPage } = toRefs(props);
 
 async function deleteExercise(exercise) {
+    myExercises.value.splice(0, 1);
     const result = await exerciseStore.deleteExercise(exercise.index);
     if (result) {
         const user = await userStore.getCurrentUser();
@@ -147,7 +148,7 @@ async function deleteExercise(exercise) {
             user.data.metadata.exercises.splice(exercise.number, 1);
             myExercises.value.splice(exercise.number, 1);
             for (let i=exercise.number; i<user.data.metadata.exercises.length; i++){
-                user.data.metadata.exercises[i].number = i;
+                user.data.metadata.exercises[i].number--;
             }
             await userStore.modifyCurrentUser(
                 user.data.fistName,

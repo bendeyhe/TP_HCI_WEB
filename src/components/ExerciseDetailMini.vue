@@ -17,7 +17,7 @@
             <div class="cont">
                 <img
                     class="image"
-                    src="https://media.istockphoto.com/id/1418215624/photo/panoramic-side-view-of-beautiful-young-asian-woman-running-on-treadmill-and-listening-to.webp?b=1&s=170667a&w=0&k=20&c=GFbpktAEzDGZWvMqFDjKPhNlKLrb9h1N6y6_woZ91y4="
+                    :src="exercise.url"
                     alt="Foto del ejercicio"
                     height="150"
                 />
