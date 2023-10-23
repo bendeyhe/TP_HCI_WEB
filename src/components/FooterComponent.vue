@@ -27,7 +27,7 @@ function getImageUrl(name){
 
 <style scoped>
 .v-footer {
-    position: fixed;
+    position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
