@@ -22,7 +22,40 @@
             </v-carousel-item>
         </v-carousel>
         <v-main>
-            <!--todo quizas aca esta bueno hacer un v-for?-->
+
+            <div class="d-flex align-center flex-column pa-6">
+                <v-btn-toggle
+                    v-model="toggle"
+                    divided
+                    variant="outlined"
+                >
+
+                    <RouterLink to="/">
+                        <v-tooltip
+                            :location="location"
+                            :origin="origin"
+                            no-click-animation>
+                            <template v-slot:activator="{ props }">
+                                <v-btn v-bind="props" icon="mdi-view-headline" class="boton-lista"></v-btn>
+                            </template>
+                            <div> Ver rutinas según su dificultad </div>
+                        </v-tooltip>
+                    </RouterLink>
+
+                    <RouterLink to="/all-routines">
+                        <v-tooltip
+                            :location="location"
+                            :origin="origin"
+                            no-click-animation>
+                            <template v-slot:activator="{ props }">
+                                <v-btn v-bind="props" icon="mdi-view-grid" class="boton-cuadricula"></v-btn>
+                            </template>
+                            <div> Ver todas las rutinas </div>
+                        </v-tooltip>
+                    </RouterLink>
+                </v-btn-toggle>
+            </div>
+
             <RoutineByCategories :nombreRutina="category1" :favourite="false"/>
             <RoutineByCategories :nombreRutina="category2" :favourite="false"/>
             <RoutineByCategories :nombreRutina="category3" :favourite="false"/>
@@ -70,6 +103,45 @@ onBeforeMount(async () => {
 function verDetalle(routine) {
     router.push({name: 'routine-details', params: {id: routine.id}});
 }
+
+import { computed, watch } from 'vue'
+
+const locationSide = ref('top')
+const locationAlign = ref('center')
+const originSide = ref('auto')
+const originAlign = ref('')
+
+const location = computed(() => {
+    return `${locationSide.value} ${locationAlign.value}`
+})
+const origin = computed(() => {
+    return originDisabled.value ? originSide.value : `${originSide.value} ${originAlign.value}`
+})
+const code = computed(() => {
+    return `<v-tooltip location="${location.value}" origin="${origin.value}" />`
+})
+const originDisabled = computed(() => {
+    return ['auto', 'overlap'].includes(originSide.value)
+})
+
+watch(locationSide, val => {
+    if (['top', 'bottom'].includes(val)) {
+        locationAlign.value = {
+            top: 'start',
+            bottom: 'end',
+        }[locationAlign.value] || locationAlign.value
+    } else {
+        locationAlign.value = {
+            start: 'top',
+            end: 'bottom',
+        }[locationAlign.value] || locationAlign.value
+    }
+})
+watch(originDisabled, val => {
+    if (!val && !originAlign.value) {
+        originAlign.value = 'center'
+    }
+})
 </script>
 
 
@@ -82,6 +154,7 @@ export default {
         category4: "Favoritas",
         category5: "Otras",
         drawer: null,
+        toggle:null,
     }),
 }
 </script>
@@ -93,11 +166,6 @@ export default {
     margin-right: auto;
 }
 
-.v-btn {
-    color: #8efd00;
-    margin-right: 10px;
-    margin-left: 10px;
-}
 
 .nombre-rutina {
     position: absolute;
@@ -135,7 +203,7 @@ export default {
 .boton-rutina {
     position: absolute;
     bottom: 30px; /* Ajusta la posición vertical según tus necesidades */
-    right: 20px; /* Ajusta la posición horizontal según tus necesidades */
+    right: 25px; /* Ajusta la posición horizontal según tus necesidades */
 
 }
 
@@ -144,4 +212,11 @@ export default {
     color: #000000;
 }
 
+.boton-lista{
+    color: black;
+}
+
+.boton-cuadricula{
+    color: black;
+}
 </style>
