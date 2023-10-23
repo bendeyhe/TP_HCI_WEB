@@ -61,6 +61,9 @@ export const useRoutineStore = defineStore('routine', {
             }
             this.favoriteRoutines.push(routine);
         },
+        clearRoutineArray(){
+            this.routines = [];
+        },
         addMyRoutine(routine) {
             for (let i = 0; i < this.myRoutines.length; i++) {
                 if (this.myRoutines[i].id === routine.id) {

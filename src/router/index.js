@@ -57,10 +57,11 @@ const routes = [
         component: () => import('@/views/MyRoutines.vue')
     },
     {
-        path: '/routines',
+        path: '/routines/:query?',
         name: 'routines',
         meta: {requiresAuth: true},
-        component: () => import('@/views/Routines.vue')
+        component: () => import('@/views/Routines.vue'),
+        props: (route) => ({ query: route.params.query })
     },
     {
         path: '/all-routines',

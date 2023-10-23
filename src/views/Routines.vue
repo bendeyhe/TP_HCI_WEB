@@ -1,6 +1,6 @@
 <template>
     <AppBar/>
-    <div class="width mx-auto">
+    <div class="width mx-auto gg">
         <PaginationGrid :typeRout="param" :query="query"/>
     </div>
     <footerComponent/>
@@ -10,9 +10,17 @@
 import AppBar from "@/components/AppBar.vue";
 import PaginationGrid from "@/components/PaginationGrid.vue";
 import footerComponent from "@/components/FooterComponent.vue";
-import {toRefs} from "vue";
+import {toRefs, onBeforeMount} from "vue";
+import {defineProps} from "vue";
+import {useRoute} from "vue-router";
+
+const route = useRoute();
 
 const param = "Routs";
+
+onBeforeMount(() => {
+    console.log(route.params.query);
+});
 
 const props = defineProps({
     query: {
@@ -23,3 +31,9 @@ const props = defineProps({
 
 const {query} = toRefs(props);
 </script>
+
+<style scoped>
+.gg {
+    margin-bottom: 100px;
+}
+</style>

@@ -5,11 +5,11 @@
         variant="solo"
         label="Buscar rutinas..."
         append-inner-icon="mdi-magnify"
+        v-model="searchQuery"
         single-line
         hide-details
         @click:append-inner="onClick"
         @keydown.enter="onClick"
-        v-model="searchQuery"
     ></v-text-field>
 </template>
 
@@ -22,9 +22,15 @@ const loading = ref(false)
 const searchQuery = ref('')
 
 function onClick() {
-    if (searchQuery.value.trim() !== '') {
+    console.log(searchQuery.value)
+    
         router.push({ name: 'routines', params: {query: searchQuery.value}})
-    }
+    
+    loading.value = true;
+    setTimeout(() => {
+        loading.value = false;
+        loaded.value = true;
+    }, 2000);
 }
 </script>
 

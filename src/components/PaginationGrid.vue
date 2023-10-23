@@ -196,18 +196,19 @@ async function getMyRoutines() {
 }
 
 async function getRoutines() {
+    debugger
     loading.value = true;
     const result = await routineStore.getRoutines();
     if(query.value === undefined || query.value === null)
         query.value = "";
-    debugger
+    routineStore.clearRoutineArray();
     if (result.success && result.data.content) {
         for (let i = 0; i < result.data.totalCount; i++) {
             const routine = result.data.content[i];
             if (routine && routine.name) {
                 const routineNameLower = routine.name.toLowerCase();
                 const queryLower = query.value.toLowerCase();
-                if(routeNameLower.includes(queryLower)){
+                if(routineNameLower.includes(queryLower)){
                     routineStore.addRoutineArray({
                         id: routine.id,
                         name: routine.name,
