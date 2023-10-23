@@ -12,7 +12,12 @@
             :max-visible="1"
         >
             <v-slide-group-item
-                v-for="routine in favourite ? routineStore.getfavoriteRoutines() : routines.values()"
+                v-for="routine in (
+                    favourite ? routineStore.getfavoriteRoutines() : (
+                        dif === 'facil' ? routineStore.getEasyRoutines() : (
+                            dif === 'dificil' ? routineStore.getDificultRoutines() : (
+                                dif === 'medio' ? routineStore.getMediumRoutines() : routineStore.getRoutines()
+                            ))))"
                 :key="routine.id"
             >
                 <v-card
@@ -72,8 +77,8 @@
 import {ref, onBeforeMount} from "vue";
 import {useRoutineStore} from "@/stores/routineStore.js";
 import {RouterLink} from "vue-router";
-import { toRefs } from 'vue';
-import { defineProps } from 'vue';
+import {toRefs} from 'vue';
+import {defineProps} from 'vue';
 
 const props = defineProps({
     nombreRutina: {
@@ -90,13 +95,12 @@ const props = defineProps({
     },
 });
 
-const { nombreRutina } = toRefs(props);
-const { favourite } = toRefs(props);
-const { dif } = toRefs(props);
+const {nombreRutina} = toRefs(props);
+const {favourite} = toRefs(props);
+const {dif} = toRefs(props);
 
 const loading = ref(false);
 const routineStore = useRoutineStore();
-const routines = ref([]);
 
 onBeforeMount(() => {
     getRoutines();
@@ -148,15 +152,47 @@ async function getRoutines() {
                     fav: routine.metadata?.fav,
                     date: routine.date,
                 });
-                console.log(dif.value)
-                if (dif.value === '') {
-                    routines.value.push(routine);
-                } else if (dif.value === 'facil' && routine.difficulty === 'rookie') {
-                    routines.value.push(routine);
+                if (dif.value === 'facil' && routine.difficulty === 'rookie') {
+                    routineStore.addEasyRoutine({
+                        id: routine.id,
+                        name: routine.name,
+                        img: routine.metadata?.image,
+                        category: routine.category,
+                        description: routine.detail,
+                        creator: routine.user,
+                        difficulty: routine.difficulty,
+                        isPublic: routine.isPublic,
+                        fav: routine.metadata?.fav,
+                        date: routine.date,
+                    });
                 } else if (dif.value === 'dificil' && routine.difficulty === 'expert') {
-                    routines.value.push(routine);
+                    routineStore.addDificultRoutine({
+                        id: routine.id,
+                        name: routine.name,
+                        img: routine.metadata?.image,
+                        category: routine.category,
+                        description: routine.detail,
+                        creator: routine.user,
+                        difficulty: routine.difficulty,
+                        isPublic: routine.isPublic,
+                        fav: routine.metadata?.fav,
+                        date: routine.date,
+                    });
                 } else {
-                    routines.value.push(routine);
+                    if (routine.difficulty === 'beginner' || routine.difficulty === 'intermediate' || routine.difficulty === 'advanced') {
+                        routineStore.addMediumRoutine({
+                            id: routine.id,
+                            name: routine.name,
+                            img: routine.metadata?.image,
+                            category: routine.category,
+                            description: routine.detail,
+                            creator: routine.user,
+                            difficulty: routine.difficulty,
+                            isPublic: routine.isPublic,
+                            fav: routine.metadata?.fav,
+                            date: routine.date,
+                        });
+                    }
                 }
             }
         }

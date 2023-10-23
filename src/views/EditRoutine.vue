@@ -640,6 +640,7 @@ onBeforeMount(async () => {
 async function addRoutine() {
     loading.value = true
     if (!route.params.id) {
+        debugger
         const rout = {
             name: routine.value.name,
             detail: routine.value.description,
@@ -900,6 +901,7 @@ async function saveExercise() {
 }
 
 async function openFinishDialog() {
+    /* todo sacar este comentario   
     if (ejEntCalor.value.length === 0) {
         await showErrorAlert('La rutina debe tener al menos un ejercicio en la entrada en calor')
         return;
@@ -917,6 +919,8 @@ async function openFinishDialog() {
             return;
         }
     }
+
+     */
     finishRoutine.value = true
 }
 

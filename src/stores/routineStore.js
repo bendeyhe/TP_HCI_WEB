@@ -10,6 +10,9 @@ export const useRoutineStore = defineStore('routine', {
     state: () => ({
         routines: ref([]),
         favoriteRoutines: ref([]),
+        easyRoutines: ref([]),
+        mediumRoutines: ref([]),
+        dificultRoutines: ref([]),
         myRoutines: ref([]),
         apiEndpoints: {
             getRoutines: {path: `${ROUT_B_URL}?size=100`, requiresAuth: true, method: 'GET'},
@@ -50,6 +53,15 @@ export const useRoutineStore = defineStore('routine', {
         getfavoriteRoutines() {
             return this.favoriteRoutines.values();
         },
+        getEasyRoutines() {
+            return this.easyRoutines.values();
+        },
+        getMediumRoutines() {
+            return this.mediumRoutines.values();
+        },
+        getDificultRoutines() {
+            return this.dificultRoutines.values();
+        },
         getMyRoutines() {
             return this.myRoutines.values();
         },
@@ -60,6 +72,30 @@ export const useRoutineStore = defineStore('routine', {
                 }
             }
             this.favoriteRoutines.push(routine);
+        },
+        addEasyRoutine(routine) {
+            for (let i = 0; i < this.easyRoutines.length; i++) {
+                if (this.easyRoutines[i].id === routine.id) {
+                    return;
+                }
+            }
+            this.easyRoutines.push(routine);
+        },
+        addMediumRoutine(routine) {
+            for (let i = 0; i < this.mediumRoutines.length; i++) {
+                if (this.mediumRoutines[i].id === routine.id) {
+                    return;
+                }
+            }
+            this.mediumRoutines.push(routine);
+        },
+        addDificultRoutine(routine) {
+            for (let i = 0; i < this.dificultRoutines.length; i++) {
+                if (this.dificultRoutines[i].id === routine.id) {
+                    return;
+                }
+            }
+            this.dificultRoutines.push(routine);
         },
         clearRoutineArray(){
             this.routines = [];
@@ -108,7 +144,7 @@ export const useRoutineStore = defineStore('routine', {
             const data = {
                 'name': routine.name,
                 'detail': routine.detail,
-                'isPublic': "true",
+                'isPublic': true,
                 'difficulty': routine.difficulty,
                 'category': {
                     'id': 1
