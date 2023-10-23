@@ -52,14 +52,14 @@
 
                 <v-col cols="2">
                     <v-autocomplete placeholder="Seleccione el ciclo" variant="outlined"
-                                    v-model="selectedCiclo" @click=updateCiclo()
+                                    v-model="selectedCiclo" @click="updateCiclo"
                                     :items="Object.values(cycles).map(cycle => cycle.name)"></v-autocomplete>
                 </v-col>
 
                 <v-col cols="6">
                     <v-row>
                         <div class="tabla">
-                            <v-table height="400px">
+                            <v-table height="400px" >
                                 <thead>
                                 <tr>
                                     <th class="text-left">
@@ -209,6 +209,7 @@ async function getRoutine() {
                     repetitions: result.data.content[i].repetitions,
                     exercises: []
                 }
+                debugger;
                 cycles.value.push(newCycle)
                 let result2 = await cycleStore.getExercisesByCycle(result.data.content[i].id)
                 if (result2.success) {
@@ -216,8 +217,8 @@ async function getRoutine() {
                         const newExercise = {
                             name: result2.data.content[j].exercise.name,
                             detail: result2.data.content[j].exercise.detail,
-                            type: (result2.data.content[j].duration.value > 0) ? 'duration' : 'repetitions',
-                            cant: (result2.data.content[j].duration.value > 0) ? result2.data.content[j].duration : result2.data.content[j].repetitions,
+                            type: (result2.data.content[j].duration > 0) ? 'segundos' : 'repeticiones',
+                            cant: (result2.data.content[j].duration > 0) ? result2.data.content[j].duration : result2.data.content[j].repetitions,
                         }
                         cycles.value[i].exercises.push(newExercise)
                     }
@@ -356,6 +357,7 @@ h3 {
 .tabla {
     padding-left: 20px;
     padding-top: 15px;
+    width: 100%;
 }
 
 .v-table {
