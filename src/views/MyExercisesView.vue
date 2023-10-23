@@ -239,7 +239,7 @@ async function saveExercise(){
             newEjercicio.value = {
                 name: '',
                 detail: '',
-                url: '',
+                url: 'https://www.feda.net/wp-content/uploads/2018/08/circuit-training.jpeg',
                 type: '',
                 number: myExercises.value.length,
                 index: 0
