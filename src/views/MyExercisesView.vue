@@ -1,7 +1,7 @@
 <template>
     <AppBar />
     <div class="mx-auto mydiv">
-        <h1 class="text-center">Mis ejercicios</h1>
+        <h1 class="text-center">Mis Ejercicios</h1>
         <div class="mx-auto">
         <v-dialog width="500" class="mx-auto">
             <template v-slot:activator="{ props }">
@@ -186,7 +186,7 @@ import { useExerciseStore } from "@/stores/exerciseStore";
 const exerciseStore = useExerciseStore();
 const userStore = useUserStore();
 const myExercises = ref([]);
-const type = ref(1);
+const type = ref("Ejercicio");
 
 const newEjercicio = ref({
     name: "",
@@ -262,7 +262,7 @@ h1 {
     color: #000000;
     margin-top: 20px;
     text-align: center;
-    margin-bottom: 5    0px;
+    margin-bottom: 50px;
 }
 
 

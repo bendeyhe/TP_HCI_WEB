@@ -203,7 +203,7 @@ export default {
     width: 100%;
     position: absolute;
     bottom: 1%;
-    text-align: center;
+    left: 25%;
 }
 
 .v-btn {

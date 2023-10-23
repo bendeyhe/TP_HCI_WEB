@@ -2,7 +2,7 @@
     <v-card
         :loading="loading"
 
-        class="mx-auto my-12"
+        class="mx-6 my-12"
         width="280"
         height="475"
     >
