@@ -179,6 +179,7 @@
                                     <v-col><h3> Cantidad de series: </h3></v-col>
                                     <v-col>
                                         <v-autocomplete density="compact" default="1" variant="outlined"
+                                                        v-if="dataPrincipal[cicloSeleccionado]"
                                                         v-model="dataPrincipal[cicloSeleccionado].cantSeries"
                                                         :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20']"></v-autocomplete>
                                     </v-col>
@@ -187,11 +188,13 @@
                                     <v-col><h3> Duración (repeticiones o tiempo): </h3></v-col>
                                     <v-col cols="2">
                                         <v-autocomplete density="compact" default="1" variant="outlined"
+                                                        v-if="dataPrincipal[cicloSeleccionado]"
                                                         v-model="dataPrincipal[cicloSeleccionado].duracion"
                                                         :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '61', '62', '63', '64', '65', '66', '67', '68', '69', '70', '71', '72', '73', '74', '75', '76', '77', '78', '79', '80', '81', '82', '83', '84', '85', '86', '87', '88', '89', '90']"></v-autocomplete>
                                     </v-col>
                                     <v-col>
                                         <v-autocomplete density="compact" default="repeticiones" variant="outlined"
+                                                        v-if="dataPrincipal[cicloSeleccionado]"
                                                         v-model="dataPrincipal[cicloSeleccionado].typeDuracion"
                                                         :items="['repeticiones', 'segundos', 'minutos']"></v-autocomplete>
                                     </v-col>
@@ -200,11 +203,13 @@
                                     <v-col><h3> Tiempo de descanso: </h3></v-col>
                                     <v-col cols="2">
                                         <v-autocomplete density="compact" default="1" variant="outlined"
+                                                        v-if="dataPrincipal[cicloSeleccionado]"
                                                         v-model="dataPrincipal[cicloSeleccionado].descanso"
                                                         :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '61', '62', '63', '64', '65', '66', '67', '68', '69', '70', '71', '72', '73', '74', '75', '76', '77', '78', '79', '80', '81', '82', '83', '84', '85', '86', '87', '88', '89', '90']"></v-autocomplete>
                                     </v-col>
                                     <v-col>
                                         <v-autocomplete density="compact" default="repeticiones" variant="outlined"
+                                                        v-if="dataPrincipal[cicloSeleccionado]"
                                                         v-model="dataPrincipal[cicloSeleccionado].typeDescanso"
                                                         :items="['segundos', 'minutos']"></v-autocomplete>
                                     </v-col>
@@ -216,7 +221,7 @@
                                     <v-col><h3> Cantidad de series: </h3></v-col>
                                     <v-col>
                                         <v-autocomplete density="compact" default="1" variant="outlined"
-                                                        v-model="dataEntCalor.cantSeries"
+                                                        v-model="dataEnf.cantSeries"
                                                         :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20']"></v-autocomplete>
                                     </v-col>
                                 </v-row>
@@ -265,7 +270,8 @@
                                 <v-btn v-if="n===1" class="boton" prepend-icon="mdi-plus" @click="agregarEjercicio">
                                     Agregar Ejercicio a Entrada en Calor
                                 </v-btn>
-                                <v-btn v-else-if="n===2" class="boton" prepend-icon="mdi-plus" @click="agregarEjercicio">
+                                <v-btn v-else-if="n===2" class="boton" prepend-icon="mdi-plus"
+                                       @click="agregarEjercicio">
                                     Agregar Ejercicio a Principal
                                 </v-btn>
                                 <v-btn v-else class="boton" prepend-icon="mdi-plus" @click="agregarEjercicio">
@@ -340,14 +346,17 @@
                     ></v-radio>
                     <v-radio
                         label="Rutina pública"
+                        v-model="routine.isPublic"
                         value="radio-2"
                     ></v-radio>
                 </v-radio-group>
 
                 <div class="text-subtitle-1">Dificultad de la rutina</div>
 
-                <v-autocomplete density="compact" default="1" variant="outlined"
+                <v-autocomplete density="compact" default="1" variant="outlined" v-model="routine.difficulty"
                                 :items="['rookie', 'beginner', 'intermediate', 'advanced', 'expert']"></v-autocomplete>
+
+                <v-text-field label="Imagen" v-model="routine.img"></v-text-field>
 
                 <v-alert
                     v-if="successAlert"
@@ -365,7 +374,7 @@
                 <v-card-actions>
                     <v-btn
                         variant="text"
-                        @click="resetForm"
+                        @click="resetForm()"
                         class="cancelar"
                     >
                         Cancelar
@@ -404,7 +413,7 @@ import {RouterLink, useRoute} from "vue-router";
 import {useRoutineStore} from "@/stores/routineStore";
 import {useCycleStore} from "@/stores/cycleStore";
 import {useUserStore} from "@/stores/userStore";
-import myExercisesView from "@/views/MyExercisesView.vue";
+import router from "@/router";
 
 const successAlert = ref(false)
 const errorAlert = ref(false)
@@ -534,39 +543,76 @@ onBeforeMount(async () => {
             routine.value = result.data
             result = await routineStore.getCyclesByRoutine(route.params.id)
             if (result.success) {
+                cicloSeleccionado.value = -1
                 for (let i = 0; i < result.data.totalCount; i++) {
-                    if (result.data.content[i].type === 'warmup')
-                        cicloEntCalor.value = result.data.content[i]
-                    else if (result.data.content[i].type === 'exercise')
-                        ciclosPrincipal.value.push(result.data.content[i])
-                    else if (result.data.content[i].type === 'cooldown')
-                        cicloEnfriamiento.value = result.data.content[i]
-                }
-            }
-            if (cicloEntCalor.value.id) {
-                result = await cycleStore.getExercisesByCycle(cicloEntCalor.value.id)
-                if (result.success) {
-                    ejEntCalor.value = result.data.content
-                }
-            }
-            if (ciclosPrincipal.value.length > 0) {
-                for (let i = 0; i < ciclosPrincipal.value.length; i++) {
-                    cantCiclosPrincipal.value.push(i + 1)
-                    result = await cycleStore.getExercisesByCycle(ciclosPrincipal.value[i].id)
-                    if (result.success) {
-                        if (!ejPrincipal.value[i])
-                            ejPrincipal.value[i] = []
-                        ejPrincipal.value[i] = result.data.content
-                        console.log(ejPrincipal.value[i].length)
+                    const result2 = await cycleStore.getExercisesByCycle(result.data.content[i].id)
+                    if (result2.success) {
+                        if (result.data.content[i].type === 'warmup') {
+                            cicloEntCalor.value = result.data.content[i]
+                            for (let j = 0; j < result2.data.totalCount; j++) {
+                                const ex = {
+                                    name: result2.data.content[j].exercise.name,
+                                    detail: result2.data.content[j].exercise.detail,
+                                    url: result2.data.content[j].exercise.metadata?.image,
+                                    type: result2.data.content[j].exercise.type,
+                                    number: 1,
+                                    index: 0
+                                }
+                                ejEntCalor.value.push(ex)
+                            }
+                        } else if (result.data.content[i].type === 'exercise') {
+                            if (cicloSeleccionado.value === -1)
+                                cicloSeleccionado.value = i + 1
+                            ciclosPrincipal.value.push(result.data.content[i])
+                            cantCiclosPrincipal.value.push(i + 1)
+                            for (let j = 0; j < result2.data.totalCount; j++) {
+                                if (!ejPrincipal.value[i + 1])
+                                    ejPrincipal.value[i + 1] = []
+                                const ex = {
+                                    name: result2.data.content[j].exercise.name,
+                                    detail: result2.data.content[j].exercise.detail,
+                                    url: result2.data.content[j].exercise.metadata?.image,
+                                    type: result2.data.content[j].exercise.type,
+                                    number: 1,
+                                    index: 0
+                                }
+                                ejPrincipal.value[i + 1].push(ex)
+                            }
+                            if (!dataPrincipal.value[i + 1])
+                                dataPrincipal.value[i + 1] = []
+                        } else if (result.data.content[i].type === 'cooldown') {
+                            cicloEnfriamiento.value = result.data.content[i]
+                            for (let j = 0; j < result2.data.totalCount; j++) {
+                                const ex = {
+                                    name: result2.data.content[j].exercise.name,
+                                    detail: result2.data.content[j].exercise.detail,
+                                    url: result2.data.content[j].exercise.metadata?.image,
+                                    type: result2.data.content[j].exercise.type,
+                                    number: 1,
+                                    index: 0
+                                }
+                                ejEnfriamiento.value.push(ex)
+                            }
+                        }
                     }
                 }
             }
-            if (cicloEnfriamiento.value.id) {
-                result = await cycleStore.getExercisesByCycle(cicloEnfriamiento.value.id)
-                if (result.success) {
-                    ejEnfriamiento.value = result.data.content
-                }
+            if (ciclosPrincipal.value.length === 0) {
+                cantCiclosPrincipal.value.push(1)
+                cicloSeleccionado.value = 1
+                if (!dataPrincipal.value[1])
+                    dataPrincipal.value[1] = []
+                dataPrincipal.value[1].push({
+                    cantSeries: 1,
+                    duracion: 10,
+                    typeDuracion: 'segundos',
+                    descanso: 10,
+                    typeDescanso: 'segundos'
+                })
+                repCicloPrincipal.value[1] = 1
             }
+            if (cicloSeleccionado === -1)
+                cicloSeleccionado.value = 1
         }
     } else {
         isEditing.value = false
@@ -585,10 +631,101 @@ onBeforeMount(async () => {
     }
 });
 
-function addRoutine() {
+async function addRoutine() {
     loading.value = true
-    //primero tengo que agregar los ciclos con los ejercicios que se han elegido
+    if (!route.params.id) {
+        const rout = {
+            name: routine.value.name,
+            detail: routine.value.description,
+            isPublic: routine.value.isPublic?true:false,
+            difficulty: routine.value.difficulty,
+            metadata: {
+                image: routine.value.img
+            }
+        }
+        const result = await routineStore.addRoutine(rout)
+        if (result.success) {
+            const idRoutine = result.data.id
+            // primero tengo que agregar los ciclos a la rutina
+            // luego agregar los ejercicios a los ciclos
 
+            let cantCiclos = 1
+            // agregar ciclo de entrada en calor
+            if (ejEntCalor.value.length > 0) {
+                const ciclo = {
+                    name: 'Entrada en calor',
+                    detail: 'Entrada en calor',
+                    type: 'warmup',
+                    order: cantCiclos,
+                    repetitions: repCicloEntCalor.value
+                }
+                cantCiclos++
+                const result = await routineStore.addCycleToRoutine(idRoutine, ciclo)
+                if(result.success){
+                    const idCiclo = result.data.id
+                    // agregar ejercicios a los ciclos
+                    // agregar ejercicios de entrada en calor
+                    if (ejEntCalor.value.length > 0) {
+                        for (let i = 0; i < ejEntCalor.value.length; i++) {
+                            const repeticiones = (dataEntCalor.value.typeDuracion === 'repeticiones' ? dataEntCalor.value.duracion : 0)
+                            const duracion = (repeticiones === 0 ? (dataEntCalor.value.typeDuracion === 'segundos' ? dataEntCalor.value.duracion : dataEntCalor.value.duracion * 60) : 0)
+                            await cycleStore.addExerciseToCycle(idCiclo, ejEntCalor.value[i].id, i + 1, duracion, repeticiones)
+                        }
+                    }
+                }
+            }
+
+            // agregar ciclos principales
+            for (let i = 0; i < ciclosPrincipal.value.length; i++) {
+                const ciclo = {
+                    name: 'Principal ' + (i + 1),
+                    detail: 'Principal ' + (i + 1),
+                    type: 'exercise',
+                    order: cantCiclos,
+                    repetitions: repCicloPrincipal.value[i + 1]
+                }
+                cantCiclos++
+                const result = await routineStore.addCycleToRoutine(idRoutine, ciclo)
+                if(result.success){
+                    const idCiclo = result.data.id
+                    // agregar ejercicios principales
+                    for (let i = 0; i < ciclosPrincipal.value.length; i++) {
+                        for (let j = 0; j < ejPrincipal.value[i + 1].length; j++) {
+                            const repeticiones = (dataPrincipal.value[i + 1].typeDuracion === 'repeticiones' ? dataPrincipal.value[i + 1].duracion : 0)
+                            const duracion = (repeticiones === 0 ? (dataPrincipal.value[i + 1].typeDuracion === 'segundos' ? dataPrincipal.value[i + 1].duracion : dataPrincipal.value[i + 1].duracion * 60) : 0)
+                            await cycleStore.addExerciseToCycle(idCiclo, ejPrincipal.value[i + 1][j].id, j + 1, duracion, repeticiones)
+                        }
+                    }
+                }
+            }
+
+            // agregar ciclo de enfriamiento
+            if (ejEnfriamiento.value.length > 0) {
+                const ciclo = {
+                    name: 'Enfriamiento',
+                    detail: 'Enfriamiento',
+                    type: 'cooldown',
+                    order: cantCiclos,
+                    repetitions: repCicloEnfriamiento.value
+                }
+                cantCiclos++
+                const result = await routineStore.addCycleToRoutine(idRoutine, ciclo)
+                if (result.success){
+                    const idCiclo = result.data.id
+                    // agregar ejercicios de enfriamiento
+                    if (ejEnfriamiento.value.length > 0) {
+                        for (let i = 0; i < ejEnfriamiento.value.length; i++) {
+                            const repeticiones = (dataEnf.value.typeDuracion === 'repeticiones' ? dataEnf.value.duracion : 0)
+                            const duracion = (repeticiones === 0 ? (dataEnf.value.typeDuracion === 'segundos' ? dataEnf.value.duracion : dataEnf.value.duracion * 60) : 0)
+                            await cycleStore.addExerciseToCycle(idCiclo, ejEnfriamiento.value[i].id, i + 1, duracion, repeticiones)
+                        }
+                    }
+                }
+            }
+            await showSuccessAlert('Rutina creada con éxito')
+            await router.push({name: 'my-routines'})
+        }
+    }
     loading.value = false
 }
 
@@ -597,46 +734,45 @@ async function agregarEjercicio() {
         await showErrorAlert2('Debe seleccionar un ejercicio o crear uno nuevo')
     } else {
         if (type.value === 1) {
-            if(dataEntCalor.value.cantSeries === 0){
+            if (dataEntCalor.value.cantSeries === 0) {
                 await showErrorAlert2('La cantidad de series no puede ser 0')
                 return;
             }
-            if(dataEntCalor.value.duracion === 0){
+            if (dataEntCalor.value.duracion === 0) {
                 await showErrorAlert2('La duración no puede ser 0')
                 return;
             }
-            if(dataEntCalor.value.descanso === 0){
+            if (dataEntCalor.value.descanso === 0) {
                 await showErrorAlert2('El tiempo de descanso no puede ser 0')
                 return;
             }
-            if(dataEntCalor.value.typeDuracion === ''){
+            if (dataEntCalor.value.typeDuracion === '') {
                 await showErrorAlert2('Debe seleccionar un tipo de duración')
                 return;
             }
-            if(dataEntCalor.value.typeDescanso === ''){
+            if (dataEntCalor.value.typeDescanso === '') {
                 await showErrorAlert2('Debe seleccionar un tipo de descanso')
                 return;
             }
             ejEntCalor.value.push(ejercicioSeleccionado.value);
         } else if (type.value === 2) {
-            debugger;
-            if(dataPrincipal.value[cicloSeleccionado.value].cantSeries === 0){
+            if (dataPrincipal.value[cicloSeleccionado.value].cantSeries === 0) {
                 await showErrorAlert2('La cantidad de series no puede ser 0')
                 return;
             }
-            if(dataPrincipal.value[cicloSeleccionado.value].duracion === 0){
+            if (dataPrincipal.value[cicloSeleccionado.value].duracion === 0) {
                 await showErrorAlert2('La duración no puede ser 0')
                 return;
             }
-            if(dataPrincipal.value[cicloSeleccionado.value].descanso === 0){
+            if (dataPrincipal.value[cicloSeleccionado.value].descanso === 0) {
                 await showErrorAlert2('El tiempo de descanso no puede ser 0')
                 return;
             }
-            if(dataPrincipal.value[cicloSeleccionado.value].typeDuracion === ''){
+            if (dataPrincipal.value[cicloSeleccionado.value].typeDuracion === '') {
                 await showErrorAlert2('Debe seleccionar un tipo de duración')
                 return;
             }
-            if(dataPrincipal.value[cicloSeleccionado.value].typeDescanso === ''){
+            if (dataPrincipal.value[cicloSeleccionado.value].typeDescanso === '') {
                 await showErrorAlert2('Debe seleccionar un tipo de descanso')
                 return;
             }
@@ -645,23 +781,23 @@ async function agregarEjercicio() {
             ejPrincipal.value[cicloSeleccionado.value].push(ejercicioSeleccionado.value);
             console.log(ejPrincipal.value)
         } else if (type.value === 3) {
-            if(dataEnf.cantSeries === 0){
+            if (dataEnf.value.cantSeries === 0) {
                 await showErrorAlert2('La cantidad de series no puede ser 0')
                 return;
             }
-            if(dataEnf.duracion === 0){
+            if (dataEnf.value.duracion === 0) {
                 await showErrorAlert2('La duración no puede ser 0')
                 return;
             }
-            if(dataEnf.descanso === 0){
+            if (dataEnf.value.descanso === 0) {
                 await showErrorAlert2('El tiempo de descanso no puede ser 0')
                 return;
             }
-            if(dataEnf.typeDuracion === ''){
+            if (dataEnf.value.typeDuracion === '') {
                 await showErrorAlert2('Debe seleccionar un tipo de duración')
                 return;
             }
-            if(dataEnf.typeDescanso === ''){
+            if (dataEnf.value.typeDescanso === '') {
                 await showErrorAlert2('Debe seleccionar un tipo de descanso')
                 return;
             }
@@ -705,7 +841,6 @@ async function saveExercise() {
 }
 
 async function openFinishDialog() {
-    /* todo borrar el comentario, esta comentado para que no moleste mientras se trabaja en la rutina
     if (ejEntCalor.value.length === 0) {
         await showErrorAlert('La rutina debe tener al menos un ejercicio en la entrada en calor')
         return;
@@ -715,7 +850,7 @@ async function openFinishDialog() {
     } else {
         let found = false
         for (let i = 1; i < ejPrincipal.value.length && !found; i++) {
-            if(ejPrincipal.value[i] && ejPrincipal.value[i].length > 0)
+            if (ejPrincipal.value[i] && ejPrincipal.value[i].length > 0)
                 found = true
         }
         if (!found) {
@@ -723,7 +858,6 @@ async function openFinishDialog() {
             return;
         }
     }
-     */
     finishRoutine.value = true
 }
 
@@ -745,6 +879,10 @@ function addCycle() {
         typeDescanso: 'segundos'
     })
     cantCiclosPrincipal.value.push(ciclosPrincipal.value.length + 1)
+}
+
+function resetForm() {
+    finishRoutine.value = false
 }
 
 </script>

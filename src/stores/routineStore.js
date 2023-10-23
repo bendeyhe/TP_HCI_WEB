@@ -102,7 +102,16 @@ export const useRoutineStore = defineStore('routine', {
             return await makeApiCall(this.apiEndpoints.getRoutines, null, useUserStore().token);
         },
         async addRoutine(routine) {
-            const data = {'name': routine.name, 'detail': routine.detail};
+            const data = {
+                'name': routine.name,
+                'detail': routine.detail,
+                'isPublic': routine.isPublic,
+                'difficulty': routine.difficulty,
+                'category': {
+                    'id': 1
+                },
+                'metadata': {'image': routine.img}
+            };
             return await makeApiCall(this.apiEndpoints.addRoutine, data, useUserStore().token);
         },
         async getRoutine(routineId) {
