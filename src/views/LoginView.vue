@@ -75,6 +75,7 @@
                         href="#"
                         rel="noopener noreferrer"
                         target="_blank"
+                        class="link"
                     >
                         Crear cuenta
                         <v-icon icon="mdi-chevron-right"></v-icon>
@@ -208,5 +209,10 @@ p {
 h1 {
     text-align: center;
     padding-top: 25px;
+}
+
+.link {
+    color: black;
+    text-decoration: none;
 }
 </style>
