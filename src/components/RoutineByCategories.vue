@@ -4,12 +4,6 @@
                                 <h1 class="titulo">Favoritas</h1>
         </RouterLink>
         <h1 v-else class="titulo">{{ nombreRutina }}</h1>
-        <RouterLink :to="{ name: 'favourite-routines' }" v-if="nombreRutina==='Favoritas'">
-                                <a class="titulo link">Ver todas las favoritas</a>
-        </RouterLink>
-        <RouterLink :to="{ name: 'all-routines' }" v-else >
-                                <a class="titulo link">Ver todas las rutinas</a>
-        </RouterLink>
         <v-slide-group
             v-model="model"
             multiple
@@ -24,7 +18,6 @@
             >
                 <v-card
                     :loading="loading"
-
                     class="mx-auto my-12"
                     width="280"
                     height="400"
@@ -43,7 +36,6 @@
                             alt="Foto de la Rutina"
                             height="150"
                         />
-                        <!-- todo aca queria poner {{ routine.img  }} pero no funciona... ¿como se hace?-->
                         <v-btn
                             class="heart"
                             :icon="
@@ -54,15 +46,6 @@
                     </div>
                     <v-card-item>
                         <v-card-title>{{ routine.name }}</v-card-title>
-                        <!--<v-card-subtitle>
-                          <span class="me-1">Local Favorite</span>
-                          <v-icon
-                            color="error"
-                            icon="mdi-fire-circle"
-                            size="small"
-                          ></v-icon>
-                        </v-card-subtitle>
-                        -->
                     </v-card-item>
                     <v-card-text>
                         <div class="creator my-4 text-subtitle-1">
@@ -90,7 +73,6 @@
 import { ref, onBeforeMount } from "vue";
 import { useRoutineStore } from "@/stores/routineStore.js";
 import { RouterLink } from "vue-router";
-import ImageWithFavIcon from "@/components/ImageWithFavIcon.vue";
 
 const loading = ref(false);
 const routineStore = useRoutineStore();
@@ -234,14 +216,6 @@ export default {
     align-items: center;
 }
 
-.link {
-    text-decoration: none;
-    color: blue
-}
-
-.link:hover {
-    cursor: pointer 
-}
 .creator-text {
     white-space: nowrap;
     overflow: hidden;
