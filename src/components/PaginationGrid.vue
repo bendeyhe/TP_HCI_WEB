@@ -57,7 +57,7 @@
         </div>
     </div>
     <div v-if="visibleRoutines.length > 0">
-        <h1 v-if="typeRout === 'All'">Todas las Rutinas</h1>
+        <h1 v-if="typeRout === 'All'" class="titulo">Todas las Rutinas</h1>
         <v-row class="width">
             <v-col cols="4" v-for="(routine, index) in visibleRoutines"
                    :key="routine.index"
@@ -473,6 +473,12 @@ h1 {
 .cont {
     position: relative;
     width: 100%;
+}
+
+.titulo {
+    text-align:left;
+    padding-top: 20px;
+    padding-left: 20px;
 }
 
 .image {

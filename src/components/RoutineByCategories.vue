@@ -36,7 +36,6 @@
                             alt="Foto de la Rutina"
                             height="150"
                         />
-                        <!-- todo aca queria poner {{ routine.img  }} pero no funciona... ¿como se hace?-->
                         <v-btn
                             class="heart"
                             :icon="
@@ -47,15 +46,6 @@
                     </div>
                     <v-card-item>
                         <v-card-title>{{ routine.name }}</v-card-title>
-                        <!--<v-card-subtitle>
-                          <span class="me-1">Local Favorite</span>
-                          <v-icon
-                            color="error"
-                            icon="mdi-fire-circle"
-                            size="small"
-                          ></v-icon>
-                        </v-card-subtitle>
-                        -->
                     </v-card-item>
                     <v-card-text>
                         <div class="creator my-4 text-subtitle-1">
@@ -83,7 +73,6 @@
 import { ref, onBeforeMount } from "vue";
 import { useRoutineStore } from "@/stores/routineStore.js";
 import { RouterLink } from "vue-router";
-import ImageWithFavIcon from "@/components/ImageWithFavIcon.vue";
 
 const loading = ref(false);
 const routineStore = useRoutineStore();
@@ -227,14 +216,6 @@ export default {
     align-items: center;
 }
 
-.link {
-    text-decoration: none;
-    color: blue
-}
-
-.link:hover {
-    cursor: pointer
-}
 .creator-text {
     white-space: nowrap;
     overflow: hidden;
