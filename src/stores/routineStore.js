@@ -108,7 +108,7 @@ export const useRoutineStore = defineStore('routine', {
             const data = {
                 'name': routine.name,
                 'detail': routine.detail,
-                'isPublic': routine.isPublic,
+                'isPublic': "true",
                 'difficulty': routine.difficulty,
                 'category': {
                     'id': 1

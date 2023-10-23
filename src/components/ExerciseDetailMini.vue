@@ -70,8 +70,42 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    ejArray: {
+        type: Array,
+        required: true,
+    },
 });
 
+function moveLeft(){
+    let index
+    for (let i = 0; i < ejArray.value.length; i++) {
+        if (ejArray.value[i].id === exercise.value.id) {
+            index = i;
+        }
+    }
+    if (index !== undefined && index > 0){
+        let aux = ejArray.value[index];
+        ejArray.value[index] = ejArray.value[index-1];
+        ejArray.value[index-1] = aux;
+    }
+}
+
+function moveRight() {
+    debugger;
+    let index;
+    for (let i = 0; i < ejArray.value.length; i++) {
+        if (ejArray.value[i].id === exercise.value.id) {
+            index = i;
+        }
+    }
+    if (index !== undefined && index < ejArray.value.length - 1){
+        let aux = ejArray.value[index];
+        ejArray.value[index] = ejArray.value[index+1];
+        ejArray.value[index+1] = aux;
+    }
+}
+
+const {ejArray} = toRefs(props);
 const { exercise } = toRefs(props);
 </script>
 

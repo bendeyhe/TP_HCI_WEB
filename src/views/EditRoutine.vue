@@ -288,7 +288,7 @@
                         <v-row v-if="n===1">   <!-- ExerciseDetailMini para Entrada en Calor -->
                             <h2 v-if="ejEntCalor.length > 0">Entrada en calor:</h2>
                             <div v-for="ej in ejEntCalor" :key="'entrada-calor-' + n">
-                                <ExerciseDetailMini :exercise="ej"/>
+                                <ExerciseDetailMini :exercise="ej" :ejArray="ejEntCalor"/>
                             </div>
                         </v-row>
                         <v-row v-else-if="n===2">
@@ -296,14 +296,14 @@
                             <h2 class="principal" v-if="ejPrincipal[cicloSeleccionado]?.length > 0">Principal
                                 {{ cicloSeleccionado }}:</h2>
                             <div v-for="ej in ejPrincipal[cicloSeleccionado]" :key="'principal-' + n">
-                                <ExerciseDetailMini :exercise="ej"/>
+                                <ExerciseDetailMini :exercise="ej" :ejArray="ejPrincipal[cicloSeleccionado]"/>
                             </div>
                         </v-row>
                         <v-row v-else>
                             <!-- ExerciseDetailMini para Enfriamiento -->
                             <h2 v-if="ejEnfriamiento.length > 0">Enfriamiento:</h2>
                             <div v-for="ej in ejEnfriamiento" :key="'enfriamiento-' + n">
-                                <ExerciseDetailMini :exercise="ej"/>
+                                <ExerciseDetailMini :exercise="ej" :ejArray="ejEnfriamiento"/>
                             </div>
                         </v-row>
                     </v-row>
