@@ -251,6 +251,7 @@ async function getAllRoutines(){
             }
         }
     }
+    loading.value = false;
 }
 
 async function updateVisibleRoutines() {
