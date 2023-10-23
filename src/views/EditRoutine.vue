@@ -103,17 +103,20 @@
                                                         label="Nombre del ejercicio"
                                                         v-model="newEjercicio.name"
                                                         maxlength="100"
+                                                        variant="outlined"
                                                         counter
                                                     ></v-text-field>
                                                     <v-text-field
                                                         label="Descripción"
                                                         v-model="newEjercicio.detail"
                                                         maxlength="200"
+                                                        variant="outlined"
                                                         counter
                                                     ></v-text-field>
                                                     <v-text-field
                                                         label="Imagen"
                                                         v-model="newEjercicio.url"
+                                                        variant="outlined"
                                                     ></v-text-field>
                                                 </v-card-text>
 
@@ -355,7 +358,7 @@
                 <v-autocomplete density="compact" default="1" variant="outlined" v-model="routine.difficulty"
                                 :items="['rookie', 'beginner', 'intermediate', 'advanced', 'expert']"></v-autocomplete>
 
-                <v-text-field label="Imagen" v-model="routine.img"></v-text-field>
+                <v-text-field label="Imagen" v-model="routine.img" variant="outlined"></v-text-field>
 
                 <v-alert
                     v-if="successAlert"

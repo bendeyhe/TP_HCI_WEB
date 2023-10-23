@@ -93,12 +93,14 @@
                         label="Nombre del ejercicio"
                         v-model="newEjercicio.name"
                         maxlength="100"
+                        variant="outlined"
                         counter
                     ></v-text-field>
                     <v-text-field
                         label="Descripción"
                         v-model="newEjercicio.detail"
                         maxlength="200"
+                        variant="outlined"
                         counter
                     ></v-text-field>
                     <v-autocomplete
@@ -113,6 +115,7 @@
                     <v-text-field
                         label="Imagen"
                         v-model="newEjercicio.url"
+                        variant="outlined"
                     ></v-text-field>
 
                     <!-- agregar alerta string maximo 274-->
