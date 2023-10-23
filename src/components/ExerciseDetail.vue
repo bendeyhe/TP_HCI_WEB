@@ -17,7 +17,7 @@
             />
             <v-card-text class="titulo"> {{ exercise.name }}</v-card-text>
             <v-card-text>
-                <v-row allign="center" class="mx-0"> </v-row>
+                <v-row allign="center" class="mx-0"></v-row>
                 <div class="overflow2" v-if="myPage == true">{{ exercise.detail }}</div>
                 <div class="overflow" v-else>{{ exercise.detail }}</div>
 
@@ -25,21 +25,61 @@
         </div>
         <div v-else>
             <v-card-text
-                >Seleccione o cree un ejercicio para agregar a la
-                rutina</v-card-text
+            >Seleccione o cree un ejercicio para agregar a la
+                rutina
+            </v-card-text
             >
         </div>
         <div class="actions">
             <v-card-actions v-if="myPage == true" class="actions">
-                <v-btn class="trashbtn" @click="deleteExercise(props.exercise)" prepend-icon="mdi-trash-can"
-                >Eliminar</v-btn>
+                <v-btn class="trashbtn" @click="openConfirmDeleteDialog" prepend-icon="mdi-trash-can"
+                >Eliminar
+                </v-btn>
                 <v-spacer></v-spacer>
                 <v-btn class="editar" @click="openEditDialog" v-bind="props" prepend-icon="mdi-pencil"
-                >Editar</v-btn>
+                >Editar
+                </v-btn>
             </v-card-actions>
         </div>
     </v-card>
 
+    <v-dialog width="475" class="mx-auto" v-model="confirmDelete">
+        <template v-slot:activator="{ props }">
+
+        </template>
+        <template v-slot:default="{ isActive }">
+            <v-card>
+                <v-card-title>¿Está seguro/a que desea eliminar el ejercicio?</v-card-title>
+                <v-card-text>Esta operación no se puede deshacer.</v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+
+                    <v-btn
+                        text="cancelar"
+                        class="cancelar"
+                        prepend-icon="mdi-close"
+                        @click="
+                                        () => {
+                                            isActive.value = false;
+                                        }
+                                    "
+                    ></v-btn>
+                    <v-btn
+                        class="confirmar"
+                        text="Confirmar"
+                        newEjercicio.index="exercise.index"
+                        prepend-icon="mdi-check"
+                        @click="
+                                        () => {
+                                            isActive.value = false;
+                                            deleteExercise(exercise);
+                                        }
+                                    "
+                    ></v-btn>
+                </v-card-actions>
+            </v-card>
+        </template>
+    </v-dialog>
 
 
     <v-dialog width="500" class="mx-auto" v-model="editDialog">
@@ -108,10 +148,10 @@
 </template>
 
 <script setup>
-import { toRefs } from "vue";
-import { useExerciseStore } from "@/stores/exerciseStore";
-import { useUserStore } from "@/stores/userStore";
-import { ref, defineProps } from "vue";
+import {toRefs} from "vue";
+import {useExerciseStore} from "@/stores/exerciseStore";
+import {useUserStore} from "@/stores/userStore";
+import {ref, defineProps} from "vue";
 
 const newEjercicio = ref({
     name: "",
@@ -124,6 +164,7 @@ const newEjercicio = ref({
 const exerciseStore = useExerciseStore();
 const userStore = useUserStore();
 const editDialog = ref(false);
+const confirmDelete = ref(false);
 const props = defineProps({
     exercise: {
         type: Object,
@@ -140,9 +181,9 @@ const props = defineProps({
     }
 });
 
-const { myExercises } = toRefs(props);
-const { exercise } = toRefs(props);
-const { myPage } = toRefs(props);
+const {myExercises} = toRefs(props);
+const {exercise} = toRefs(props);
+const {myPage} = toRefs(props);
 
 async function deleteExercise(exercise) {
     debugger;
@@ -175,29 +216,34 @@ async function editExercise(exercise) {
     debugger
     const result = await exerciseStore.getExercise(exercise.index);
     if (result) {
-        if(newEjercicio.value.name != "")
+        if (newEjercicio.value.name != "")
             result.data.name = newEjercicio.value.name;
-        if(newEjercicio.value.detail != "")
+        if (newEjercicio.value.detail != "")
             result.data.detail = newEjercicio.value.detail;
-        if(newEjercicio.value.url.length > 0)
+        if (newEjercicio.value.url.length > 0)
             result.data.url = newEjercicio.value.url;
-        if(newEjercicio.value.type != "")
+        if (newEjercicio.value.type != "")
             result.data.type = newEjercicio.value.type;
         const result2 = await exerciseStore.changeExercise(result.data);
-        if (result2){
+        if (result2) {
             myExercises.value[exercise.number] = result.data;
             const user = await userStore.getCurrentUser();
             user.data.metadata.exercises[exercise.number] = result.data;
-            const aux= await userStore.modifyCurrentUser(user.data.firstName, user.data.lastName, user.data.gender, user.data.metadata);
+            const aux = await userStore.modifyCurrentUser(user.data.firstName, user.data.lastName, user.data.gender, user.data.metadata);
             debugger
 
         }
     }
     //const result = await exerciseStore.changeExercise(exercise);
 }
+
 async function openEditDialog() {
-    newEjercicio.value = { ...exercise.value };
+    newEjercicio.value = {...exercise.value};
     editDialog.value = true;
+}
+
+async function openConfirmDeleteDialog() {
+    confirmDelete.value = true;
 }
 </script>
 
