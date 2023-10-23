@@ -692,19 +692,28 @@ async function addRoutine() {
                     repetitions: repCicloPrincipal.value[i + 1]
                 }
                 cantCiclos++
-                const result = await routineStore.addCycleToRoutine(idRoutine, ciclo)
-                if (result.success) {
-                    const idCiclo = result.data.id
-                    // agregar ejercicios principales
-                    for (let j = 0; j < ejPrincipal.value[i + 1]?.length; j++) {
-                        console.log(dataPrincipal.value[i + 1][j + 1])
-                        debugger
-                        const repeticiones = (dataPrincipal.value[i + 1][j + 1].typeDuracion === 'repeticiones' ? dataPrincipal.value[i + 1][j + 1].duracion : 0)
-                        const duracion = (repeticiones === 0 ? (dataPrincipal.value[i + 1][j + 1].typeDuracion === 'segundos' ? dataPrincipal.value[i + 1][j + 1].duracion : dataPrincipal.value[i + 1][j + 1].duracion * 60) : 0)
-                        const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejPrincipal.value[i + 1][j].id, j + 1, duracion, repeticiones)
-                        if (!result2.success) {
-                            await showErrorAlert('Error al agregar ejercicio a ciclo')
-                            return;
+                //quiero agregar el ciclo si tiene por lo menos un ejercicio adentro
+                let foundExercise = false
+                for (let j = 0; j < ejPrincipal.value[i + 1]?.length; j++) {
+                    if (ejPrincipal.value[i + 1][j].id != null) {
+                        foundExercise = true
+                    }
+                }
+                if (foundExercise) {
+                    const result = await routineStore.addCycleToRoutine(idRoutine, ciclo)
+                    if (result.success) {
+                        const idCiclo = result.data.id
+                        // agregar ejercicios principales
+                        for (let j = 0; j < ejPrincipal.value[i + 1]?.length; j++) {
+                            console.log(dataPrincipal.value[i + 1][j + 1])
+                            debugger
+                            const repeticiones = (dataPrincipal.value[i + 1][j + 1].typeDuracion === 'repeticiones' ? dataPrincipal.value[i + 1][j + 1].duracion : 0)
+                            const duracion = (repeticiones === 0 ? (dataPrincipal.value[i + 1][j + 1].typeDuracion === 'segundos' ? dataPrincipal.value[i + 1][j + 1].duracion : dataPrincipal.value[i + 1][j + 1].duracion * 60) : 0)
+                            const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejPrincipal.value[i + 1][j].id, j + 1, duracion, repeticiones)
+                            if (!result2.success) {
+                                await showErrorAlert('Error al agregar ejercicio a ciclo')
+                                return;
+                            }
                         }
                     }
                 }
@@ -770,6 +779,12 @@ async function agregarEjercicio() {
                 await showErrorAlert2('Debe seleccionar un tipo de descanso')
                 return;
             }
+            for (let i = 0; i < ejEntCalor.value.length; i++) {
+                if (ejEntCalor.value[i].id === ejercicioSeleccionado.value.id) {
+                    await showErrorAlert2('El ejercicio ya está en la lista, elija otro')
+                    return;
+                }
+            }
             ejEntCalor.value.push(ejercicioSeleccionado.value);
         } else if (type.value === 2) {
             let cantEjs = ejPrincipal.value[cicloSeleccionado.value]?.length
@@ -796,6 +811,13 @@ async function agregarEjercicio() {
             if (dataPrincipal.value[cicloSeleccionado.value][cantEjs.value]?.typeDescanso === '') {
                 await showErrorAlert2('Debe seleccionar un tipo de descanso')
                 return;
+            }
+
+            for (let i = 0; i < ejPrincipal.value[cicloSeleccionado.value]?.length; i++) {
+                if (ejPrincipal.value[cicloSeleccionado.value][i].id === ejercicioSeleccionado.value.id) {
+                    await showErrorAlert2('El ejercicio ya está en la lista, elija otro')
+                    return;
+                }
             }
 
             if (ejPrincipal.value[cicloSeleccionado.value] == null)
@@ -829,6 +851,13 @@ async function agregarEjercicio() {
             if (dataEnf.value.typeDescanso === '') {
                 await showErrorAlert2('Debe seleccionar un tipo de descanso')
                 return;
+            }
+
+            for (let i = 0; i < ejEnfriamiento.value.length; i++) {
+                if (ejEnfriamiento.value[i].id === ejercicioSeleccionado.value.id) {
+                    await showErrorAlert2('El ejercicio ya está en la lista, elija otro')
+                    return;
+                }
             }
             ejEnfriamiento.value.push(ejercicioSeleccionado.value);
         }
@@ -890,23 +919,23 @@ async function openFinishDialog() {
 }
 
 function addCycle() {
-    cicloSeleccionado.value = ciclosPrincipal.value.length + 2
+    cicloSeleccionado.value = ciclosPrincipal.value.length + 1
     repCicloPrincipal.value.push(1)
     ciclosPrincipal.value.push({
         type: 'exercise',
         number: ciclosPrincipal.value.length + 1,
         index: ciclosPrincipal.value.length + 1
     })
-    if (!dataPrincipal.value[cicloSeleccionado.value])
-        dataPrincipal.value[cicloSeleccionado.value] = []
-    dataPrincipal.value[cicloSeleccionado.value].push({
+    if (!dataPrincipal.value[cicloSeleccionado.value + 1])
+        dataPrincipal.value[cicloSeleccionado.value + 1] = []
+    dataPrincipal.value[cicloSeleccionado.value + 1].push({
         cantSeries: 1,
         duracion: 10,
         typeDuracion: 'segundos',
         descanso: 10,
         typeDescanso: 'segundos'
     })
-    cantCiclosPrincipal.value.push(ciclosPrincipal.value.length + 1)
+    cantCiclosPrincipal.value.push(ciclosPrincipal.value.length)
 }
 
 function resetForm() {
