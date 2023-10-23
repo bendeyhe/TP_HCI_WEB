@@ -5,6 +5,18 @@
     <v-row>
         <v-col>
             <v-btn prepend-icon="mdi-content-save" class="save" @click="openFinishDialog"> Finalizar</v-btn>
+            <v-alert
+                v-if="successAlert"
+                color="success"
+                icon="$success"
+                :text=successMessage
+            ></v-alert>
+            <v-alert
+                v-if="errorAlert"
+                color="error"
+                icon="$error"
+                :text=errorMessage
+            ></v-alert>
         </v-col>
     </v-row>
 
@@ -43,10 +55,27 @@
                                         </v-btn>
                                     </v-col>
                                 </v-row>
-                                <v-row>
+                                <v-row v-if="n===1">
                                     <v-col><h3> Cantidad de repeticiones del ciclo: </h3></v-col>
                                     <v-col>
                                         <v-autocomplete density="compact" default="1" variant="outlined"
+                                                        v-model="repCicloEntCalor"
+                                                        :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20']"></v-autocomplete>
+                                    </v-col>
+                                </v-row>
+                                <v-row v-if="n===2">
+                                    <v-col><h3> Cantidad de repeticiones del ciclo: </h3></v-col>
+                                    <v-col>
+                                        <v-autocomplete density="compact" default="1" variant="outlined"
+                                                        v-model="repCicloPrincipal[cicloSeleccionado]"
+                                                        :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20']"></v-autocomplete>
+                                    </v-col>
+                                </v-row>
+                                <v-row v-if="n===3">
+                                    <v-col><h3> Cantidad de repeticiones del ciclo: </h3></v-col>
+                                    <v-col>
+                                        <v-autocomplete density="compact" default="1" variant="outlined"
+                                                        v-model="repCicloEnfriamiento"
                                                         :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20']"></v-autocomplete>
                                     </v-col>
                                 </v-row>
@@ -354,6 +383,36 @@ import {useCycleStore} from "@/stores/cycleStore";
 import {useUserStore} from "@/stores/userStore";
 import myExercisesView from "@/views/MyExercisesView.vue";
 
+const successAlert = ref(false)
+const errorAlert = ref(false)
+const successMessage = ref('')
+const errorMessage = ref('')
+
+
+async function showSuccessAlert(message = 'Usuario registrado con éxito') {
+    successMessage.value = message
+    successAlert.value = true
+
+    await new Promise(resolve => {
+        setTimeout(() => {
+            successAlert.value = false;
+            resolve();
+        }, 3000);
+    });
+}
+
+async function showErrorAlert(message = 'Error el registrar usuario') {
+    errorMessage.value = message
+    errorAlert.value = true
+
+    await new Promise(resolve => {
+        setTimeout(() => {
+            errorAlert.value = false;
+            resolve();
+        }, 5000);
+    });
+}
+
 const myExercises = ref([])
 const userStore = useUserStore()
 const exerciseStore = useExerciseStore()
@@ -374,7 +433,7 @@ const cicloSeleccionado = ref(1);
 const ejDescanso = ref({
     name: 'Descanso',
     detail: 'Descanso',
-    url: 'https://www.feda.net/wp-content/uploads/2018/08/circuit-training.jpeg',
+    url: '',
     type: 'rest',
     number: 0,
     index: 0
@@ -382,7 +441,7 @@ const ejDescanso = ref({
 const newEjercicio = ref({
     name: '',
     detail: '',
-    url: 'https://www.feda.net/wp-content/uploads/2018/08/circuit-training.jpeg',
+    url: '',
     type: '',
     number: 0,
     index: 0
@@ -390,7 +449,7 @@ const newEjercicio = ref({
 const ejercicioSeleccionado = ref({
     name: '',
     detail: '',
-    url: 'https://www.feda.net/wp-content/uploads/2018/08/circuit-training.jpeg',
+    url: '',
     type: '',
     number: 0,
     index: 0
@@ -411,6 +470,9 @@ const dataEnf = ref({
     descanso: 0,
     typeDescanso: ''
 })
+const repCicloEntCalor = ref(1)
+const repCicloPrincipal = ref([])
+const repCicloEnfriamiento = ref(1)
 
 provide('selectedExercise', ejercicioSeleccionado);
 
@@ -459,6 +521,7 @@ onBeforeMount(async () => {
     } else {
         isEditing.value = false
         cantCiclosPrincipal.value.push(1)
+        cicloSeleccionado.value = 1
         if (!dataPrincipal.value[1])
             dataPrincipal.value[1] = []
         dataPrincipal.value[1].push({
@@ -468,6 +531,7 @@ onBeforeMount(async () => {
             descanso: 0,
             typeDescanso: ''
         })
+        repCicloPrincipal.value[1] = 1
     }
 });
 
@@ -521,12 +585,30 @@ async function saveExercise() {
     }
 }
 
-function openFinishDialog() {
-    finishRoutine.value = true;
+async function openFinishDialog() {
+    if (ejEntCalor.value.length === 0) {
+        await showErrorAlert('La rutina debe tener al menos un ejercicio en la entrada en calor')
+        return;
+    } else if (ejEnfriamiento.value.length === 0) {
+        await showErrorAlert('La rutina debe tener al menos un ejercicio en el enfriamiento')
+        return;
+    } else {
+        let found = false
+        for (let i = 1; i < ejPrincipal.value.length && !found; i++) {
+            if(ejPrincipal.value[i] && ejPrincipal.value[i].length > 0)
+                found = true
+        }
+        if (!found) {
+            await showErrorAlert('La rutina debe tener al menos un ejercicio en la parte principal')
+            return;
+        }
+    }
+    finishRoutine.value = true
 }
 
 function addCycle() {
     cicloSeleccionado.value = ciclosPrincipal.value.length + 2
+    repCicloPrincipal.value.push(1)
     ciclosPrincipal.value.push({
         type: 'exercise',
         number: ciclosPrincipal.value.length + 1,

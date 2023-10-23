@@ -40,7 +40,7 @@
 
                         <!-- agregar alerta string maximo 274-->
                     </v-card-text>
-                
+
 
                     <v-card-actions>
                         <v-spacer></v-spacer>
@@ -170,7 +170,7 @@
 
             -->
     </div>
-    
+
     <FooterComponent />
 </template>
 
@@ -203,7 +203,7 @@ onBeforeMount(async () => {
         if (user.data.metadata.exercises) {
             myExercises.value = user.data.metadata.exercises;
         }
-        
+
     }
 });
 
@@ -217,7 +217,6 @@ async function updateMyExercises() {
 }
 
 async function saveExercise(){
-    debugger;
     if (type.value === 'Descanso')
         newEjercicio.value.type = 'rest'
     else

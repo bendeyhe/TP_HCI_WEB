@@ -151,7 +151,6 @@ const props = defineProps({
 const { typeRout, query } = toRefs(props);
 
 async function getFavs() {
-    debugger
     loading.value = true;
     const result = await routineStore.getRoutines();
     if (result.success && result.data.content) {
