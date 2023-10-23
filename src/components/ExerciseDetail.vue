@@ -8,18 +8,18 @@
             ></v-progress-linear>
         </template>
 
-        <div v-if="exercise.name !== ''">
+        <div v-if="exercise?.name !== ''">
             <img
                 class="image"
-                :src="exercise.url"
+                :src="exercise?.url"
                 alt="Foto del Ejercicio"
                 height="175"
             />
-            <v-card-text class="titulo"> {{ exercise.name }}</v-card-text>
+            <v-card-text class="titulo"> {{ exercise?.name }}</v-card-text>
             <v-card-text>
                 <v-row allign="center" class="mx-0"></v-row>
-                <div class="overflow2" v-if="myPage == true">{{ exercise.detail }}</div>
-                <div class="overflow" v-else>{{ exercise.detail }}</div>
+                <div class="overflow2" v-if="myPage == true">{{ exercise?.detail }}</div>
+                <div class="overflow" v-else>{{ exercise?.detail }}</div>
 
             </v-card-text>
         </div>

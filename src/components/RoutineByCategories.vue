@@ -1,11 +1,10 @@
 <template>
     <v-sheet class="mx-auto" elevation="8">
         <RouterLink :to="{ name: 'favourite-routines' }" v-if="nombreRutina==='Favoritas'" class="favor">
-                                <h1 class="titulo">Favoritas</h1>
+            <h1 class="titulo">Favoritas</h1>
         </RouterLink>
         <h1 v-else class="titulo">{{ nombreRutina }}</h1>
         <v-slide-group
-            v-model="model"
             multiple
             class="pa-4"
             selected-class="bg-primary"
@@ -13,7 +12,7 @@
             :max-visible="1"
         >
             <v-slide-group-item
-                v-for="routine in favourite ? routineStore.getfavoriteRoutines() : routineStore.getAllRoutines()"
+                v-for="routine in favourite ? routineStore.getfavoriteRoutines() : routines.values()"
                 :key="routine.id"
             >
                 <v-card
@@ -51,7 +50,7 @@
                         <div class="creator my-4 text-subtitle-1">
                             <v-icon icon="mdi-account"></v-icon>
                             <div class="creator-text">
-                                • {{ routine.creator.username }}
+                                • {{ routine.creator?.username }}
                             </div>
                         </div>
                         <div class="overflow">{{ routine.description }}</div>
@@ -70,15 +69,34 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount } from "vue";
-import { useRoutineStore } from "@/stores/routineStore.js";
-import { RouterLink } from "vue-router";
+import {ref, onBeforeMount} from "vue";
+import {useRoutineStore} from "@/stores/routineStore.js";
+import {RouterLink} from "vue-router";
+import { toRefs } from 'vue';
+import { defineProps } from 'vue';
+
+const props = defineProps({
+    nombreRutina: {
+        type: String,
+        required: true,
+    },
+    favourite: {
+        type: Boolean,
+        required: true,
+    },
+    dif: {
+        type: String,
+        required: false,
+    },
+});
+
+const { nombreRutina } = toRefs(props);
+const { favourite } = toRefs(props);
+const { dif } = toRefs(props);
 
 const loading = ref(false);
 const routineStore = useRoutineStore();
-const model = ref([]);
-
-
+const routines = ref([]);
 
 onBeforeMount(() => {
     getRoutines();
@@ -116,21 +134,31 @@ async function getRoutines() {
     const result = await routineStore.getRoutines();
     if (result.success) {
         for (let i = 0; i < result.data.totalCount; i++) {
-            if(result.data.content[i]){
-            const routine = result.data.content[i];
-            routineStore.addRoutineArray({
-                id: routine.id,
-                name: routine.name,
-                img: routine.metadata?.image,
-                category: routine.category,
-                description: routine.detail,
-                creator: routine.user,
-                difficulty: routine.difficulty,
-                isPublic: routine.isPublic,
-                fav: routine.metadata?.fav,
-                date: routine.date,
-            });
-        }
+            if (result.data.content[i]) {
+                const routine = result.data.content[i];
+                routineStore.addRoutineArray({
+                    id: routine.id,
+                    name: routine.name,
+                    img: routine.metadata?.image,
+                    category: routine.category,
+                    description: routine.detail,
+                    creator: routine.user,
+                    difficulty: routine.difficulty,
+                    isPublic: routine.isPublic,
+                    fav: routine.metadata?.fav,
+                    date: routine.date,
+                });
+                console.log(dif.value)
+                if (dif.value === '') {
+                    routines.value.push(routine);
+                } else if (dif.value === 'facil' && routine.difficulty === 'rookie') {
+                    routines.value.push(routine);
+                } else if (dif.value === 'dificil' && routine.difficulty === 'expert') {
+                    routines.value.push(routine);
+                } else {
+                    routines.value.push(routine);
+                }
+            }
         }
     }
     loading.value = false;
@@ -146,18 +174,6 @@ async function toggle(routine) {
         // todo tirar error
     }
 }
-</script>
-
-<script>
-export default {
-    data: () => ({
-        model: [],
-    }),
-    props: {
-        nombreRutina: String,
-        favourite: Boolean,
-    },
-};
 </script>
 
 <style scoped>
@@ -211,6 +227,7 @@ export default {
     text-decoration: none;
     color: #000000;
 }
+
 .creator {
     display: flex;
     align-items: center;

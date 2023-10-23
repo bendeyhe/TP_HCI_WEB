@@ -111,11 +111,11 @@
         </v-container>
     </v-card>
 
-    <RoutineByCategories nombreRutina="Dificultad Fácil" :favourite="false"/>
-    <RoutineByCategories nombreRutina="Dificultad Media" :favourite="false"/>
-    <RoutineByCategories nombreRutina="Dificultad Difícil" :favourite="false"/>
-    <RoutineByCategories nombreRutina="Favoritas" :favourite="true"/>
-    <RoutineByCategories nombreRutina="Otras" :favourite="false"/>
+    <RoutineByCategories nombreRutina="Dificultad Fácil" :favourite="false" dif="facil"/>
+    <RoutineByCategories nombreRutina="Dificultad Media" :favourite="false" dif="medio"/>
+    <RoutineByCategories nombreRutina="Dificultad Difícil" :favourite="false" dif="dificil"/>
+    <RoutineByCategories nombreRutina="Favoritas" :favourite="true" dif="todas"/>
+    <RoutineByCategories nombreRutina="Otras" :favourite="false" dif="todas"/>
 
     <FooterComponent/>
 
@@ -209,7 +209,6 @@ async function getRoutine() {
                     repetitions: result.data.content[i].repetitions,
                     exercises: []
                 }
-                debugger;
                 cycles.value.push(newCycle)
                 let result2 = await cycleStore.getExercisesByCycle(result.data.content[i].id)
                 if (result2.success) {

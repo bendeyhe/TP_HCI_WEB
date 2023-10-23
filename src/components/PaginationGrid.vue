@@ -38,7 +38,7 @@
                         <template v-slot:activator="{ props }">
                             <v-btn v-bind="props" icon="mdi-view-headline" class="boton-lista"></v-btn>
                         </template>
-                        <div> Ver rutinas según su dificultad </div>
+                        <div> Ver rutinas según su dificultad</div>
                     </v-tooltip>
                 </RouterLink>
 
@@ -50,7 +50,7 @@
                         <template v-slot:activator="{ props }">
                             <v-btn v-bind="props" icon="mdi-view-grid" class="boton-cuadricula"></v-btn>
                         </template>
-                        <div> Ver todas las rutinas </div>
+                        <div> Ver todas las rutinas</div>
                     </v-tooltip>
                 </RouterLink>
             </v-btn-toggle>
@@ -224,7 +224,6 @@ async function getFavs() {
 }
 
 async function getMyRoutines() {
-    debugger;
     loading.value = true;
     let result = await userStore.getCurrentUser();
     if (result.success) {
@@ -236,15 +235,15 @@ async function getMyRoutines() {
                 routineStore.addMyRoutine({
                     id: routine.id,
                     name: routine.name,
-                    img: routine.metadata.image,
+                    img: routine.metadata?.image,
                     //category: routine.category,
                     description: routine.detail,
                     creator: user,
                     difficulty: routine.difficulty,
                     isPublic: routine.isPublic,
-                    fav: routine.metadata.fav,
+                    fav: routine.metadata?.fav,
                     date: routine.date,
-                    score: routine.metadata.score,
+                    score: routine.metadata?.score,
                 });
             }
         }
@@ -253,42 +252,36 @@ async function getMyRoutines() {
 }
 
 async function getRoutines() {
-    try {
-
-
-        loading.value = true;
-        const result = await routineStore.getRoutines();
-        if (query.value === undefined || query.value === null)
-            query.value = "";
-        routineStore.clearRoutineArray();
-        if (result.success && result.data.content) {
-            for (let i = 0; i < result.data.content.length; i++) {
-                const routine = result.data.content[i];
-                if (routine && routine.name) {
-                    const routineNameLower = routine.name.toLowerCase();
-                    const queryLower = query.value.toLowerCase();
-                    if (routineNameLower.includes(queryLower)) {
-                        routineStore.addRoutineArray({
-                            id: routine.id,
-                            name: routine.name,
-                            img: routine.metadata.image,
-                            category: routine.category,
-                            description: routine.detail,
-                            creator: routine.user,
-                            difficulty: routine.difficulty,
-                            isPublic: routine.isPublic,
-                            fav: routine.metadata.fav,
-                            date: routine.date,
-                            score: routine.metadata.score,
-                        });
-                    }
+    loading.value = true;
+    const result = await routineStore.getRoutines();
+    if (query.value === undefined || query.value === null)
+        query.value = "";
+    routineStore.clearRoutineArray();
+    if (result.success && result.data.content) {
+        for (let i = 0; i < result.data.content.length; i++) {
+            const routine = result.data.content[i];
+            if (routine && routine.name) {
+                const routineNameLower = routine.name.toLowerCase();
+                const queryLower = query.value.toLowerCase();
+                if (routineNameLower.includes(queryLower)) {
+                    routineStore.addRoutineArray({
+                        id: routine.id,
+                        name: routine.name,
+                        img: routine.metadata.image,
+                        category: routine.category,
+                        description: routine.detail,
+                        creator: routine.user,
+                        difficulty: routine.difficulty,
+                        isPublic: routine.isPublic,
+                        fav: routine.metadata.fav,
+                        date: routine.date,
+                        score: routine.metadata.score,
+                    });
                 }
             }
         }
-        loading.value = false;
-    } catch (e) {
-        debugger;
     }
+    loading.value = false;
 }
 
 async function getAllRoutines() {
@@ -407,7 +400,7 @@ function inputPage(number) {
 }
 
 onBeforeMount(async () => {
-    if(typeRout.value === "All"){
+    if (typeRout.value === "All") {
         const result = await routineStore.getRoutines();
         if (result.success) {
             for (let i = 0; i < 10; i++) {
@@ -424,7 +417,7 @@ onBeforeMount(async () => {
 });
 
 
-import { computed, watch } from 'vue'
+import {computed, watch} from 'vue'
 
 const locationSide = ref('top')
 const locationAlign = ref('center')
@@ -476,7 +469,7 @@ h1 {
 }
 
 .titulo {
-    text-align:left;
+    text-align: left;
     padding-top: 20px;
     padding-left: 20px;
 }

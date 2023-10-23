@@ -684,7 +684,6 @@ async function addRoutine() {
                     }
                 }
             }
-            debugger
 
             // agregar ciclos principales
             for (let i = 0; i < ciclosPrincipal.value.length; i++) {
@@ -710,7 +709,6 @@ async function addRoutine() {
                         // agregar ejercicios principales
                         for (let j = 0; j < ejPrincipal.value[i + 1]?.length; j++) {
                             console.log(dataPrincipal.value[i + 1][j + 1])
-                            debugger
                             const repeticiones = (dataPrincipal.value[i + 1][j + 1].typeDuracion === 'repeticiones' ? dataPrincipal.value[i + 1][j + 1].duracion : 0)
                             const duracion = (repeticiones === 0 ? (dataPrincipal.value[i + 1][j + 1].typeDuracion === 'segundos' ? dataPrincipal.value[i + 1][j + 1].duracion : dataPrincipal.value[i + 1][j + 1].duracion * 60) : 0)
                             const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejPrincipal.value[i + 1][j].id, j + 1, duracion, repeticiones)

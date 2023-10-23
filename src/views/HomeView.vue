@@ -38,7 +38,7 @@
                             <template v-slot:activator="{ props }">
                                 <v-btn v-bind="props" icon="mdi-view-headline" class="boton-lista"></v-btn>
                             </template>
-                            <div> Ver rutinas según su dificultad </div>
+                            <div> Ver rutinas según su dificultad</div>
                         </v-tooltip>
                     </RouterLink>
 
@@ -50,17 +50,17 @@
                             <template v-slot:activator="{ props }">
                                 <v-btn v-bind="props" icon="mdi-view-grid" class="boton-cuadricula"></v-btn>
                             </template>
-                            <div> Ver todas las rutinas </div>
+                            <div> Ver todas las rutinas</div>
                         </v-tooltip>
                     </RouterLink>
                 </v-btn-toggle>
             </div>
 
-            <RoutineByCategories :nombreRutina="category1" :favourite="false"/>
-            <RoutineByCategories :nombreRutina="category2" :favourite="false"/>
-            <RoutineByCategories :nombreRutina="category3" :favourite="false"/>
-            <RoutineByCategories :nombreRutina="category4" :favourite="true"/>
-            <RoutineByCategories :nombreRutina="category5" :favourite="false"/>
+            <RoutineByCategories :nombreRutina="category1" :favourite="false" dif="facil"/>
+            <RoutineByCategories :nombreRutina="category2" :favourite="false" dif="medio"/>
+            <RoutineByCategories :nombreRutina="category3" :favourite="false" dif="dificil"/>
+            <RoutineByCategories :nombreRutina="category4" :favourite="true" dif="todas"/>
+            <RoutineByCategories :nombreRutina="category5" :favourite="false" dif="todas"/>
         </v-main>
     </v-app>
     <footer-component/>
@@ -104,7 +104,7 @@ function verDetalle(routine) {
     router.push({name: 'routine-details', params: {id: routine.id}});
 }
 
-import { computed, watch } from 'vue'
+import {computed, watch} from 'vue'
 
 const locationSide = ref('top')
 const locationAlign = ref('center')
@@ -154,7 +154,7 @@ export default {
         category4: "Favoritas",
         category5: "Otras",
         drawer: null,
-        toggle:null,
+        toggle: null,
     }),
 }
 </script>
@@ -212,11 +212,11 @@ export default {
     color: #000000;
 }
 
-.boton-lista{
+.boton-lista {
     color: black;
 }
 
-.boton-cuadricula{
+.boton-cuadricula {
     color: black;
 }
 </style>
