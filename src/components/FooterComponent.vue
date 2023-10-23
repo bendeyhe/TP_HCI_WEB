@@ -27,17 +27,19 @@ function getImageUrl(name){
 
 <style scoped>
 .v-footer {
-    position: fixed;
+    position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
     background-color: rgba(0, 0, 0, 0.47);
     z-index: 1000;
+    height: 50px;
+
 }
 
 
 img {
-    width: 120px;
-    height: 50px;
+    width: 72px;
+    height: 30px;
 }
 </style>
