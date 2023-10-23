@@ -1,6 +1,7 @@
 <template>
     <h1 v-if="typeRout === 'fav'">Rutinas Favoritas</h1>
     <h1 v-if="typeRout === 'myRouts'">Mis Rutinas</h1>
+    <h1 v-if="typeRout === 'All'">Todas las Rutinas</h1>
     <div v-if="visibleRoutines.length > 0">
         <v-row class="width">
             <v-col cols="4" v-for="(routine, index) in visibleRoutines"
@@ -31,7 +32,7 @@
                             height="150"
                         />
 
-                        <v-btn v-if="typeRout === 'fav'"
+                        <v-btn v-if="typeRout === 'fav' || typeRout === 'All'"
                                class="heart"
                                :icon="
                                 routine.fav ? 'mdi-heart' : 'mdi-heart-outline'
@@ -48,19 +49,6 @@
                         <v-card-title>{{ routine.name }}</v-card-title>
                     </v-card-item>
                     <v-card-text>
-                        <v-row allign="center" class="mx-0">
-                            <v-rating
-                                :model-value="routine.score"
-                                color="amber"
-                                density="compact"
-                                half-increments
-                                readonly
-                                size="small"
-                            ></v-rating>
-                            <div class="text-grey ms-4">
-                                {{ routine.score }}
-                            </div>
-                        </v-row>
                         <div class="creator my-4 text-subtitle-1">
                             <v-icon icon="mdi-account"></v-icon>
                             <div class="creator-text">
@@ -240,6 +228,31 @@ async function getRoutines() {
     loading.value = false;
 }
 
+async function getAllRoutines(){
+    loading.value = true;
+    const result = await routineStore.getRoutines();
+    if (result.success && result.data.content) {
+        for (let i = 0; i < result.data.totalCount; i++) {
+            const routine = result.data.content[i];
+            if (routine && routine.name) {
+                routineStore.addRoutineArray({
+                    id: routine.id,
+                    name: routine.name,
+                    img: routine.metadata.image,
+                    category: routine.category,
+                    description: routine.detail,
+                    creator: routine.user,
+                    difficulty: routine.difficulty,
+                    isPublic: routine.isPublic,
+                    fav: routine.metadata.fav,
+                    date: routine.date,
+                    score: routine.metadata.score,
+                });
+            }
+        }
+    }
+}
+
 async function updateVisibleRoutines() {
     if (typeRout.value === "fav") {
         await getFavs();
@@ -261,7 +274,19 @@ async function updateVisibleRoutines() {
         amountPages.value = Math.ceil(routineArray.value.length / pageSize.value);
         if (visibleRoutines.value.length === 0 && pageNumber.value > 0)
             updatePage(pageNumber.value - 1)
-    } else {
+    } else if (typeRout.value === "All") {
+        await getAllRoutines();
+        visibleRoutines.value = Array.from(routineStore.getAllRoutines()).slice(
+            (pageNumber.value - 1) * pageSize.value,
+            pageNumber.value * pageSize.value
+        );
+        routineArray.value = Array.from(routineStore.getAllRoutines());
+        amountPages.value = Math.ceil(routineArray.value.length / pageSize.value);
+        if (visibleRoutines.value.length === 0 && pageNumber.value > 0)
+            updatePage(pageNumber.value - 1)
+
+    }
+    else {
         await getRoutines();
         visibleRoutines.value = Array.from(routineStore.getAllRoutines()).slice(
             (pageNumber.value - 1) * pageSize.value,
@@ -319,7 +344,7 @@ function inputPage(number) {
 }
 
 onBeforeMount(() => {
-    if(typeRout.value !== "fav" && typeRout.value !== "myRouts")
+    if(typeRout.value !== "fav" && typeRout.value !== "myRouts" && typeRout.value !== "All")
         typeRout.value = "Routs";
     updateVisibleRoutines();
 });
@@ -356,6 +381,7 @@ h1 {
     width: 100%;
     position: absolute;
     bottom: 1%;
+    left: 25%;
 }
 
 .v-btn {

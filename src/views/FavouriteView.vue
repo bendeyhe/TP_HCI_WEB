@@ -1,6 +1,6 @@
 <template>
     <AppBar/>
-    <div class="width mx-auto">
+    <div class="width mx-auto gg" >
         <PaginationGrid :typeRout="param"/>
     </div>
     <footerComponent/>
@@ -13,3 +13,9 @@ import footerComponent from "@/components/FooterComponent.vue";
 
 const param = "fav";
 </script>
+
+<style scoped>
+.gg{
+    margin-bottom: 100px;
+}
+</style>

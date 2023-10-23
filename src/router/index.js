@@ -63,6 +63,12 @@ const routes = [
         component: () => import('@/views/Routines.vue')
     },
     {
+        path: '/all-routines',
+        name: 'all-routines',
+        meta: {requiresAuth: true},
+        component: () => import('@/views/AllRoutines.vue')
+    },
+    {
         path: '/login',
         name: 'login',
         meta: {requiresAuth: false},
