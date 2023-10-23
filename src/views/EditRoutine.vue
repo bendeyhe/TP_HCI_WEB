@@ -674,13 +674,14 @@ async function addRoutine() {
                             const duracion = (repeticiones === 0 ? (dataEntCalor.value.typeDuracion === 'segundos' ? dataEntCalor.value.duracion : dataEntCalor.value.duracion * 60) : 0)
                             const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejEntCalor.value[i].id, i + 1, duracion, repeticiones)
                             if (!result2.success) {
-                                await showErrorAlert('Error al agregar ejercicio a ciclo')
+                                await showErrorAlert('Error al agregar ejercicio a ciclo en calor')
                                 return;
                             }
                         }
                     }
                 }
             }
+            debugger
 
             // agregar ciclos principales
             for (let i = 0; i < ciclosPrincipal.value.length; i++) {
@@ -703,7 +704,7 @@ async function addRoutine() {
                         const duracion = (repeticiones === 0 ? (dataPrincipal.value[i + 1][j + 1].typeDuracion === 'segundos' ? dataPrincipal.value[i + 1][j + 1].duracion : dataPrincipal.value[i + 1][j + 1].duracion * 60) : 0)
                         const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejPrincipal.value[i + 1][j].id, j + 1, duracion, repeticiones)
                         if (!result2.success) {
-                            await showErrorAlert('Error al agregar ejercicio a ciclo')
+                            await showErrorAlert('Error al agregar ejercicio a ciclo principal')
                             return;
                         }
                     }
@@ -730,7 +731,7 @@ async function addRoutine() {
                             const duracion = (repeticiones === 0 ? (dataEnf.value.typeDuracion === 'segundos' ? dataEnf.value.duracion : dataEnf.value.duracion * 60) : 0)
                             const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejEnfriamiento.value[i].id, i + 1, duracion, repeticiones)
                             if (!result2.success) {
-                                await showErrorAlert('Error al agregar ejercicio a ciclo')
+                                await showErrorAlert('Error al agregar ejercicio a ciclo enfriamiento')
                                 return;
                             }
                         }
