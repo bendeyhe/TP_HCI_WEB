@@ -26,12 +26,18 @@ function getImageUrl(name){
 
 
 <style scoped>
-img{
-    width: 120px;
-    height: 50px;
+.v-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.47);
+    z-index: 1000;
 }
 
-.v-footer {
-    background-color: rgba(0,0,0,0.47);
+
+img {
+    width: 120px;
+    height: 50px;
 }
 </style>
