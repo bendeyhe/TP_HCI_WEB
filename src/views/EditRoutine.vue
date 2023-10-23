@@ -677,7 +677,6 @@ async function saveExercise() {
     let result = await exerciseStore.addExercise(newEjercicio.value);
     if (result.success) {
         newEjercicio.value.index = result.data.id
-        result = await exerciseStore.addExerciseImage(result.data.id, newEjercicio.value)
         const user = await userStore.getCurrentUser()
         if (user.success) {
             if (!user.data.metadata)
@@ -686,7 +685,9 @@ async function saveExercise() {
                 user.data.metadata.exercises = []
             user.data.metadata.exercises.push(newEjercicio.value)
             await userStore.modifyCurrentUser(user.data.firstName, user.data.lastName, user.data.gender, user.data.metadata)
+            myExercises.value = user.data.metadata.exercises
         }
+        result = await exerciseStore.addExerciseImage(result.data.id, newEjercicio.value)
         if (result.success) {
             ejercicioSeleccionado.value = newEjercicio.value;
             newEjercicio.value = {
@@ -694,10 +695,9 @@ async function saveExercise() {
                 detail: '',
                 url: '',
                 type: '',
-                number: user.data.metadata.exercises.length,
+                number: myExercises.value.length,
                 index: 0
             }
-            myExercises.value = user.data.metadata.exercises
         }
     }
 }
