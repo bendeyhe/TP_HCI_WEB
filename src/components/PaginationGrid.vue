@@ -168,13 +168,14 @@ async function getFavs() {
 }
 
 async function getMyRoutines() {
+    debugger;
     loading.value = true;
     let result = await userStore.getCurrentUser();
     if (result.success) {
         const user = result.data;
         result = await userStore.getCurUserRoutines();
         if (result.success && result.data.content) {
-            for (let i = 0; i < result.data.totalCount; i++) {
+            for (let i = 0; i < result.data.content.length; i++) {
                 const routine = result.data.content[i];
                 routineStore.addMyRoutine({
                     id: routine.id,
