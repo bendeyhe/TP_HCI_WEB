@@ -901,7 +901,6 @@ async function saveExercise() {
 }
 
 async function openFinishDialog() {
-    /* todo sacar este comentario   
     if (ejEntCalor.value.length === 0) {
         await showErrorAlert('La rutina debe tener al menos un ejercicio en la entrada en calor')
         return;
@@ -919,8 +918,6 @@ async function openFinishDialog() {
             return;
         }
     }
-
-     */
     finishRoutine.value = true
 }
 
