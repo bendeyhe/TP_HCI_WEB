@@ -113,7 +113,7 @@ export const useRoutineStore = defineStore('routine', {
                 'category': {
                     'id': 1
                 },
-                'metadata': {'image': routine.img}
+                'metadata': {'image': routine.metadata?.image}
             };
             return await makeApiCall(this.apiEndpoints.addRoutine, data, useUserStore().token);
         },

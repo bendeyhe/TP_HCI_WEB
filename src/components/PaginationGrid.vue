@@ -204,7 +204,7 @@ async function getRoutines() {
         query.value = "";
     routineStore.clearRoutineArray();
     if (result.success && result.data.content) {
-        for (let i = 0; i < result.data.totalCount; i++) {
+        for (let i = 0; i < result.data.content.length; i++) {
             const routine = result.data.content[i];
             if (routine && routine.name) {
                 const routineNameLower = routine.name.toLowerCase();
