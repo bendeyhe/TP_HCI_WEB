@@ -33,11 +33,13 @@ function getImageUrl(name){
     width: 100%;
     background-color: rgba(0, 0, 0, 0.47);
     z-index: 1000;
+    height: 50px;
+
 }
 
 
 img {
-    width: 120px;
-    height: 50px;
+    width: 72px;
+    height: 30px;
 }
 </style>
