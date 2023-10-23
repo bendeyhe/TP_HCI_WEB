@@ -52,14 +52,14 @@
 
                 <v-col cols="2">
                     <v-autocomplete placeholder="Seleccione el ciclo" variant="outlined"
-                                    v-model="selectedCiclo" @click=updateCiclo()
+                                    v-model="selectedCiclo" @click="updateCiclo"
                                     :items="Object.values(cycles).map(cycle => cycle.name)"></v-autocomplete>
                 </v-col>
 
                 <v-col cols="6">
                     <v-row>
                         <div class="tabla">
-                            <v-table height="400px">
+                            <v-table height="400px" >
                                 <thead>
                                 <tr>
                                     <th class="text-left">
@@ -357,6 +357,7 @@ h3 {
 .tabla {
     padding-left: 20px;
     padding-top: 15px;
+    width: 100%;
 }
 
 .v-table {
