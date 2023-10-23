@@ -142,6 +142,11 @@ async function openModal() {
             else
                 return exercise.type !== 'rest'
         })
+        for (let i=0; i<exercises.value.length ; i++) {
+            const result2 = await exerciseStore.getExerciseImage(exercises.value[i], 1);
+            if (result2.success)
+                exercises.value[i].url = result2.data.url;
+        }
 
         // Inicializa la matriz show con valores falsos para cada tarjeta
         show.value = new Array(exercises.value.length).fill(false)
