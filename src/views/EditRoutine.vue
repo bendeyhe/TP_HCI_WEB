@@ -248,16 +248,28 @@
                                 </v-row>
                             </div>
 
+                            <v-alert
+                                v-if="successAlert2"
+                                color="success"
+                                icon="$success"
+                                :text=successMessage
+                            ></v-alert>
+                            <v-alert
+                                v-if="errorAlert2"
+                                color="error"
+                                icon="$error"
+                                :text=errorMessage
+                            ></v-alert>
+
                             <v-row>
                                 <v-btn v-if="n===1" class="boton" prepend-icon="mdi-plus" @click="agregarEjercicio">
                                     Agregar Ejercicio a Entrada en Calor
                                 </v-btn>
-                                <v-btn v-else-if="n===2" class="boton" prepend-icon="mdi-plus"
-                                       @click="agregarEjercicio()">Agregar Ejercicio a Principal
+                                <v-btn v-else-if="n===2" class="boton" prepend-icon="mdi-plus" @click="agregarEjercicio()">
+                                    Agregar Ejercicio a Principal
                                 </v-btn>
                                 <v-btn v-else class="boton" prepend-icon="mdi-plus" @click="agregarEjercicio">
-                                    Agregar
-                                    Ejercicio a Enfriamiento
+                                    Agregar Ejercicio a Enfriamiento
                                 </v-btn>
                             </v-row>
                         </v-col>
@@ -337,6 +349,19 @@
                 <v-autocomplete density="compact" default="1" variant="outlined"
                                 :items="['rookie', 'beginner', 'intermediate', 'advanced', 'expert']"></v-autocomplete>
 
+                <v-alert
+                    v-if="successAlert"
+                    color="success"
+                    icon="$success"
+                    :text=successMessage
+                ></v-alert>
+                <v-alert
+                    v-if="errorAlert"
+                    color="error"
+                    icon="$error"
+                    :text=errorMessage
+                ></v-alert>
+
                 <v-card-actions>
                     <v-btn
                         variant="text"
@@ -349,7 +374,7 @@
                     <v-btn
                         class="confirmar"
                         variant="text"
-                        @click="saveRoutine"
+                        @click="addRoutine"
                     >
                         <template v-if="loading">
                             <v-progress-circular
@@ -359,15 +384,13 @@
                             ></v-progress-circular>
                         </template>
                         <template v-else>
-                            Finalizar
+                            Guardar rutina
                         </template>
                     </v-btn>
                 </v-card-actions>
             </v-card>
         </div>
     </v-dialog>
-
-
 </template>
 
 <script setup>
@@ -387,6 +410,8 @@ const successAlert = ref(false)
 const errorAlert = ref(false)
 const successMessage = ref('')
 const errorMessage = ref('')
+const successAlert2 = ref(false)
+const errorAlert2 = ref(false)
 
 
 async function showSuccessAlert(message = 'Usuario registrado con éxito') {
@@ -408,6 +433,30 @@ async function showErrorAlert(message = 'Error el registrar usuario') {
     await new Promise(resolve => {
         setTimeout(() => {
             errorAlert.value = false;
+            resolve();
+        }, 5000);
+    });
+}
+
+async function showSuccessAlert2(message = 'Usuario registrado con éxito') {
+    successMessage.value = message
+    successAlert2.value = true
+
+    await new Promise(resolve => {
+        setTimeout(() => {
+            successAlert2.value = false;
+            resolve();
+        }, 3000);
+    });
+}
+
+async function showErrorAlert2(message = 'Error el registrar usuario') {
+    errorMessage.value = message
+    errorAlert2.value = true
+
+    await new Promise(resolve => {
+        setTimeout(() => {
+            errorAlert2.value = false;
             resolve();
         }, 5000);
     });
@@ -456,23 +505,24 @@ const ejercicioSeleccionado = ref({
 });
 const isEditing = ref(false);
 const dataEntCalor = ref({
-    cantSeries: 0,
-    duracion: 0,
-    typeDuracion: '',
-    descanso: 0,
-    typeDescanso: ''
+    cantSeries: 1,
+    duracion: 10,
+    typeDuracion: 'segundos',
+    descanso: 10,
+    typeDescanso: 'segundos'
 })
 const dataPrincipal = ref([])
 const dataEnf = ref({
-    cantSeries: 0,
-    duracion: 0,
-    typeDuracion: '',
-    descanso: 0,
-    typeDescanso: ''
+    cantSeries: 1,
+    duracion: 10,
+    typeDuracion: 'segundos',
+    descanso: 10,
+    typeDescanso: 'segundos'
 })
 const repCicloEntCalor = ref(1)
 const repCicloPrincipal = ref([])
 const repCicloEnfriamiento = ref(1)
+const loading = ref(false)
 
 provide('selectedExercise', ejercicioSeleccionado);
 
@@ -525,28 +575,95 @@ onBeforeMount(async () => {
         if (!dataPrincipal.value[1])
             dataPrincipal.value[1] = []
         dataPrincipal.value[1].push({
-            cantSeries: 0,
-            duracion: 0,
-            typeDuracion: '',
-            descanso: 0,
-            typeDescanso: ''
+            cantSeries: 1,
+            duracion: 10,
+            typeDuracion: 'segundos',
+            descanso: 10,
+            typeDescanso: 'segundos'
         })
         repCicloPrincipal.value[1] = 1
     }
 });
 
-function agregarEjercicio() {
+function addRoutine() {
+    loading.value = true
+    //primero tengo que agregar los ciclos con los ejercicios que se han elegido
+
+    loading.value = false
+}
+
+async function agregarEjercicio() {
     if (ejercicioSeleccionado.value.name === '' || ejercicioSeleccionado.value.detail === '' || ejercicioSeleccionado.value.url === '') {
-        alert('Debe seleccionar un ejercicio o crear uno nuevo')
+        await showErrorAlert2('Debe seleccionar un ejercicio o crear uno nuevo')
     } else {
         if (type.value === 1) {
+            if(dataEntCalor.value.cantSeries === 0){
+                await showErrorAlert2('La cantidad de series no puede ser 0')
+                return;
+            }
+            if(dataEntCalor.value.duracion === 0){
+                await showErrorAlert2('La duración no puede ser 0')
+                return;
+            }
+            if(dataEntCalor.value.descanso === 0){
+                await showErrorAlert2('El tiempo de descanso no puede ser 0')
+                return;
+            }
+            if(dataEntCalor.value.typeDuracion === ''){
+                await showErrorAlert2('Debe seleccionar un tipo de duración')
+                return;
+            }
+            if(dataEntCalor.value.typeDescanso === ''){
+                await showErrorAlert2('Debe seleccionar un tipo de descanso')
+                return;
+            }
             ejEntCalor.value.push(ejercicioSeleccionado);
         } else if (type.value === 2) {
+            if(dataPrincipal[cicloSeleccionado.value].cantSeries === 0){
+                await showErrorAlert2('La cantidad de series no puede ser 0')
+                return;
+            }
+            if(dataPrincipal[cicloSeleccionado.value].duracion === 0){
+                await showErrorAlert2('La duración no puede ser 0')
+                return;
+            }
+            if(dataPrincipal[cicloSeleccionado.value].descanso === 0){
+                await showErrorAlert2('El tiempo de descanso no puede ser 0')
+                return;
+            }
+            if(dataPrincipal[cicloSeleccionado.value].typeDuracion === ''){
+                await showErrorAlert2('Debe seleccionar un tipo de duración')
+                return;
+            }
+            if(dataPrincipal[cicloSeleccionado.value].typeDescanso === ''){
+                await showErrorAlert2('Debe seleccionar un tipo de descanso')
+                return;
+            }
             if (ejPrincipal.value[cicloSeleccionado.value] == null)
                 ejPrincipal.value[cicloSeleccionado.value] = []
             ejPrincipal.value[cicloSeleccionado.value].push(ejercicioSeleccionado.value);
             console.log(ejPrincipal.value)
         } else if (type.value === 3) {
+            if(dataEnf.cantSeries === 0){
+                await showErrorAlert2('La cantidad de series no puede ser 0')
+                return;
+            }
+            if(dataEnf.duracion === 0){
+                await showErrorAlert2('La duración no puede ser 0')
+                return;
+            }
+            if(dataEnf.descanso === 0){
+                await showErrorAlert2('El tiempo de descanso no puede ser 0')
+                return;
+            }
+            if(dataEnf.typeDuracion === ''){
+                await showErrorAlert2('Debe seleccionar un tipo de duración')
+                return;
+            }
+            if(dataEnf.typeDescanso === ''){
+                await showErrorAlert2('Debe seleccionar un tipo de descanso')
+                return;
+            }
             ejEnfriamiento.value.push(ejercicioSeleccionado);
         }
     }
@@ -586,6 +703,7 @@ async function saveExercise() {
 }
 
 async function openFinishDialog() {
+    /* todo borrar el comentario, esta comentado para que no moleste mientras se trabaja en la rutina
     if (ejEntCalor.value.length === 0) {
         await showErrorAlert('La rutina debe tener al menos un ejercicio en la entrada en calor')
         return;
@@ -603,6 +721,7 @@ async function openFinishDialog() {
             return;
         }
     }
+     */
     finishRoutine.value = true
 }
 
@@ -617,11 +736,11 @@ function addCycle() {
     if (!dataPrincipal.value[cicloSeleccionado.value])
         dataPrincipal.value[cicloSeleccionado.value] = []
     dataPrincipal.value[cicloSeleccionado.value].push({
-        cantSeries: 0,
-        duracion: 0,
-        typeDuracion: '',
-        descanso: 0,
-        typeDescanso: ''
+        cantSeries: 1,
+        duracion: 10,
+        typeDuracion: 'segundos',
+        descanso: 10,
+        typeDescanso: 'segundos'
     })
     cantCiclosPrincipal.value.push(ciclosPrincipal.value.length + 1)
 }

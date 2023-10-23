@@ -149,8 +149,10 @@ async function openModal() {
 
         for (const exercise of exercises.value) {
             const array = await exerciseStore.getExerciseImages(exercise.id);
-            if (array.success)
-                exercise.img = array.data.content[0].url;
+            if (array.success){
+                if(array.data.content.length > 0 && array.data.content[0].url)
+                    exercise.img = array.data.content[0].url;
+            }
         }
     }
     showModal.value = true;
