@@ -640,7 +640,6 @@ onBeforeMount(async () => {
 async function addRoutine() {
     loading.value = true
     if (!route.params.id) {
-        debugger
         const rout = {
             name: routine.value.name,
             detail: routine.value.description,
@@ -753,6 +752,24 @@ async function addRoutine() {
             finishRoutine.value = false
             await router.push({name: 'my-routines'})
         }
+    }
+    else{
+        // en este caso estoy editando una rutina
+        // primero tengo que borrar los ciclos de la rutina
+        // luego agregar los ciclos a la rutina
+        // luego agregar los ejercicios a los ciclos
+
+        // primero edito la rutina
+        const rout = {
+            name: routine.value.name,
+            detail: routine.value.description,
+            isPublic: routine.value.isPublic ? true : false,
+            difficulty: routine.value.difficulty,
+            metadata: {
+                image: routine.value.img
+            }
+        }
+        const result = await routineStore.changeRoutine(rout)
     }
     loading.value = false
 }

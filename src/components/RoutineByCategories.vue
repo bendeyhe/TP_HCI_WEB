@@ -22,7 +22,7 @@
             >
                 <v-card
                     :loading="loading"
-                    class="mx-auto my-12"
+                    class="mx-4 my-12"
                     width="280"
                     height="400"
                 >
@@ -152,7 +152,7 @@ async function getRoutines() {
                     fav: routine.metadata?.fav,
                     date: routine.date,
                 });
-                if (dif.value === 'facil' && routine.difficulty === 'rookie') {
+                if (dif.value === 'facil' && (routine.difficulty === 'rookie' || routine.difficulty === 'beginner')) {
                     routineStore.addEasyRoutine({
                         id: routine.id,
                         name: routine.name,
@@ -179,7 +179,7 @@ async function getRoutines() {
                         date: routine.date,
                     });
                 } else {
-                    if (routine.difficulty === 'beginner' || routine.difficulty === 'intermediate' || routine.difficulty === 'advanced') {
+                    if (routine.difficulty === 'intermediate' || routine.difficulty === 'advanced') {
                         routineStore.addMediumRoutine({
                             id: routine.id,
                             name: routine.name,
