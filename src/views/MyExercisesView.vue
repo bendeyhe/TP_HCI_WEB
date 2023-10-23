@@ -72,7 +72,7 @@
 
 
     <v-row class="width">
-        <v-col cols="4" v-for="exercise in myExercises">
+        <v-col cols="3" v-for="exercise in myExercises">
             <ExerciseDetail :exercise="exercise" :myExercises="myExercises" :myPage="true" />
             <!--
             <v-card>
