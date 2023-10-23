@@ -1,8 +1,63 @@
 <template>
     <h1 v-if="typeRout === 'fav'">Rutinas Favoritas</h1>
     <h1 v-if="typeRout === 'myRouts'">Mis Rutinas</h1>
-    <h1 v-if="typeRout === 'All'">Todas las Rutinas</h1>
+
+
+    <div v-if="typeRout === 'All'">
+        <v-carousel cycle show-arrows="hover" hide-delimiter-background v-if="!loading">
+            <v-carousel-item
+                v-for="routine in topRoutines?.values()"
+                :src="routine.metadata.image"
+                cover
+            >
+                <div class="nombre-rutina">
+                    {{ routine.name }}
+                </div>
+                <div class="detalles-rutina">
+                    Creador: {{ routine.user.username }} <br>
+                    Dificultad: {{ routine.difficulty }}
+                </div>
+                <div class="boton-rutina">
+                    <v-btn class="boton" @click="verDetalle(routine)"> Ver Detalle</v-btn>
+                </div>
+            </v-carousel-item>
+        </v-carousel>
+
+        <div class="d-flex align-center flex-column pa-6">
+            <v-btn-toggle
+                v-model="toggle"
+                divided
+                variant="outlined"
+            >
+
+                <RouterLink to="/">
+                    <v-tooltip
+                        :location="location"
+                        :origin="origin"
+                        no-click-animation>
+                        <template v-slot:activator="{ props }">
+                            <v-btn v-bind="props" icon="mdi-view-headline" class="boton-lista"></v-btn>
+                        </template>
+                        <div> Ver rutinas según su dificultad </div>
+                    </v-tooltip>
+                </RouterLink>
+
+                <RouterLink to="/all-routines">
+                    <v-tooltip
+                        :location="location"
+                        :origin="origin"
+                        no-click-animation>
+                        <template v-slot:activator="{ props }">
+                            <v-btn v-bind="props" icon="mdi-view-grid" class="boton-cuadricula"></v-btn>
+                        </template>
+                        <div> Ver todas las rutinas </div>
+                    </v-tooltip>
+                </RouterLink>
+            </v-btn-toggle>
+        </div>
+    </div>
     <div v-if="visibleRoutines.length > 0">
+        <h1 v-if="typeRout === 'All'">Todas las Rutinas</h1>
         <v-row class="width">
             <v-col cols="4" v-for="(routine, index) in visibleRoutines"
                    :key="routine.index"
@@ -65,9 +120,9 @@
                             </RouterLink>
                             <v-spacer></v-spacer>
                             <v-btn v-if="typeRout.value === 'myRouts'"
-                                icon="mdi-trash-can-outline"
-                                @click="deleteRout(routine)"
-                                class="red-hover"
+                                   icon="mdi-trash-can-outline"
+                                   @click="deleteRout(routine)"
+                                   class="red-hover"
                             ></v-btn>
                         </v-card-actions>
                     </div>
@@ -99,11 +154,11 @@
     </div>
     <div v-else>
         <div v-if="typeRout === 'fav'" class="flex-container">
-            <h2>Parece que no has likeado ninguna rutina todavía. Estoy seguro que ya encontrarás una que te encante!
-                ʕ•ᴥ•ʔ</h2>
+            <h2>No tienes ninguna rutina en favoritos.
+            </h2>
         </div>
         <div v-else-if="typeRout === 'MyRouts'" class="flex-container">
-            <h2>Todavía no creaste ninguna rutina. Es hora de que empieces a hacer tus rutinas! ʕ•ᴥ•ʔ</h2>
+            <h2>Todavía no creaste ninguna rutina.</h2>
         </div>
         <div v-else class="flex-container">
             <h2>No se han encontrado resultados</h2>
@@ -127,6 +182,7 @@ const amountPages = ref(1);
 const loading = ref(false);
 const routineStore = useRoutineStore();
 const userStore = useUserStore();
+const topRoutines = ref([]);
 
 const props = defineProps({
     typeRout: {
@@ -139,7 +195,7 @@ const props = defineProps({
     },
 });
 
-const { typeRout, query } = toRefs(props);
+const {typeRout, query} = toRefs(props);
 
 async function getFavs() {
     loading.value = true;
@@ -197,40 +253,45 @@ async function getMyRoutines() {
 }
 
 async function getRoutines() {
-    debugger
-    loading.value = true;
-    const result = await routineStore.getRoutines();
-    if(query.value === undefined || query.value === null)
-        query.value = "";
-    routineStore.clearRoutineArray();
-    if (result.success && result.data.content) {
-        for (let i = 0; i < result.data.content.length; i++) {
-            const routine = result.data.content[i];
-            if (routine && routine.name) {
-                const routineNameLower = routine.name.toLowerCase();
-                const queryLower = query.value.toLowerCase();
-                if(routineNameLower.includes(queryLower)){
-                    routineStore.addRoutineArray({
-                        id: routine.id,
-                        name: routine.name,
-                        img: routine.metadata.image,
-                        category: routine.category,
-                        description: routine.detail,
-                        creator: routine.user,
-                        difficulty: routine.difficulty,
-                        isPublic: routine.isPublic,
-                        fav: routine.metadata.fav,
-                        date: routine.date,
-                        score: routine.metadata.score,
-                    });
+    try {
+
+
+        loading.value = true;
+        const result = await routineStore.getRoutines();
+        if (query.value === undefined || query.value === null)
+            query.value = "";
+        routineStore.clearRoutineArray();
+        if (result.success && result.data.content) {
+            for (let i = 0; i < result.data.content.length; i++) {
+                const routine = result.data.content[i];
+                if (routine && routine.name) {
+                    const routineNameLower = routine.name.toLowerCase();
+                    const queryLower = query.value.toLowerCase();
+                    if (routineNameLower.includes(queryLower)) {
+                        routineStore.addRoutineArray({
+                            id: routine.id,
+                            name: routine.name,
+                            img: routine.metadata.image,
+                            category: routine.category,
+                            description: routine.detail,
+                            creator: routine.user,
+                            difficulty: routine.difficulty,
+                            isPublic: routine.isPublic,
+                            fav: routine.metadata.fav,
+                            date: routine.date,
+                            score: routine.metadata.score,
+                        });
+                    }
                 }
             }
         }
+        loading.value = false;
+    } catch (e) {
+        debugger;
     }
-    loading.value = false;
 }
 
-async function getAllRoutines(){
+async function getAllRoutines() {
     loading.value = true;
     const result = await routineStore.getRoutines();
     if (result.success && result.data.content) {
@@ -288,8 +349,7 @@ async function updateVisibleRoutines() {
         if (visibleRoutines.value.length === 0 && pageNumber.value > 0)
             updatePage(pageNumber.value - 1)
 
-    }
-    else {
+    } else {
         await getRoutines();
         visibleRoutines.value = Array.from(routineStore.getAllRoutines()).slice(
             (pageNumber.value - 1) * pageSize.value,
@@ -318,7 +378,7 @@ async function editRoutine(routine) {
 
 async function deleteRout(routine) {
     const result = await routineStore.deleteRoutine(routine.id);
-    if (result.success){
+    if (result.success) {
         routineStore.removeMyRoutine(routine);
         routineStore.removeRoutines(routine)
         await updateVisibleRoutines()
@@ -346,11 +406,62 @@ function inputPage(number) {
     updateVisibleRoutines();
 }
 
-onBeforeMount(() => {
-    if(typeRout.value !== "fav" && typeRout.value !== "myRouts" && typeRout.value !== "All")
+onBeforeMount(async () => {
+    if(typeRout.value === "All"){
+        const result = await routineStore.getRoutines();
+        if (result.success) {
+            for (let i = 0; i < 10; i++) {
+                const routine = result.data.content[i];
+                if (routine && routine.metadata?.image) {
+                    topRoutines.value.push(routine);
+                }
+            }
+        }
+    }
+    if (typeRout.value !== "fav" && typeRout.value !== "myRouts" && typeRout.value !== "All")
         typeRout.value = "Routs";
-    updateVisibleRoutines();
+    await updateVisibleRoutines();
 });
+
+
+import { computed, watch } from 'vue'
+
+const locationSide = ref('top')
+const locationAlign = ref('center')
+const originSide = ref('auto')
+const originAlign = ref('')
+
+const location = computed(() => {
+    return `${locationSide.value} ${locationAlign.value}`
+})
+const origin = computed(() => {
+    return originDisabled.value ? originSide.value : `${originSide.value} ${originAlign.value}`
+})
+const code = computed(() => {
+    return `<v-tooltip location="${location.value}" origin="${origin.value}" />`
+})
+const originDisabled = computed(() => {
+    return ['auto', 'overlap'].includes(originSide.value)
+})
+
+watch(locationSide, val => {
+    if (['top', 'bottom'].includes(val)) {
+        locationAlign.value = {
+            top: 'start',
+            bottom: 'end',
+        }[locationAlign.value] || locationAlign.value
+    } else {
+        locationAlign.value = {
+            start: 'top',
+            end: 'bottom',
+        }[locationAlign.value] || locationAlign.value
+    }
+})
+watch(originDisabled, val => {
+    if (!val && !originAlign.value) {
+        originAlign.value = 'center'
+    }
+})
 </script>
 
 <style scoped>
@@ -437,6 +548,51 @@ h1 {
 
 .red-hover:hover {
     background-color: rgba(255, 0, 0, 0.4);
+}
+
+.nombre-rutina {
+    position: absolute;
+    top: 20px; /* Ajusta la posición vertical según tus necesidades */
+    left: 20px; /* Ajusta la posición horizontal según tus necesidades */
+    color: white; /* Color del texto */
+    font-size: 45px; /* Tamaño de la fuente del texto */
+    font-weight: bolder;
+    font-family: Montserrat, sans-serif;
+    padding: 10px; /* Espaciado interior del texto */
+    background-color: black;
+    border-radius: 5px;
+}
+
+.detalles-rutina {
+    position: absolute;
+    bottom: 20px; /* Ajusta la posición vertical según tus necesidades */
+    left: 20px; /* Ajusta la posición horizontal según tus necesidades */
+    color: white; /* Color del texto */
+    font-size: 20px; /* Tamaño de la fuente del texto */
+    font-family: Montserrat, sans-serif;
+    padding: 10px; /* Espaciado interior del texto */
+    background-color: black;
+    border-radius: 5px;
+}
+
+
+.detalle-rutina {
+    color: white; /* Color del texto */
+    font-size: 20px; /* Tamaño de la fuente del texto */
+    font-family: Montserrat, sans-serif;
+    background-color: black;
+}
+
+.boton-rutina {
+    position: absolute;
+    bottom: 30px; /* Ajusta la posición vertical según tus necesidades */
+    right: 25px; /* Ajusta la posición horizontal según tus necesidades */
+
+}
+
+.boton {
+    background-color: #8efd00;
+    color: #000000;
 }
 
 </style>
