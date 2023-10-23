@@ -1,10 +1,33 @@
 <template>
-    <img :src="getImageUrl('unauthorized.jpg')" alt="Unauthorized" class="image" />
-    <RouterLink to="/">
-        <v-btn>Volver a TooBIG</v-btn>
-    </RouterLink>
+    <div class="center-container">
+        <div class="image-container">
+            <img :src="getImageUrl('unauthorized.jpg')" alt="Unauthorized" class="image" />
+        </div>
+        <RouterLink to="/">
+            <v-btn class="center-button">Volver a TooBIG</v-btn>
+        </RouterLink>
+    </div>
 </template>
 
+<style>
+.center-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+
+.image-container {
+    max-width: 100%;
+}
+
+
+.center-button {
+    margin-top: 5px;
+}
+</style>
 <script setup>
 import Unauthorized from "@/assets/training.jpg";
 
