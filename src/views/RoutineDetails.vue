@@ -115,9 +115,10 @@
     <RoutineByCategories nombreRutina="Dificultad Media" :favourite="false" dif="medio"/>
     <RoutineByCategories nombreRutina="Dificultad Difícil" :favourite="false" dif="dificil"/>
     <RoutineByCategories nombreRutina="Favoritas" :favourite="true" dif="todas"/>
-    <RoutineByCategories nombreRutina="Otras" :favourite="false" dif="todas"/>
+    <br>
+    <br>
 
-    <FooterComponent/>
+
 
     <v-dialog v-model="showShareDialog" max-width="400">
         <v-card>
@@ -135,6 +136,8 @@
             </v-card-actions>
         </v-card>
     </v-dialog>
+
+    <FooterComponent/>
 </template>
 
 
