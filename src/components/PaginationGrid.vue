@@ -173,7 +173,7 @@
             </div>
         </div>
     </div>
-    <div v-else>
+    <div v-else class="centered-content">
         <v-progress-circular
             color="primary"
             indeterminate
