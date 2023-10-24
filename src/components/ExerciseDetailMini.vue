@@ -90,6 +90,18 @@ function moveLeft(){
     }
 }
 
+function deleteEx() {
+    let index;
+    for (let i = 0; i < ejArray.value.length; i++) {
+        if (ejArray.value[i].id === exercise.value.id) {
+            index = i;
+        }
+    }
+    if (index !== undefined){
+        ejArray.value.splice(index, 1);
+    }
+}
+
 function moveRight() {
     debugger;
     let index;
