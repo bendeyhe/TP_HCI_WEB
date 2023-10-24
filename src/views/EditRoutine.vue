@@ -1017,7 +1017,7 @@ async function agregarEjercicio() {
             }
 
             for (let i = 0; i < ejPrincipal.value[cicloSeleccionado.value]?.length; i++) {
-                if (ejPrincipal.value[cicloSeleccionado.value][i].id === ejercicioSeleccionado.value.id) {
+                if (ejPrincipal.value[cicloSeleccionado.value][i].name === ejercicioSeleccionado.value.name ) {
                     await showErrorAlert2('El ejercicio ya está en la lista, elija otro')
                     return;
                 }
@@ -1056,7 +1056,7 @@ async function agregarEjercicio() {
             }
 
             for (let i = 0; i < ejEnfriamiento.value.length; i++) {
-                if (ejEnfriamiento.value[i].id === ejercicioSeleccionado.value.id) {
+                if (ejEnfriamiento.value[i].name === ejercicioSeleccionado.value.name) {
                     await showErrorAlert2('El ejercicio ya está en la lista, elija otro')
                     return;
                 }
