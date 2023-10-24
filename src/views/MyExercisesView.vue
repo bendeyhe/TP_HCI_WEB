@@ -33,7 +33,6 @@
                             ></v-text-field>
                             <v-autocomplete density="compact" variant="outlined" label="Tipo" v-model="type"
                                             :items="['Ejercicio', 'Descanso']" default="Ejercicio"></v-autocomplete>
-
                             <v-text-field
                                 label="Imagen"
                                 v-model="newEjercicio.url"
@@ -53,11 +52,8 @@
                                 :text=errorMessage
                             ></v-alert>
                         </v-card-text>
-
-
                         <v-card-actions>
                             <v-spacer></v-spacer>
-
                             <v-btn
                                 text="cancelar"
                                 class="cancelar"

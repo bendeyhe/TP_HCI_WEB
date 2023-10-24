@@ -404,6 +404,7 @@ import {useRoutineStore} from "@/stores/routineStore";
 import {useCycleStore} from "@/stores/cycleStore";
 import {useUserStore} from "@/stores/userStore";
 import router from "@/router";
+import {useCategoryStore} from "@/stores/categoryStore";
 
 const successAlert = ref(false)
 const errorAlert = ref(false)
@@ -465,6 +466,7 @@ const myExercises = ref([])
 const userStore = useUserStore()
 const exerciseStore = useExerciseStore()
 const routineStore = useRoutineStore()
+const categoryStore = useCategoryStore()
 const cycleStore = useCycleStore()
 const routine = ref({});
 const type = ref(1);
@@ -730,6 +732,23 @@ function diffToSpanish(dif) {
 async function addRoutine() {
     loading.value = true
     if (!route.params.id) {
+        const resultCat = await categoryStore.getCategories()
+        if (resultCat.success) {
+            if (resultCat.data.totalCount === 0) {
+                const cat = {
+                    name: 'cat 1',
+                    detail: 'cat 1'
+                }
+                const result2 = await categoryStore.addCategory(cat)
+                if (!result2.success) {
+                    await showErrorAlert('Error al agregar categoria')
+                    return;
+                }
+            }
+        } else{
+            await showErrorAlert('Error al obtener categorias')
+            return;
+        }
         const rout = {
             name: routine.value.name,
             detail: routine.value.description,
