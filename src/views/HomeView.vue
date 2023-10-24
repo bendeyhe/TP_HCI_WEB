@@ -1,5 +1,5 @@
 <template>
-  <div class="gg">
+  <div >
     <v-app id="inspire">
 
       <v-carousel cycle show-arrows="hover" hide-delimiter-background v-if="!loading" height="400px">
@@ -212,10 +212,6 @@ export default {
 
 }
 
-.gg {
-  margin-bottom: 100px;
-  margin-bottom: 100px;
-}
 
 .boton {
   background-color: #8efd00;

@@ -78,11 +78,13 @@
                 </template>
             </v-dialog>
         </div>
-        <v-row class="width">
-            <v-col cols="3" v-for="exercise in myExercises">
-                <ExerciseDetail :exercise="exercise" :myExercises="myExercises" :myPage="true"/>
-            </v-col>
-        </v-row>
+        <div class="fondo">
+            <v-row class="width" justify="start">
+                <v-col v-for="exercise in myExercises">
+                    <ExerciseDetail :exercise="exercise" :myExercises="myExercises" :myPage="true"/>
+                </v-col>
+            </v-row>
+        </div>
     </div>
 </template>
 
@@ -265,6 +267,13 @@ h2 {
     background-color: #8efd00;
     color: #000000;
     margin-top: 40px;
+}
+
+.fondo {
+    background-color: lightgray;
+    border-radius: 20px;
+    margin: 30px;
+    padding-right: 20px;
 }
 </style>
 

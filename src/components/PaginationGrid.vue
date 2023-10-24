@@ -57,79 +57,82 @@
         </div>
     </div>
     <div v-if="visibleRoutines.length > 0">
-        <h1 v-if="typeRout === 'All'" class="titulo">Todas las Rutinas</h1>
-        <v-row>
-            <v-col v-for="(routine, index) in visibleRoutines"
-                   :key="routine.index"
-                   v-bind:visibleRoutines="visibleRoutines"
-                   v-bind:pageNumber="pageNumber"
-                   v-bind:routine="routine"
-            >
-                <v-card
-                    :loading="loading"
-                    class="ml-10 my-2"
-                    width="280"
-                    height="400"
+        <div class="fondo">
+            <h1 v-if="typeRout === 'All'" class="titulo">Todas las Rutinas</h1>
+            <v-row justify="start">
+                <v-col v-for="(routine, index) in visibleRoutines"
+                       :key="routine.index"
+                       v-bind:visibleRoutines="visibleRoutines"
+                       v-bind:pageNumber="pageNumber"
+                       v-bind:routine="routine"
+                       sm="6" md="4" lg="3"
                 >
-                    <template v-slot:loader="{ isActive }">
-                        <v-progress-linear
-                            :active="isActive"
-                            height="4"
-                            indeterminate
-                        ></v-progress-linear>
-                    </template>
-                    <div class="cont">
-                        <img
-                            class="image"
-                            :src="routine.img"
-                            alt="Foto de la Rutina"
-                            height="150"
-                        />
+                    <v-card
+                        :loading="loading"
+                        class="ml-10 my-2"
+                        width="280"
+                        height="400"
+                    >
+                        <template v-slot:loader="{ isActive }">
+                            <v-progress-linear
+                                :active="isActive"
+                                height="4"
+                                indeterminate
+                            ></v-progress-linear>
+                        </template>
+                        <div class="cont">
+                            <img
+                                class="image"
+                                :src="routine.img"
+                                alt="Foto de la Rutina"
+                                height="150"
+                            />
 
-                        <v-btn v-if="typeRout === 'fav' || typeRout === 'All'"
-                               class="heart"
-                               :icon="
+                            <v-btn v-if="typeRout === 'fav' || typeRout === 'All'"
+                                   class="heart"
+                                   :icon="
                                 routine.fav ? 'mdi-heart' : 'mdi-heart-outline'
                             "
-                               @click="toggle(routine)"
-                        ></v-btn>
-                        <v-btn v-else
-                               class="heart"
-                               icon="mdi-pencil"
-                               @click="editRoutine(routine)"
-                        ></v-btn>
-                    </div>
-                    <v-card-item>
-                        <v-card-title>{{ routine.name }}</v-card-title>
-                    </v-card-item>
-                    <v-card-text>
-                        <div class="creator my-2 text-subtitle-1">
-                            <v-icon icon="mdi-account"></v-icon>
-                            <div class="creator-text">
-                                • {{ routine.creator.username }}
-                            </div>
-                        </div>
-                        <div class="overflow">{{ routine.description }}</div>
-                    </v-card-text>
-                    <div class="detail">
-
-                        <v-card-actions>
-                            <RouterLink :to="{ name: 'routine-details', params: { id: routine.id } }">
-                                <v-btn>Ver Detalle</v-btn>
-                            </RouterLink>
-                            <v-spacer></v-spacer>
-                            <v-btn v-if="typeRout.value === 'myRouts'"
-                                   icon="mdi-trash-can-outline"
-                                   @click="deleteRout(routine)"
-                                   class="red-hover"
+                                   @click="toggle(routine)"
                             ></v-btn>
-                        </v-card-actions>
-                    </div>
-                </v-card>
-            </v-col>
-        </v-row>
+                            <v-btn v-else
+                                   class="heart"
+                                   icon="mdi-pencil"
+                                   @click="editRoutine(routine)"
+                            ></v-btn>
+                        </div>
+                        <v-card-item>
+                            <v-card-title>{{ routine.name }}</v-card-title>
+                        </v-card-item>
+                        <v-card-text>
+                            <div class="creator my-2 text-subtitle-1">
+                                <v-icon icon="mdi-account"></v-icon>
+                                <div class="creator-text">
+                                    • {{ routine.creator.username }}
+                                </div>
+                            </div>
+                            <div class="overflow">{{ routine.description }}</div>
+                        </v-card-text>
+                        <div class="detail">
+
+                            <v-card-actions>
+                                <RouterLink :to="{ name: 'routine-details', params: { id: routine.id } }">
+                                    <v-btn>Ver Detalle</v-btn>
+                                </RouterLink>
+                                <v-spacer></v-spacer>
+                                <v-btn v-if="typeRout.value === 'myRouts'"
+                                       icon="mdi-trash-can-outline"
+                                       @click="deleteRout(routine)"
+                                       class="red-hover"
+                                ></v-btn>
+                            </v-card-actions>
+                        </div>
+                    </v-card>
+                </v-col>
+            </v-row>
+        </div>
         <v-spacer></v-spacer>
-        <div >
+        <div>
             <v-pagination v-if="amountPages > 1"
                           v-model="pageNumber"
                           :length="amountPages"
@@ -143,7 +146,7 @@
                     </v-btn>
                 </template>
                 <template v-slot:next>
-                    <v-btn class ="flecha" @click="nextPage" :disabled="pageNumber === amountPages  ">
+                    <v-btn class="flecha" @click="nextPage" :disabled="pageNumber === amountPages  ">
                         <v-icon>mdi-chevron-right</v-icon>
                     </v-btn>
                 </template>
@@ -154,7 +157,7 @@
     <div v-else-if="!loading2">
         <div class="image-container">
             <div class="centered-content">
-                <img :src="getImageUrl('NoFavsImg.jpg')" alt="No tienes ninguna rutina en favoritos." class="image2" />
+                <img :src="getImageUrl('NoFavsImg.jpg')" alt="No tienes ninguna rutina en favoritos." class="image2"/>
                 <div v-if="typeRout === 'fav'" class="flex-container">
                     <h2>No tienes ninguna rutina en favoritos.</h2>
                 </div>
@@ -170,6 +173,13 @@
             </div>
         </div>
     </div>
+    <div v-else>
+        <v-progress-circular
+            color="primary"
+            indeterminate
+            size="100"
+        ></v-progress-circular>
+    </div>
 </template>
 
 
@@ -183,7 +193,7 @@ import {useRoute} from "vue-router";
 
 const page = ref(1);
 const pageNumber = ref(1);
-const pageSize = ref(8);
+const pageSize = ref(9);
 const visibleRoutines = ref([]);
 const routineArray = ref([]);
 const amountPages = ref(1);
@@ -467,12 +477,16 @@ watch(originDisabled, val => {
     }
 })
 
-function getImageUrl(name){
+function getImageUrl(name) {
     return new URL(`../assets/${name}`, import.meta.url).href
 }
+
 const route = useRoute()
 
-watch(() => route.params.query, (newQuery) => {query.value = newQuery; updateVisibleRoutines()})
+watch(() => route.params.query, (newQuery) => {
+    query.value = newQuery;
+    updateVisibleRoutines()
+})
 
 </script>
 
@@ -617,6 +631,7 @@ h1 {
 .image-container {
     max-width: 100%;
 }
+
 .centered-content {
     display: flex;
     flex-direction: column;
@@ -628,9 +643,16 @@ h1 {
 .center-button {
     color: #000000;
     background-color: #8efd00;
-    margin-right : 10px;
-    margin-left : 10px;
-    margin-top : 10px;
+    margin-right: 10px;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+.fondo {
+    background-color: lightgray;
+    border-radius: 20px;
+    margin: 30px;
+    padding-right: 20px;
 }
 
 </style>

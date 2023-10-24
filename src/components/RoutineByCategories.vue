@@ -282,7 +282,11 @@ async function toggle(routine) {
 }
 
 .probando {
-    background-color: rgba(128, 128, 128, 0.30);
+    background-color: lightgray;
+    padding-right: 20px;
+    padding-left: 20px;
+    margin: 30px;
+    border-radius:25px;
 }
 
 </style>
