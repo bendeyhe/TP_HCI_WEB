@@ -117,6 +117,8 @@
                                                     <v-text-field
                                                         label="Imagen"
                                                         v-model="newEjercicio.url"
+                                                        maxlength="200"
+                                                        counter
                                                         variant="outlined"
                                                     ></v-text-field>
                                                 </v-card-text>
@@ -715,8 +717,9 @@ async function addRoutine() {
                     if (ejEntCalor.value.length > 0) {
                         for (let i = 0; i < ejEntCalor.value.length; i++) {
                             const repeticiones = (dataEntCalor.value.typeDuracion === 'repeticiones' ? dataEntCalor.value.duracion : 0)
+                            const repInt = parseInt(repeticiones.value)
                             const duracion = (repeticiones === 0 ? (dataEntCalor.value.typeDuracion === 'segundos' ? dataEntCalor.value.duracion : dataEntCalor.value.duracion * 60) : 0)
-                            const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejEntCalor.value[i].id, i + 1, duracion, repeticiones)
+                            const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejEntCalor.value[i].id, i + 1, duracion, repInt)
                             if (!result2.success) {
                                 await showErrorAlert('Error al agregar ejercicio a ciclo en calor')
                                 return;
@@ -750,8 +753,9 @@ async function addRoutine() {
                         // agregar ejercicios principales
                         for (let j = 0; j < ejPrincipal.value[i + 1]?.length; j++) {
                             const repeticiones = (dataPrincipal.value[i + 1][j + 1].typeDuracion === 'repeticiones' ? dataPrincipal.value[i + 1][j + 1].duracion : 0)
+                            const repInt = parseInt(repeticiones.value)
                             const duracion = (repeticiones === 0 ? (dataPrincipal.value[i + 1][j + 1].typeDuracion === 'segundos' ? dataPrincipal.value[i + 1][j + 1].duracion : dataPrincipal.value[i + 1][j + 1].duracion * 60) : 0)
-                            const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejPrincipal.value[i + 1][j].id, j + 1, duracion, repeticiones)
+                            const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejPrincipal.value[i + 1][j].id, j + 1, duracion, repInt)
                             if (!result2.success) {
                                 await showErrorAlert('Error al agregar ejercicio a ciclo')
                                 return;
@@ -778,8 +782,9 @@ async function addRoutine() {
                     if (ejEnfriamiento.value.length > 0) {
                         for (let i = 0; i < ejEnfriamiento.value.length; i++) {
                             const repeticiones = (dataEnf.value.typeDuracion === 'repeticiones' ? dataEnf.value.duracion : 0)
+                            const repInt = parseInt(repeticiones.value)
                             const duracion = (repeticiones === 0 ? (dataEnf.value.typeDuracion === 'segundos' ? dataEnf.value.duracion : dataEnf.value.duracion * 60) : 0)
-                            const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejEnfriamiento.value[i].id, i + 1, duracion, repeticiones)
+                            const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejEnfriamiento.value[i].id, i + 1, duracion, repInt)
                             if (!result2.success) {
                                 await showErrorAlert('Error al agregar ejercicio a ciclo enfriamiento')
                                 return;
@@ -864,8 +869,9 @@ async function addRoutine() {
                 if (ejEntCalor.value.length > 0) {
                     for (let i = 0; i < ejEntCalor.value.length; i++) {
                         const repeticiones = (dataEntCalor.value.typeDuracion === 'repeticiones' ? dataEntCalor.value.duracion : 0)
+                        const repInt = parseInt(repeticiones.value)
                         const duracion = (repeticiones === 0 ? (dataEntCalor.value.typeDuracion === 'segundos' ? dataEntCalor.value.duracion : dataEntCalor.value.duracion * 60) : 0)
-                        const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejEntCalor.value[i].id, i + 1, duracion, repeticiones)
+                        const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejEntCalor.value[i].id, i + 1, duracion, repInt)
                         if (!result2.success) {
                             await showErrorAlert('Error al agregar ejercicio a ciclo en calor')
                             return;
@@ -899,8 +905,9 @@ async function addRoutine() {
                     // agregar ejercicios principales
                     for (let j = 0; j < ejPrincipal.value[i + 1]?.length; j++) {
                         const repeticiones = (dataPrincipal.value[i + 1][j].typeDuracion === 'repeticiones' ? dataPrincipal.value[i + 1][j].duracion : 0)
+                        const repInt = parseInt(repeticiones.value)
                         const duracion = (repeticiones === 0 ? (dataPrincipal.value[i + 1][j].typeDuracion === 'segundos' ? dataPrincipal.value[i + 1][j].duracion : dataPrincipal.value[i + 1][j].duracion * 60) : 0)
-                        const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejPrincipal.value[i + 1][j].id, j + 1, duracion, repeticiones)
+                        const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejPrincipal.value[i + 1][j].id, j + 1, duracion, repInt)
                         if (!result2.success) {
                             await showErrorAlert('Error al agregar ejercicio a ciclo')
                             return;
@@ -927,8 +934,9 @@ async function addRoutine() {
                 if (ejEnfriamiento.value.length > 0) {
                     for (let i = 0; i < ejEnfriamiento.value.length; i++) {
                         const repeticiones = (dataEnf.value.typeDuracion === 'repeticiones' ? dataEnf.value.duracion : 0)
+                        const repInt = parseInt(repeticiones.value)
                         const duracion = (repeticiones === 0 ? (dataEnf.value.typeDuracion === 'segundos' ? dataEnf.value.duracion : dataEnf.value.duracion * 60) : 0)
-                        const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejEnfriamiento.value[i].id, i + 1, duracion, repeticiones)
+                        const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejEnfriamiento.value[i].id, i + 1, duracion, repInt)
                         if (!result2.success) {
                             await showErrorAlert('Error al agregar ejercicio a ciclo enfriamiento')
                             return;

@@ -196,7 +196,14 @@ function closeModal() {
 }
 
 function selectExercise(exercise) {
-    selectedExercise.value = exercise;
+    selectedExercise.value = {
+        name: exercise.name,
+        detail: exercise.detail,
+        url: exercise.img,
+        type: '',
+        number: 0,
+        index: 0
+    }
     closeModal();
 }
 
