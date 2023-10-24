@@ -50,6 +50,24 @@ export const useRoutineStore = defineStore('routine', {
     }),
 
     actions: {
+        clearRoutines() {
+            this.routines = [];
+        },
+        clearMyRoutines() {
+            this.myRoutines = [];
+        },
+        clearFavoriteRoutines() {
+            this.favoriteRoutines = [];
+        },
+        clearEasyRoutines() {
+            this.easyRoutines = [];
+        },
+        clearMediumRoutines() {
+            this.mediumRoutines = [];
+        },
+        clearDificultRoutines() {
+            this.dificultRoutines = [];
+        },
         getfavoriteRoutines() {
             return this.favoriteRoutines.values();
         },
@@ -72,30 +90,46 @@ export const useRoutineStore = defineStore('routine', {
                 }
             }
             this.favoriteRoutines.push(routine);
+            this.favoriteRoutines.sort( (a, b) => a.date < b.date ? 1 : -1)
         },
         addEasyRoutine(routine) {
+            const user = useUserStore().getUsername();
+            if (routine.creator.username === user) {
+                return;
+                }
             for (let i = 0; i < this.easyRoutines.length; i++) {
                 if (this.easyRoutines[i].id === routine.id) {
                     return;
                 }
             }
             this.easyRoutines.push(routine);
+            this.easyRoutines.sort( (a, b) => a.date < b.date ? 1 : -1)
         },
         addMediumRoutine(routine) {
+            const user = useUserStore().getUsername();
+            if (routine.creator.username === user) {
+                return;
+                }
             for (let i = 0; i < this.mediumRoutines.length; i++) {
                 if (this.mediumRoutines[i].id === routine.id) {
                     return;
                 }
             }
             this.mediumRoutines.push(routine);
+            this.mediumRoutines.sort( (a, b) => a.date < b.date ? 1 : -1)
         },
         addDificultRoutine(routine) {
+            const user = useUserStore().getUsername();
+            if (routine.creator.username === user) {
+                return;
+                }
             for (let i = 0; i < this.dificultRoutines.length; i++) {
                 if (this.dificultRoutines[i].id === routine.id) {
                     return;
                 }
             }
             this.dificultRoutines.push(routine);
+            this.dificultRoutines.sort( (a, b) => a.date < b.date ? 1 : -1)
         },
         clearRoutineArray(){
             this.routines = [];
@@ -107,6 +141,7 @@ export const useRoutineStore = defineStore('routine', {
                 }
             }
             this.myRoutines.push(routine);
+            this.myRoutines.sort( (a, b) => a.date < b.date ? 1 : -1)
         },
         getAllRoutines() {
             return this.routines.values();
@@ -118,6 +153,7 @@ export const useRoutineStore = defineStore('routine', {
                 }
             }
             this.routines.push(routine);
+            this.routines.sort( (a, b) => a.date < b.date ? 1 : -1)
         },
         removeFavoriteRoutine(routine) {
             const index = this.favoriteRoutines.findIndex(r => r.id === routine.id);

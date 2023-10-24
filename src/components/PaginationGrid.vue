@@ -191,9 +191,10 @@ import {useUserStore} from "@/stores/userStore";
 import router from "@/router";
 import {useRoute} from "vue-router";
 
+
 const page = ref(1);
 const pageNumber = ref(1);
-const pageSize = ref(9);
+const pageSize = ref(8);
 const visibleRoutines = ref([]);
 const routineArray = ref([]);
 const amountPages = ref(1);
@@ -218,6 +219,7 @@ const {typeRout, query} = toRefs(props);
 
 async function getFavs() {
     loading.value = true;
+    routineStore.clearFavoriteRoutines();
     const result = await routineStore.getRoutines();
     if (result.success && result.data.content) {
         for (let i = 0; i < result.data.totalCount; i++) {
@@ -244,6 +246,7 @@ async function getFavs() {
 
 async function getMyRoutines() {
     loading.value = true;
+    routineStore.clearMyRoutines();
     let result = await userStore.getCurrentUser();
     if (result.success) {
         const user = result.data;
@@ -305,11 +308,13 @@ async function getRoutines() {
 
 async function getAllRoutines() {
     loading.value = true;
+    const user = await userStore.getUsername();
+    routineStore.clearRoutines();
     const result = await routineStore.getRoutines();
     if (result.success && result.data.content) {
         for (let i = 0; i < result.data.totalCount; i++) {
             const routine = result.data.content[i];
-            if (routine && routine.name) {
+            if (routine && routine.name && routine.user.username !== user) {
                 routineStore.addRoutineArray({
                     id: routine.id,
                     name: routine.name,
