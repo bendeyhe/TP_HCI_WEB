@@ -9,25 +9,6 @@
     </div>
 </template>
 
-<style>
-.center-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-
-
-.image-container {
-    max-width: 100%;
-}
-
-
-.center-button {
-    margin-top: 5px;
-}
-</style>
 <script setup>
 import Unauthorized from "@/assets/training.jpg";
 
@@ -47,5 +28,23 @@ function getImageUrl(name){
 .image {
     width: 500px;
     height: auto;
+}
+
+.center-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+
+.image-container {
+    max-width: 100%;
+}
+
+
+.center-button {
+    margin-top: 5px;
 }
 </style>

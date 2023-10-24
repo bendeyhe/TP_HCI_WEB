@@ -152,18 +152,26 @@
         </div>
     </div>
     <div v-else>
-        <div v-if="typeRout === 'fav'" class="flex-container">
-            <h2>No tienes ninguna rutina en favoritos.
-            </h2>
-        </div>
-        <div v-else-if="typeRout === 'MyRouts'" class="flex-container">
-            <h2>Todavía no creaste ninguna rutina.</h2>
-        </div>
-        <div v-else class="flex-container">
-            <h2>No se han encontrado resultados</h2>
+        <div class="image-container">
+            <div class="centered-content">
+                <img :src="getImageUrl('NoFavsImg.jpg')" alt="No tienes ninguna rutina en favoritos." class="image" />
+                <div v-if="typeRout === 'fav'" class="flex-container">
+                    <h2>No tienes ninguna rutina en favoritos.</h2>
+                </div>
+                <div v-else-if="typeRout === 'MyRouts'" class="flex-container">
+                    <h2>Todavía no creaste ninguna rutina.</h2>
+                </div>
+                <div v-else class="flex-container">
+                    <h2>No se han encontrado resultados</h2>
+                </div>
+                <RouterLink to="/">
+                    <v-btn class="center-button">Volver</v-btn>
+                </RouterLink>
+            </div>
         </div>
     </div>
 </template>
+
 
 <script setup>
 
@@ -454,6 +462,10 @@ watch(originDisabled, val => {
         originAlign.value = 'center'
     }
 })
+
+function getImageUrl(name){
+    return new URL(`../assets/${name}`, import.meta.url).href
+}
 </script>
 
 <style scoped>
@@ -587,6 +599,30 @@ h1 {
 
 .flecha {
     height: 50px;
+}
+
+.image {
+    width: 500px;
+    height: auto;
+}
+
+.image-container {
+    max-width: 100%;
+}
+.centered-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.center-button {
+    color: #000000;
+    background-color: #8efd00;
+    margin-right : 10px;
+    margin-left : 10px;
+    margin-top : 10px;
 }
 
 </style>

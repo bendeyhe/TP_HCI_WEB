@@ -1,6 +1,6 @@
 <template>
     <span class="go-back">
-        <v-btn @click="goBack" class="btn">Go Back</v-btn>
+        <v-btn @click="goBack" class="btn">Volver</v-btn>
     </span>
 </template>
 
