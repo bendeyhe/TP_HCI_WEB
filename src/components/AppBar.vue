@@ -20,7 +20,7 @@
                 <v-list-item @click="goTo('/my-profile')">Perfil</v-list-item>
                 <v-list-item @click="goTo('/my-exercises')">Mis ejercicios</v-list-item>
                 <v-list-item @click="goTo('/my-routines')">Mis rutinas</v-list-item>
-                <v-list-item @click="goTo('/favourite')">Favoritos</v-list-item>
+                <v-list-item @click="goTo('/favourite')">Favoritas</v-list-item>
                 <v-list-item @click="logout">Cerrar sesión</v-list-item>
             </v-list>
         </v-menu>
