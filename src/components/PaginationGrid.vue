@@ -67,7 +67,7 @@
             >
                 <v-card
                     :loading="loading"
-                    class="mx-2 my-2"
+                    class="ml-10 my-2"
                     width="280"
                     height="400"
                 >
@@ -103,7 +103,7 @@
                         <v-card-title>{{ routine.name }}</v-card-title>
                     </v-card-item>
                     <v-card-text>
-                        <div class="creator my-4 text-subtitle-1">
+                        <div class="creator my-2 text-subtitle-1">
                             <v-icon icon="mdi-account"></v-icon>
                             <div class="creator-text">
                                 • {{ routine.creator.username }}
@@ -129,7 +129,7 @@
             </v-col>
         </v-row>
         <v-spacer></v-spacer>
-        <div class="pagination-container">
+        <div >
             <v-pagination v-if="amountPages > 1"
                           v-model="pageNumber"
                           :length="amountPages"
@@ -138,12 +138,12 @@
                           color="secondary"
                           class="mx-auto pagination mx-auto">
                 <template v-slot:prev>
-                    <v-btn @click="previousPage" :disabled="pageNumber === 1">
+                    <v-btn class="flecha" @click="previousPage" :disabled="pageNumber === 1">
                         <v-icon>mdi-chevron-left</v-icon>
                     </v-btn>
                 </template>
                 <template v-slot:next>
-                    <v-btn @click="nextPage" :disabled="pageNumber === amountPages  ">
+                    <v-btn class ="flecha" @click="nextPage" :disabled="pageNumber === amountPages  ">
                         <v-icon>mdi-chevron-right</v-icon>
                     </v-btn>
                 </template>
@@ -174,7 +174,7 @@ import router from "@/router";
 
 const page = ref(1);
 const pageNumber = ref(1);
-const pageSize = ref(9);
+const pageSize = ref(8);
 const visibleRoutines = ref([]);
 const routineArray = ref([]);
 const amountPages = ref(1);
@@ -522,10 +522,6 @@ h1 {
     max-width: 200px;
 }
 
-.pagination-container {
-    display: flex;
-    justify-content: center;
-}
 
 .pagination {
     justify-content: center;
@@ -587,6 +583,10 @@ h1 {
 .boton {
     background-color: #8efd00;
     color: #000000;
+}
+
+.flecha {
+    height: 50px;
 }
 
 </style>

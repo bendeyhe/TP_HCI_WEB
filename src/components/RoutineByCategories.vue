@@ -21,7 +21,7 @@
             >
                 <v-card
                     :loading="loading"
-                    class="mx-4 my-6"
+                    class="ml-10 my-6"
                     width="280"
                     height="400"
                 >
