@@ -44,7 +44,7 @@ export const useExerciseStore = defineStore('exercise', {
                     return;
                 }
             }
-            this.exercises.push(exercise);
+            this.exercisesSearch.push(exercise);
         },
         async getExercises() {
             return await makeApiCall(this.apiEndpoints.getExercises, null, useUserStore().token);

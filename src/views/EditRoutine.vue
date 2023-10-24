@@ -85,9 +85,9 @@
                             <v-row>
                                 <v-col>
                                     <SearchBarExercise @exercise-selected="ejercicioSeleccionado" :is-rest="true"
-                                                       v-if="n===3"/>
+                                                       :exercises-to-search="exercisesSearch" v-if="n===3"/>
                                     <SearchBarExercise @exercise-selected="ejercicioSeleccionado" :is-rest="false"
-                                                       v-else/>
+                                                       :exercises-to-search="exercisesSearch" v-else/>
                                 </v-col>
                                 <v-col cols="1"><h3 class="o"> ó </h3></v-col>
                                 <v-col>
@@ -522,6 +522,7 @@ const repCicloEntCalor = ref(1)
 const repCicloPrincipal = ref([])
 const repCicloEnfriamiento = ref(1)
 const loading = ref(false)
+const exercisesSearch = ref([])
 
 provide('selectedExercise', ejercicioSeleccionado);
 
@@ -529,7 +530,7 @@ onBeforeMount(async () => {
     const result = await exerciseStore.getExercises()
     if (result.success) {
         for (let i = 0; i < result.data.totalCount; i++)
-            myExercises.value.push(result.data.content[i])
+            exercisesSearch.value.push(result.data.content[i])
     }
     if (route.params.id) {
         isEditing.value = true
@@ -1073,6 +1074,8 @@ async function saveExercise() {
         newEjercicio.value.type = 'exercise'
     let result = await exerciseStore.addExercise(newEjercicio.value);
     if (result.success) {
+        exerciseStore.addExerciseSearch(newEjercicio.value)
+        exercisesSearch.value.push(newEjercicio.value)
         newEjercicio.value.index = result.data.id
         const user = await userStore.getCurrentUser()
         if (user.success) {

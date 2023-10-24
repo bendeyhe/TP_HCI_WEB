@@ -106,9 +106,10 @@
 </template>
 
 <script setup>
-import {ref, inject} from 'vue'
+import {ref, inject, onBeforeMount} from 'vue'
 import {useExerciseStore} from '@/stores/exerciseStore'
 import {toRefs} from 'vue';
+
 
 const loaded = ref(false)
 const loadingButton = ref(false)
@@ -124,22 +125,27 @@ const props = defineProps({
         type: Boolean,
         required: true
     },
+    exercisesToSearch: {
+        type: Array,
+        required: false
+    }
 });
 
 const {isRest} = toRefs(props);
+const {exercisesToSearch} = toRefs(props);
 
 // Crear una matriz show para controlar cada tarjeta
 const show = ref([])
 
+
 async function openModal() {
     loadingButton.value = true;
-    debugger
-    const allExercises = exerciseStore.getExercisesSearch()
-    exercises.value = allExercises.filter(exercise => {
-        if (isRest.value)
-            return exercise.type === 'rest'
-        else
-            return exercise.type !== 'rest'
+    exercises.value = exercisesToSearch.value.filter(exercise => {
+        if (isRest.value) {
+            return exercise.name.toLowerCase().includes(searchQuery.value.toLowerCase()) && exercise.type === 'rest'
+        } else {
+            return exercise.name.toLowerCase().includes(searchQuery.value.toLowerCase()) && exercise.type !== 'rest'
+        }
     })
     for (let i = 0; i < exercises.value.length; i++) {
         const result2 = await exerciseStore.getExerciseImage(exercises.value[i], 1);
@@ -163,26 +169,22 @@ async function openModal() {
 
 async function search() {
     loading.value = true;
-    const result = await exerciseStore.getExercises()
-    if (result.success) {
-        const allExercises = result.data.content
-        exercises.value = allExercises.filter(exercise => {
-            if (isRest.value) {
-                return exercise.name.toLowerCase().includes(searchQuery.value.toLowerCase()) && exercise.type === 'rest'
-            } else {
-                return exercise.name.toLowerCase().includes(searchQuery.value.toLowerCase()) && exercise.type !== 'rest'
-            }
-        })
-
-        // Inicializa la matriz show con valores falsos para cada tarjeta
-        show.value = new Array(exercises.value.length).fill(false)
-
-
-        for (const exercise of exercises.value) {
-            const result2 = await exerciseStore.getExerciseImage(exercise, 1);
-            if (result2.success)
-                exercise.img = result2.data.url;
+    exercises.value = exercisesToSearch.value.filter(exercise => {
+        if (isRest.value) {
+            return exercise.name.toLowerCase().includes(searchQuery.value.toLowerCase()) && exercise.type === 'rest'
+        } else {
+            return exercise.name.toLowerCase().includes(searchQuery.value.toLowerCase()) && exercise.type !== 'rest'
         }
+    })
+
+    // Inicializa la matriz show con valores falsos para cada tarjeta
+    show.value = new Array(exercises.value.length).fill(false)
+
+
+    for (const exercise of exercises.value) {
+        const result2 = await exerciseStore.getExerciseImage(exercise, 1);
+        if (result2.success)
+            exercise.img = result2.data.url;
     }
     showModal.value = true;
     loading.value = false;
