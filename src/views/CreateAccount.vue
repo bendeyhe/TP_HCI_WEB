@@ -133,6 +133,7 @@
                             indeterminate
                             size="20"
                             color="white"
+                            @click.stop
                         ></v-progress-circular>
                     </template>
                     <template v-else>
@@ -195,7 +196,7 @@ async function register() {
             convertToEnglishGender()
             result = await userStore.register(username.value, password.value, email.value, firstName.value, lastName.value, genderEnglish.value);
             if (result.success) {
-                userStore.setToken(result.token);
+                userStore.setToken(result.token); // todo ver si esto hay que hacerlo aca o esta mal conceptualmente asignarle el token cuando registra
                 userStore.setMail(email.value);
                 await router.push({path: '/validate', query: {email: email.value, username: username.value}})
             } else {

@@ -101,7 +101,7 @@
                     </v-row>
                     <v-row class="fila3">
                         <v-col>
-                            <v-btn  v-if="isMyRoutine" class="eliminar" @click="openDeleteRoutineDialog"
+                            <v-btn v-if="selfRoutine" class="eliminar" @click="openDeleteRoutineDialog"
                                    prepend-icon="mdi-trash-can-outline"> Eliminar Rutina
                             </v-btn>
                         </v-col>
@@ -110,7 +110,7 @@
                                    prepend-icon="mdi-share-variant"> Compartir
                             </v-btn>
                         </v-col>
-                        <v-col>
+                        <v-col v-if="selfRoutine">
                             <v-btn class="editar" prepend-icon="mdi-pencil" @click="editarRoutina()"> Editar rutina
                             </v-btn>
                         </v-col>
@@ -189,11 +189,13 @@ import {computed, onBeforeMount, ref, watch} from "vue";
 import {useRoutineStore} from "@/stores/routineStore";
 import {useExerciseStore} from "@/stores/exerciseStore";
 import {useCycleStore} from "@/stores/cycleStore";
+import {useUserStore} from "@/stores/userStore";
 
 const route = useRoute()
 const router = useRouter()
 const isSelected = ref(false)
 const routineStore = useRoutineStore()
+const userStore = useUserStore()
 const exerciseStore = useExerciseStore()
 const cycleStore = useCycleStore()
 let routine = ref({})
@@ -201,51 +203,35 @@ let showShareDialog = ref(false);
 const cycles = ref([])
 const selectedCiclo = ref('')
 const confirmDelete = ref(false)
-// let cicloToShow = ref({})
-// const exercises = ref([])
-
-/*watch(() => selectedCiclo, () => {
-    updateCiclo();
-});*/
+const selfRoutine = ref(false)
 
 onBeforeMount(async () => {
     await getRoutine()
 });
 
-function isMyRoutine() {
-    return routine.value.creator.id === localStorage.getItem('userId');
-}
-
 async function deleteRoutine(routine) {
     const result = await routineStore.deleteRoutine(routine.id);
     if (result.success) {
-        
         router.go(-1);
-    } 
+    }
 }
 
 async function editarRoutina() {
     await router.push({name: 'edit-routine', params: {id: route.params.id}});
 }
 
-/*function updateCiclo() {
-    for (let i = 0; i < cycles.value.length; i++) {
-        if (cycles.value[i].name === selectedCiclo.value){
-            exercises.value = cycles.value[i].exercises
-            cicloToShow.value = cycles.value[i]
-            return
-        }
-    }
-}*/
-
 const cicloToShow = computed(() => {
     return cycles.value.find(cycle => cycle.name === selectedCiclo.value);
 })
 
 async function getRoutine() {
+    // me fijo si el usuario actual es el mismo que el de la rutina, si es asi selfRoutine = true
+    const username = userStore.getUsername()
     const result0 = await routineStore.getRoutine(route.params.id)
     cycles.value = []
     if (result0.success) {
+        if (username === result0.data.user?.username)
+            selfRoutine.value = true
         const newRoutine = {
             id: result0.data.id,
             name: result0.data.name,

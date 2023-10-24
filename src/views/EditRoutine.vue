@@ -381,6 +381,7 @@
                                 indeterminate
                                 size="20"
                                 color="white"
+                                @click.stop
                             ></v-progress-circular>
                         </template>
                         <template v-else>

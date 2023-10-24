@@ -3,6 +3,7 @@ import {makeApiCall} from "@/stores/apiUtils";
 import {API_BASE_URL} from "@/stores/apiUtils";
 
 const SECURITY_TOKEN_KEY = "security-token";
+const SECURITY_NAME = "name";
 
 const USER_B_URL = `${API_BASE_URL}/users`;
 
@@ -10,6 +11,7 @@ export const useUserStore = defineStore('login', {
     state: () => ({
         token: "",
         user: null,
+        name: null,
         mail: null,
         apiEndpoints: {
             getUsers: {path: `${USER_B_URL}`, requiresAuth: true, method: 'GET'},
@@ -61,9 +63,20 @@ export const useUserStore = defineStore('login', {
                 localStorage.setItem(SECURITY_TOKEN_KEY, token);
             this.setToken(token);
         },
+        getUsername() {
+            return localStorage.getItem(SECURITY_NAME);
+        },
+        updateUsername(username) {
+            localStorage.setItem(SECURITY_NAME, username);
+            this.name = localStorage.getItem(SECURITY_NAME);
+        },
         removeToken() {
             localStorage.removeItem(SECURITY_TOKEN_KEY);
             this.setToken(null);
+        },
+        removeUsername() {
+            localStorage.removeItem(SECURITY_NAME);
+            this.name = null;
         },
 
         // GET: /users

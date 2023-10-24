@@ -1,88 +1,89 @@
 <template>
-  <h1>Inicio de Sesión</h1>
-  <div class="login-box">
-    <v-card
-        class="mx-auto pt-6 pa-12 pb-8"
-        elevation="8"
-        max-width="448"
-        rounded="lg"
-    >
-      <div class="text-subtitle-1 text-medium-emphasis">Usuario</div>
+    <h1>Inicio de Sesión</h1>
+    <div class="login-box">
+        <v-card
+            class="mx-auto pt-6 pa-12 pb-8"
+            elevation="8"
+            max-width="448"
+            rounded="lg"
+        >
+            <div class="text-subtitle-1 text-medium-emphasis">Usuario</div>
 
-      <v-text-field
-          density="compact"
-          placeholder="Ingresá tu usuario"
-          prepend-inner-icon="mdi-account-outline"
-          variant="outlined"
-          v-model="username"
-          :disabled="loading || passedUsername"
-      ></v-text-field>
+            <v-text-field
+                density="compact"
+                placeholder="Ingresá tu usuario"
+                prepend-inner-icon="mdi-account-outline"
+                variant="outlined"
+                v-model="username"
+                :disabled="loading || passedUsername"
+            ></v-text-field>
 
-      <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
-        Contraseña
-      </div>
+            <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
+                Contraseña
+            </div>
 
-      <v-text-field
-          :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
-          :type="visible ? 'text' : 'password'"
-          density="compact"
-          placeholder="Ingresá tu contraseña"
-          prepend-inner-icon="mdi-lock-outline"
-          variant="outlined"
-          v-model="password"
-          @click:append-inner="visible = !visible"
-          :disabled="loading"
-          @keydown.enter="loginUser"
-      ></v-text-field>
+            <v-text-field
+                :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
+                :type="visible ? 'text' : 'password'"
+                density="compact"
+                placeholder="Ingresá tu contraseña"
+                prepend-inner-icon="mdi-lock-outline"
+                variant="outlined"
+                v-model="password"
+                @click:append-inner="visible = !visible"
+                :disabled="loading"
+                @keydown.enter="loginUser"
+            ></v-text-field>
 
-      <v-alert
-          v-if="successAlert"
-          color="success"
-          icon="$success"
-          :text=successMessage
-      ></v-alert>
-      <v-alert
-          v-if="errorAlert"
-          color="error"
-          icon="$error"
-          :text=errorMessage
-      ></v-alert>
+            <v-alert
+                v-if="successAlert"
+                color="success"
+                icon="$success"
+                :text=successMessage
+            ></v-alert>
+            <v-alert
+                v-if="errorAlert"
+                color="error"
+                icon="$error"
+                :text=errorMessage
+            ></v-alert>
 
-      <v-btn
-          block
-          class="mb-8"
-          size="large"
-          variant="tonal"
-          @click="loginUser"
-      >
-        <template v-if="loading">
-          <v-progress-circular
-              indeterminate
-              size="20"
-              color="white"
-          ></v-progress-circular>
-        </template>
-        <template v-else>
-          <v-icon>mdi-login</v-icon>
-          &nbsp;
-          Iniciar Sesión
-        </template>
-      </v-btn>
-      <RouterLink to="/create-account">
-        <v-card-text class="text-center">
-          <a
-              href="#"
-              rel="noopener noreferrer"
-              target="_blank"
-              class="link"
-          >
-            Crear cuenta
-            <v-icon icon="mdi-chevron-right"></v-icon>
-          </a>
-        </v-card-text>
-      </RouterLink>
-    </v-card>
-  </div>
+            <v-btn
+                block
+                class="mb-8"
+                size="large"
+                variant="tonal"
+                @click="loginUser"
+            >
+                <template v-if="loading">
+                    <v-progress-circular
+                        indeterminate
+                        size="20"
+                        color="white"
+                        @click.stop
+                    ></v-progress-circular>
+                </template>
+                <template v-else>
+                    <v-icon>mdi-login</v-icon>
+                    &nbsp;
+                    Iniciar Sesión
+                </template>
+            </v-btn>
+            <RouterLink to="/create-account">
+                <v-card-text class="text-center">
+                    <a
+                        href="#"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                        class="link"
+                    >
+                        Crear cuenta
+                        <v-icon icon="mdi-chevron-right"></v-icon>
+                    </a>
+                </v-card-text>
+            </RouterLink>
+        </v-card>
+    </div>
 
 
 </template>
@@ -108,65 +109,66 @@ const loading = ref(false);
 const passedUsername = ref(false)
 
 onBeforeMount(() => {
-  if (route.query.username) {
-    passedUsername.value = true;
-    username.value = route.query.username;
-  }
+    if (route.query.username) {
+        passedUsername.value = true;
+        username.value = route.query.username;
+    }
 });
 
 const validateForm = () => {
-  formErrors.value = [];
-  if (!username.value)
-    formErrors.value.push('El usuario es obligatorio. ');
-  if (!password.value)
-    formErrors.value.push('La contraseña es obligatoria.');
+    formErrors.value = [];
+    if (!username.value)
+        formErrors.value.push('El usuario es obligatorio. ');
+    if (!password.value)
+        formErrors.value.push('La contraseña es obligatoria.');
 };
 
 async function loginUser() {
-  validateForm();
-  if (formErrors.value.length > 0) {
-    const error = formErrors.value.join('');
-    await showErrorAlert(error);
-    loading.value = false;
-  } else {
-    loading.value = true;
-    const result = await userStore.login(username.value, password.value);
-    if (result.error || !result.success) {
-      if (result.details[0].includes('verified')) {
-        await showErrorAlert('Debe verificar su cuenta antes de iniciar sesión');
-        await router.push({path: '/validate'})
-      } else
-        await showErrorAlert('Usuario o contraseña incorrectos');
-      loading.value = false;
+    validateForm();
+    if (formErrors.value.length > 0) {
+        const error = formErrors.value.join('');
+        await showErrorAlert(error);
+        loading.value = false;
     } else {
-      userStore.setToken(result.data.token)
-      userStore.updateToken(result.data.token, true)
-      showSuccessAlert('Usuario autenticado con éxito');
-      const redirectUrl = route.query.redirect || '/'
-      await router.push({path: redirectUrl})
+        loading.value = true;
+        const result = await userStore.login(username.value, password.value);
+        if (result.error || !result.success) {
+            if (result.details[0].includes('verified')) {
+                await showErrorAlert('Debe verificar su cuenta antes de iniciar sesión');
+                await router.push({path: '/validate'})
+            } else
+                await showErrorAlert('Usuario o contraseña incorrectos');
+            loading.value = false;
+        } else {
+            userStore.setToken(result.data.token)
+            userStore.updateToken(result.data.token, true)
+            userStore.updateUsername(username.value)
+            showSuccessAlert('Usuario autenticado con éxito');
+            const redirectUrl = route.query.redirect || '/'
+            await router.push({path: redirectUrl})
+        }
     }
-  }
 }
 
 function showSuccessAlert(message) {
-  successMessage.value = message
-  successAlert.value = true
+    successMessage.value = message
+    successAlert.value = true
 
-  setTimeout(() => {
-    successAlert.value = false;
-  }, 1500);
+    setTimeout(() => {
+        successAlert.value = false;
+    }, 1500);
 }
 
 async function showErrorAlert(message) {
-  errorMessage.value = message
-  errorAlert.value = true
+    errorMessage.value = message
+    errorAlert.value = true
 
-  await new Promise(resolve => {
-    setTimeout(() => {
-      errorAlert.value = false;
-      resolve();
-    }, 1500);
-  });
+    await new Promise(resolve => {
+        setTimeout(() => {
+            errorAlert.value = false;
+            resolve();
+        }, 1500);
+    });
 }
 
 </script>
@@ -176,36 +178,36 @@ async function showErrorAlert(message) {
 import {useUserStore} from "@/stores/userStore";
 
 export default {
-  data: () => ({
-    visible: false,
-  }),
+    data: () => ({
+        visible: false,
+    }),
 }
 </script>
 
 <style scoped>
 .v-btn {
-  color: #8efd00;
-  background-color: #000000;
-  margin-right: 10px;
-  margin-top: 20px;
+    color: #8efd00;
+    background-color: #000000;
+    margin-right: 10px;
+    margin-top: 20px;
 }
 
 .login-box {
-  padding-top: 2%;
+    padding-top: 2%;
 }
 
 p {
-  text-align: center;
-  padding-top: 25px;
+    text-align: center;
+    padding-top: 25px;
 }
 
 h1 {
-  text-align: center;
-  padding-top: 25px;
+    text-align: center;
+    padding-top: 25px;
 }
 
 .link {
-  color: black;
-  text-decoration: none;
+    color: black;
+    text-decoration: none;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
     <v-btn block class="seleccionar-ejercicio" @click="openModal">
         <template v-if="loadingButton">
-            <v-progress-circular indeterminate size="20" color="white"/>
+            <v-progress-circular indeterminate size="20" @click.stop color="white"/>
         </template>
         <template v-else> Seleccionar ejercicio existente</template>
     </v-btn>
