@@ -4,12 +4,12 @@
     <v-card class="routine-card" v-if="routine">
         <v-container fluid>
             <v-row>
-                <v-col cols="4">
+                <v-col>
                     <v-card
                         :loading="loading"
                         width="280"
                         class="card"
-                        height="400"
+                        height="475"
                     >
                         <template v-slot:loader="{ isActive }">
                             <v-progress-linear
@@ -35,13 +35,13 @@
                             <v-card-title>{{ routine.name }}</v-card-title>
                         </v-card-item>
                         <v-card-text>
-                            <div class="creator my-4 text-subtitle-1">
+                            <div class="creator mb-4 text-subtitle-1">
                                 <v-icon icon="mdi-account"></v-icon>
-                                <!--
+
                                 <div class="creator-text">
                                     • {{ routine.creator.username }}
                                 </div>
-                                -->
+
                             </div>
                             <div class="overflow">{{ routine.description }}</div>
                         </v-card-text>
@@ -50,19 +50,24 @@
                     </v-card>
                 </v-col>
 
-                <v-col cols="2">
+                <v-col>
+                    <v-row>
+                        <h4>Seleccione el ciclo para ver el detalle en la tabla:</h4>
+                    </v-row>
+                    <v-row>
                     <v-autocomplete placeholder="Seleccione el ciclo" variant="outlined"
                                     v-model="selectedCiclo" @click="updateCiclo"
                                     :items="Object.values(cycles).map(cycle => cycle.name)"></v-autocomplete>
+                    </v-row>
                 </v-col>
 
                 <v-col cols="6">
                     <v-row>
                         <div class="tabla">
-                            <v-table height="400px" >
+                            <v-table height="400px" class="mr-4">
                                 <thead>
                                 <tr>
-                                    <th class="text-left">
+                                    <th class="font-weight-bold">
                                         {{ selectedCiclo }}
                                     </th>
                                 </tr>
@@ -376,7 +381,6 @@ h3 {
     text-overflow: ellipsis;
     max-width: 700px;
     display: -webkit-box;
-    -webkit-line-clamp: 6; /* number of lines to show */
     -webkit-box-orient: vertical;
 }
 
@@ -388,5 +392,12 @@ h1 {
 .fila3 {
     padding-top: 15px;
 }
+
+.v-card-title {
+    overflow: visible;
+    white-space: normal;
+    max-height: none;
+}
+
 
 </style>
