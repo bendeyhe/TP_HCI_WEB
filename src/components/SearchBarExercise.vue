@@ -196,6 +196,7 @@ function closeModal() {
 
 function selectExercise(exercise) {
     selectedExercise.value = {
+        id: exercise.id,
         name: exercise.name,
         detail: exercise.detail,
         url: exercise.img,
