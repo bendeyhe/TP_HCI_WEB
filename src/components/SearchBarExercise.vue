@@ -133,31 +133,28 @@ const show = ref([])
 
 async function openModal() {
     loadingButton.value = true;
-    const result = await exerciseStore.getExercises()
-    if (result.success) {
-        const allExercises = result.data.content
-        exercises.value = allExercises.filter(exercise => {
-            if(isRest.value)
-                return exercise.type === 'rest'
-            else
-                return exercise.type !== 'rest'
-        })
-        for (let i=0; i<exercises.value.length ; i++) {
-            const result2 = await exerciseStore.getExerciseImage(exercises.value[i], 1);
-            if (result2.success)
-                exercises.value[i].url = result2.data.url;
-        }
+    debugger
+    const allExercises = exerciseStore.getExercisesSearch()
+    exercises.value = allExercises.filter(exercise => {
+        if (isRest.value)
+            return exercise.type === 'rest'
+        else
+            return exercise.type !== 'rest'
+    })
+    for (let i = 0; i < exercises.value.length; i++) {
+        const result2 = await exerciseStore.getExerciseImage(exercises.value[i], 1);
+        if (result2.success)
+            exercises.value[i].url = result2.data.url;
+    }
 
-        // Inicializa la matriz show con valores falsos para cada tarjeta
-        show.value = new Array(exercises.value.length).fill(false)
+    // Inicializa la matriz show con valores falsos para cada tarjeta
+    show.value = new Array(exercises.value.length).fill(false)
 
-
-        for (const exercise of exercises.value) {
-            const array = await exerciseStore.getExerciseImages(exercise.id);
-            if (array.success){
-                if(array.data.content.length > 0 && array.data.content[0].url)
-                    exercise.img = array.data.content[0].url;
-            }
+    for (const exercise of exercises.value) {
+        const array = await exerciseStore.getExerciseImages(exercise.id);
+        if (array.success) {
+            if (array.data.content.length > 0 && array.data.content[0].url)
+                exercise.img = array.data.content[0].url;
         }
     }
     showModal.value = true;
