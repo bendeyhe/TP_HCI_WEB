@@ -84,10 +84,10 @@
                             </div>
                             <v-row>
                                 <v-col>
-                                    <SearchBarExercise @exercise-selected="ejercicioSeleccionado" :is-rest="true"
-                                                       :exercises-to-search="exercisesSearch" v-if="n===3"/>
-                                    <SearchBarExercise @exercise-selected="ejercicioSeleccionado" :is-rest="false"
-                                                       :exercises-to-search="exercisesSearch" v-else/>
+                                    <SearchBarExercise @exercise-selected="ejercicioSeleccionado"
+                                                       :exercises-to-search="exercisesSearchRest" v-if="n===3"/>
+                                    <SearchBarExercise @exercise-selected="ejercicioSeleccionado"
+                                                       :exercises-to-search="exercisesSearchEx" v-else/>
                                 </v-col>
                                 <v-col cols="1"><h3 class="o"> ó </h3></v-col>
                                 <v-col>
@@ -522,15 +522,34 @@ const repCicloEntCalor = ref(1)
 const repCicloPrincipal = ref([])
 const repCicloEnfriamiento = ref(1)
 const loading = ref(false)
-const exercisesSearch = ref([])
+const exercisesSearchRest = ref([])
+const exercisesSearchEx = ref([])
 
 provide('selectedExercise', ejercicioSeleccionado);
 
 onBeforeMount(async () => {
     const result = await exerciseStore.getExercises()
     if (result.success) {
-        for (let i = 0; i < result.data.totalCount; i++)
-            exercisesSearch.value.push(result.data.content[i])
+        for (let i = 0; i < result.data.totalCount; i++) {
+            if (result.data.content[i].type === 'exercise')
+                exercisesSearchEx.value.push(result.data.content[i])
+            else
+                exercisesSearchRest.value.push(result.data.content[i])
+        }
+        for (let i = 0; i < exercisesSearchRest.value.length; i++) {
+            const result2 = await exerciseStore.getExerciseImages(exercisesSearchRest.value[i].id);
+            if (result2.success && result2.data.content.length > 0 && result2.data.content[0].url)
+                exercisesSearchRest.value[i].url = result2.data.content[0].url;
+            else
+                exercisesSearchRest.value[i].url = 'https://th.bing.com/th/id/OIG.hUKUpOfOW_DIJ924Uky.?pid=ImgGn&w=1024&h=1024&rs=1'
+        }
+        for (let i = 0; i < exercisesSearchEx.value.length; i++) {
+            const result2 = await exerciseStore.getExerciseImages(exercisesSearchEx.value[i].id);
+            if (result2.success && result2.data.content.length > 0 && result2.data.content[0].url)
+                exercisesSearchEx.value[i].url = result2.data.content[0].url;
+            else
+                exercisesSearchEx.value[i].url = 'https://th.bing.com/th/id/OIG.hUKUpOfOW_DIJ924Uky.?pid=ImgGn&w=1024&h=1024&rs=1'
+        }
     }
     if (route.params.id) {
         isEditing.value = true
@@ -660,7 +679,7 @@ onBeforeMount(async () => {
     }
 });
 
-function resetEjSeleccionado(){
+function resetEjSeleccionado() {
     ejercicioSeleccionado.value = {
         name: '',
         detail: '',
@@ -725,7 +744,7 @@ async function addRoutine() {
                             let repeticiones = (dataEntCalor.value.typeDuracion === 'repeticiones' ? dataEntCalor.value.duracion : 0)
                             let repInt = parseInt(repeticiones?.value)
                             const duracion = (repeticiones === 0 ? (dataEntCalor.value.typeDuracion === 'segundos' ? dataEntCalor.value.duracion : dataEntCalor.value.duracion * 60) : 0)
-                            if(isNaN(repInt))
+                            if (isNaN(repInt))
                                 repInt = 0
                             const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejEntCalor.value[i].id, i + 1, duracion, repInt)
                             if (!result2.success) {
@@ -763,7 +782,7 @@ async function addRoutine() {
                             const repeticiones = (dataPrincipal.value[i + 1][j + 1].typeDuracion === 'repeticiones' ? dataPrincipal.value[i + 1][j + 1].duracion : 0)
                             let repInt = parseInt(repeticiones?.value)
                             const duracion = (repeticiones === 0 ? (dataPrincipal.value[i + 1][j + 1].typeDuracion === 'segundos' ? dataPrincipal.value[i + 1][j + 1].duracion : dataPrincipal.value[i + 1][j + 1].duracion * 60) : 0)
-                            if(isNaN(repInt))
+                            if (isNaN(repInt))
                                 repInt = 0
                             const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejPrincipal.value[i + 1][j].id, j + 1, duracion, repInt)
                             if (!result2.success) {
@@ -794,7 +813,7 @@ async function addRoutine() {
                             const repeticiones = (dataEnf.value.typeDuracion === 'repeticiones' ? dataEnf.value.duracion : 0)
                             let repInt = parseInt(repeticiones?.value)
                             const duracion = (repeticiones === 0 ? (dataEnf.value.typeDuracion === 'segundos' ? dataEnf.value.duracion : dataEnf.value.duracion * 60) : 0)
-                            if(isNaN(repInt))
+                            if (isNaN(repInt))
                                 repInt = 0
                             const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejEnfriamiento.value[i].id, i + 1, duracion, repInt)
                             if (!result2.success) {
@@ -818,7 +837,7 @@ async function addRoutine() {
             isPublic: true,
             difficulty: routine.value.difficulty,
             img: routine.value.img,
-            score : 0,
+            score: 0,
             fav: routine.value.fav,
         }
         if (!rout.name) {
@@ -878,7 +897,7 @@ async function addRoutine() {
                         const repeticiones = (dataEntCalor.value.typeDuracion === 'repeticiones' ? dataEntCalor.value.duracion : 0)
                         let repInt = parseInt(repeticiones?.value)
                         const duracion = (repeticiones === 0 ? (dataEntCalor.value.typeDuracion === 'segundos' ? dataEntCalor.value.duracion : dataEntCalor.value.duracion * 60) : 0)
-                        if(isNaN(repInt))
+                        if (isNaN(repInt))
                             repInt = 0
                         const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejEntCalor.value[i].id, i + 1, duracion, repInt)
                         if (!result2.success) {
@@ -916,7 +935,7 @@ async function addRoutine() {
                         const repeticiones = (dataPrincipal.value[i + 1][j].typeDuracion === 'repeticiones' ? dataPrincipal.value[i + 1][j].duracion : 0)
                         let repInt = parseInt(repeticiones?.value)
                         const duracion = (repeticiones === 0 ? (dataPrincipal.value[i + 1][j].typeDuracion === 'segundos' ? dataPrincipal.value[i + 1][j].duracion : dataPrincipal.value[i + 1][j].duracion * 60) : 0)
-                        if(isNaN(repInt))
+                        if (isNaN(repInt))
                             repInt = 0
                         const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejPrincipal.value[i + 1][j].id, j + 1, duracion, repInt)
                         if (!result2.success) {
@@ -947,7 +966,7 @@ async function addRoutine() {
                         const repeticiones = (dataEnf.value.typeDuracion === 'repeticiones' ? dataEnf.value.duracion : 0)
                         let repInt = parseInt(repeticiones?.value)
                         const duracion = (repeticiones === 0 ? (dataEnf.value.typeDuracion === 'segundos' ? dataEnf.value.duracion : dataEnf.value.duracion * 60) : 0)
-                        if(isNaN(repInt))
+                        if (isNaN(repInt))
                             repInt = 0
                         const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejEnfriamiento.value[i].id, i + 1, duracion, repInt)
                         if (!result2.success) {
@@ -1025,7 +1044,7 @@ async function agregarEjercicio() {
             }
 
             for (let i = 0; i < ejPrincipal.value[cicloSeleccionado.value]?.length; i++) {
-                if (ejPrincipal.value[cicloSeleccionado.value][i].name === ejercicioSeleccionado.value.name ) {
+                if (ejPrincipal.value[cicloSeleccionado.value][i].name === ejercicioSeleccionado.value.name) {
                     await showErrorAlert2('El ejercicio ya está en la lista, elija otro')
                     return;
                 }
@@ -1081,9 +1100,11 @@ async function saveExercise() {
         newEjercicio.value.type = 'exercise'
     let result = await exerciseStore.addExercise(newEjercicio.value);
     if (result.success) {
-        exerciseStore.addExerciseSearch(newEjercicio.value)
-        exercisesSearch.value.push(newEjercicio.value)
         newEjercicio.value.index = result.data.id
+        if (newEjercicio.value.type === 'exercise')
+            exercisesSearchEx.value.push(newEjercicio.value)
+        else
+            exercisesSearchRest.value.push(newEjercicio.value)
         const user = await userStore.getCurrentUser()
         if (user.success) {
             if (!user.data.metadata)

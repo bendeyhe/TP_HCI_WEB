@@ -103,7 +103,6 @@ function deleteEx() {
 }
 
 function moveRight() {
-    debugger;
     let index;
     for (let i = 0; i < ejArray.value.length; i++) {
         if (ejArray.value[i].id === exercise.value.id) {
