@@ -154,7 +154,7 @@
     <div v-else>
         <div class="image-container">
             <div class="centered-content">
-                <img :src="getImageUrl('NoFavsImg.jpg')" alt="No tienes ninguna rutina en favoritos." class="image" />
+                <img :src="getImageUrl('NoFavsImg.jpg')" alt="No tienes ninguna rutina en favoritos." class="image2" />
                 <div v-if="typeRout === 'fav'" class="flex-container">
                     <h2>No tienes ninguna rutina en favoritos.</h2>
                 </div>
@@ -601,7 +601,7 @@ h1 {
     height: 50px;
 }
 
-.image {
+.image2 {
     width: 500px;
     height: auto;
 }
