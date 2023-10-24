@@ -151,7 +151,7 @@
             </v-pagination>
         </div>
     </div>
-    <div v-else>
+    <div v-else-if="!loading2">
         <div class="image-container">
             <div class="centered-content">
                 <img :src="getImageUrl('NoFavsImg.jpg')" alt="No tienes ninguna rutina en favoritos." class="image2" />
@@ -188,6 +188,7 @@ const visibleRoutines = ref([]);
 const routineArray = ref([]);
 const amountPages = ref(1);
 const loading = ref(false);
+const loading2 = ref(false);
 const routineStore = useRoutineStore();
 const userStore = useUserStore();
 const topRoutines = ref([]);
@@ -319,6 +320,7 @@ async function getAllRoutines() {
 }
 
 async function updateVisibleRoutines() {
+    loading2.value = true;
     if (typeRout.value === "fav") {
         await getFavs();
         visibleRoutines.value = Array.from(routineStore.getfavoriteRoutines()).slice(
@@ -361,6 +363,7 @@ async function updateVisibleRoutines() {
         if (visibleRoutines.value.length === 0 && pageNumber.value > 0)
             updatePage(pageNumber.value - 1)
     }
+    loading2.value = false;
 }
 
 async function toggle(routine) {
