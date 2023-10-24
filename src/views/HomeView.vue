@@ -61,7 +61,6 @@
             <RoutineByCategories :nombreRutina="category2" :favourite="false" dif="medio"/>
             <RoutineByCategories :nombreRutina="category3" :favourite="false" dif="dificil"/>
             <RoutineByCategories :nombreRutina="category4" :favourite="true" dif="todas"/>
-            <RoutineByCategories :nombreRutina="category5" :favourite="false" dif="todas"/>
         </v-main>
     </v-app>
     </div>
@@ -154,7 +153,6 @@ export default {
         category2: "Dificultad Media",
         category3: "Dificultad Difícil",
         category4: "Favoritas",
-        category5: "Otras",
         drawer: null,
         toggle: null,
     }),

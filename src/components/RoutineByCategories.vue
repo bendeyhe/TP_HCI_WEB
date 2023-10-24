@@ -275,4 +275,10 @@ async function toggle(routine) {
     max-width: 200px;
 }
 
+.v-card-title:hover {
+    overflow: visible;
+    white-space: normal;
+    max-height: none;
+}
+
 </style>

@@ -563,6 +563,12 @@ h1 {
     border-radius: 5px;
 }
 
+.v-card-title:hover {
+    overflow: visible;
+    white-space: normal;
+    max-height: none;
+}
+
 
 .detalle-rutina {
     color: white; /* Color del texto */
