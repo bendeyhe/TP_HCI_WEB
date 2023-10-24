@@ -20,6 +20,7 @@
                 <v-row allign="center" class="mx-0"></v-row>
                 <div class="overflow2" v-if="myPage == true">{{ exercise?.detail }}</div>
                 <div class="overflow" v-else>{{ exercise?.detail }}</div>
+                <div class="overflow">Tipo de Ejercicio: {{ typeToSpanish(exercise?.type) }}</div>
 
             </v-card-text>
         </div>
@@ -149,10 +150,7 @@
                         text="Confirmar"
                         newEjercicio.index="exercise.index"
                         @click="async () => {
-                            if((await editExercise(exercise)) === true)
-                                isActive.value = false;
-                            else
-                                isActive.value = true;
+                            isActive.value=(await editExercise(exercise))!==true;
                         }"
                     ></v-btn>
                 </v-card-actions>
@@ -228,6 +226,12 @@ async function showErrorAlert(message = 'Error el registrar usuario') {
     });
 }
 
+function typeToSpanish(type){
+    if(type === 'rest')
+        return 'Descanso'
+    else
+        return 'Ejercicio'
+}
 
 async function deleteExercise(exercise) {
     const index = myExercises.value.findIndex(e => e === exercise);
@@ -289,28 +293,28 @@ async function editExercise(exercise) {
                 const result2 = await exerciseStore.changeExercise(exerciseToUpdate);
                 if (result2.success) {
                     const user = await userStore.getCurrentUser();
-                    if(!user.success){
-                        await showErrorAlert('Error al editar el ejercicio4')
+                    if (!user.success) {
+                        await showErrorAlert('Error al editar el ejercicio')
                         return false
                     }
                     const index = user.data.metadata.exercises.findIndex(e => e.index === exercise.index);
                     user.data.metadata.exercises[index] = exerciseToUpdate;
                     const result3 = await userStore.modifyCurrentUser(user.data.firstName, user.data.lastName, user.data.gender, user.data.metadata);
-                    if(!result3.success) {
-                        await showErrorAlert('Error al editar el ejercicio5')
+                    if (!result3.success) {
+                        await showErrorAlert('Error al editar el ejercicio')
                         return false
                     }
                 } else {
-                    await showErrorAlert('Error al editar el ejercicio1')
+                    await showErrorAlert('Error al editar el ejercicio')
                     return false
                 }
             }
         } else {
-            await showErrorAlert('Error al editar el ejercicio2')
+            await showErrorAlert('Error al editar el ejercicio')
             return false
         }
     } else {
-        await showErrorAlert('Error al editar el ejercicio3')
+        await showErrorAlert('Error al editar el ejercicio')
         return false
     }
     return true
