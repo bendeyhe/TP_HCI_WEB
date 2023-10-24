@@ -101,7 +101,7 @@
                     </v-row>
                     <v-row class="fila3">
                         <v-col>
-                            <v-btn class="eliminar" @click="openDeleteRoutineDialog"
+                            <v-btn  v-if="isMyRoutine" class="eliminar" @click="openDeleteRoutineDialog"
                                    prepend-icon="mdi-trash-can-outline"> Eliminar Rutina
                             </v-btn>
                         </v-col>
@@ -211,6 +211,18 @@ const confirmDelete = ref(false)
 onBeforeMount(async () => {
     await getRoutine()
 });
+
+function isMyRoutine() {
+    return routine.value.creator.id === localStorage.getItem('userId');
+}
+
+async function deleteRoutine(routine) {
+    const result = await routineStore.deleteRoutine(routine.id);
+    if (result.success) {
+        
+        router.go(-1);
+    } 
+}
 
 async function editarRoutina() {
     await router.push({name: 'edit-routine', params: {id: route.params.id}});
