@@ -101,12 +101,12 @@
                     </v-row>
                     <v-row class="fila3">
                         <v-col>
-                            <v-btn v-if="selfRoutine" class="eliminar" @click="openDeleteRoutineDialog"
+                            <v-btn v-if="selfRoutine" class="eliminar ml-6" @click="openDeleteRoutineDialog"
                                    prepend-icon="mdi-trash-can-outline"> Eliminar Rutina
                             </v-btn>
                         </v-col>
                         <v-col>
-                            <v-btn class="editar" @click="shareRoutine"
+                            <v-btn class="editar ml-6" @click="shareRoutine"
                                    prepend-icon="mdi-share-variant"> Compartir
                             </v-btn>
                         </v-col>
