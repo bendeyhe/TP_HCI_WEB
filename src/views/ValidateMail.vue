@@ -1,5 +1,4 @@
 <template>
-    <AppBarWithoutSearch/>
     <h1>Validación de Mail</h1>
     <div class="login-box">
         <v-card
@@ -72,9 +71,6 @@
 import {onBeforeMount, ref} from 'vue';
 import {useRouter, useRoute, RouterLink} from 'vue-router'
 import {useUserStore} from '@/stores/userStore'
-import AppBar from '@/components/AppBar.vue'
-import AppBarWithoutSearch from "@/components/AppBarWithoutSearch.vue";
-import loginView from "@/views/LoginView.vue";
 
 const userStore = useUserStore()
 

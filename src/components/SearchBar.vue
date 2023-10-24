@@ -14,48 +14,28 @@
 </template>
 
 <script setup>
-import {ref} from 'vue'
+import {ref, watch} from 'vue'
 import router from "@/router";
+import {useRoute} from "vue-router";
 
 const loaded = ref(false)
 const loading = ref(false)
 const searchQuery = ref('')
 
-function onClick() {
+const route = useRoute()
 
+watch(() => route.name, () => { if (route.name !== 'routines') searchQuery.value = '' } )
+
+function onClick() {
     router.push({name: 'routines', params: {query: searchQuery.value}})
 
-    loading.value = true;
+    /*loading.value = true;
     setTimeout(() => {
         loading.value = false;
         loaded.value = true;
-    }, 2000);
+    }, 2000);*/
 }
 </script>
-
-<script>
-export default {
-    data: () => ({
-        loaded: false,
-        loading: false,
-        searchQuery: ''
-    }),
-
-    methods: {
-        onClick() {
-            if (searchQuery.value.trim() !== '') {
-                this.loading = true
-
-                setTimeout(() => {
-                    this.loading = false
-                    this.loaded = true
-                }, 2000)
-            }
-        },
-    },
-}
-</script>
-
 
 <style scoped>
 .v-text-field {

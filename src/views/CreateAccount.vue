@@ -1,5 +1,4 @@
 <template>
-    <AppBarWithoutSearch/>
     <h1>Crear Cuenta</h1>
     <div class="register-box">
         <v-card
@@ -151,7 +150,6 @@
 import {onBeforeMount, ref} from 'vue';
 import {useRouter, useRoute, RouterLink} from 'vue-router'
 import {useUserStore} from "@/stores/userStore";
-import AppBarWithoutSearch from "@/components/AppBarWithoutSearch.vue";
 
 
 const userStore = useUserStore()
@@ -199,8 +197,6 @@ async function register() {
             if (result.success) {
                 userStore.setToken(result.token);
                 userStore.setMail(email.value);
-                //await showSuccessAlert('Su usuario fue registrado con éxito y en casilla de' +
-                //    ' email: ' + email.value + ' recibirá un mensaje para verificar su cuenta.');
                 await router.push({path: '/validate', query: {email: email.value, username: username.value}})
             } else {
                 loading.value = false;

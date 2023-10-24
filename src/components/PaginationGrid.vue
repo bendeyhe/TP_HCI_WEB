@@ -179,6 +179,7 @@ import {ref, onBeforeMount, toRefs} from 'vue';
 import {useRoutineStore} from '@/stores/routineStore.js';
 import {useUserStore} from "@/stores/userStore";
 import router from "@/router";
+import {useRoute} from "vue-router";
 
 const page = ref(1);
 const pageNumber = ref(1);
@@ -466,6 +467,10 @@ watch(originDisabled, val => {
 function getImageUrl(name){
     return new URL(`../assets/${name}`, import.meta.url).href
 }
+const route = useRoute()
+
+watch(() => route.params.query, (newQuery) => {query.value = newQuery; updateVisibleRoutines()})
+
 </script>
 
 <style scoped>

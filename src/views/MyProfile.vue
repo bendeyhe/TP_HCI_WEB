@@ -1,5 +1,4 @@
 <template>
-    <AppBar/>
     <h1>Mi Perfil</h1>
 
     <div class="login-box">
@@ -125,7 +124,6 @@
 </template>
 
 <script setup>
-import AppBar from "@/components/AppBar.vue";
 import {ref, onBeforeMount} from "vue";
 import storage from "@/storage/storage";
 import {RouterLink, useRouter} from "vue-router";

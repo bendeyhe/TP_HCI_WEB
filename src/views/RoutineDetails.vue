@@ -1,5 +1,4 @@
 <template>
-    <AppBar/>
     <h1> Detalle de la Rutina</h1>
     <v-card class="routine-card" v-if="routine">
         <v-container fluid>
@@ -39,11 +38,11 @@
                                 <v-icon icon="mdi-account"></v-icon>
 
                                 <div class="creator-text">
-                                    • {{ routine.creator.username }}
+                                    • {{ routine?.creator?.username }}
                                 </div>
 
                             </div>
-                            <div class="overflow">{{ routine.description }}</div>
+                            <div class="overflow">{{ routine?.description }}</div>
                         </v-card-text>
                         <div class="detail">
                         </div>
@@ -56,7 +55,7 @@
                     </v-row>
                     <v-row>
                     <v-autocomplete placeholder="Seleccione el ciclo" variant="outlined"
-                                    v-model="selectedCiclo" @click="updateCiclo"
+                                    v-model="selectedCiclo" @update="updateCiclo"
                                     :items="Object.values(cycles).map(cycle => cycle.name)"></v-autocomplete>
                     </v-row>
                 </v-col>
@@ -141,20 +140,16 @@
             </v-card-actions>
         </v-card>
     </v-dialog>
-
-    <FooterComponent/>
 </template>
 
 
 <script setup>
-import AppBar from "@/components/AppBar.vue";
 import {RouterLink, useRoute, useRouter} from "vue-router";
 import RoutineByCategories from "@/components/RoutineByCategories.vue";
-import {onBeforeMount, ref, watch} from "vue";
+import {computed, onBeforeMount, ref, watch} from "vue";
 import {useRoutineStore} from "@/stores/routineStore";
 import {useExerciseStore} from "@/stores/exerciseStore";
 import {useCycleStore} from "@/stores/cycleStore";
-import FooterComponent from "@/components/FooterComponent.vue";
 
 const route = useRoute()
 const router = useRouter()
@@ -166,12 +161,12 @@ let routine = ref({})
 let showShareDialog = ref(false);
 const cycles = ref([])
 const selectedCiclo = ref('')
-let cicloToShow = ref({})
-const exercises = ref([])
+// let cicloToShow = ref({})
+// const exercises = ref([])
 
-watch(() => selectedCiclo, () => {
+/*watch(() => selectedCiclo, () => {
     updateCiclo();
-});
+});*/
 
 onBeforeMount(async () => {
     await getRoutine()
@@ -180,7 +175,7 @@ onBeforeMount(async () => {
 async function editarRoutina() {
     await router.push({name: 'edit-routine', params: {id: route.params.id}});
 }
-function updateCiclo() {
+/*function updateCiclo() {
     for (let i = 0; i < cycles.value.length; i++) {
         if (cycles.value[i].name === selectedCiclo.value){
             exercises.value = cycles.value[i].exercises
@@ -188,9 +183,15 @@ function updateCiclo() {
             return
         }
     }
-}
+}*/
+
+const cicloToShow = computed(() => {
+    return cycles.value.find(cycle => cycle.name === selectedCiclo.value);
+})
+
 async function getRoutine() {
     const result0 = await routineStore.getRoutine(route.params.id)
+    cycles.value = []
     if (result0.success) {
         const newRoutine = {
             id: result0.data.id,
@@ -215,6 +216,7 @@ async function getRoutine() {
                     exercises: []
                 }
                 cycles.value.push(newCycle)
+                if (i === 0) selectedCiclo.value = newCycle.name
                 let result2 = await cycleStore.getExercisesByCycle(result.data.content[i].id)
                 if (result2.success) {
                     for (let j = 0; j < result2.data.totalCount; j++) {

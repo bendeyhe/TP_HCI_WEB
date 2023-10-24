@@ -1,5 +1,4 @@
 <template>
-    <AppBar/>
     <div class="mx-auto mydiv">
         <h1 class="text-center">Mis Ejercicios</h1>
         <div class="mx-auto">
@@ -89,12 +88,9 @@
             </v-col>
         </v-row>
     </div>
-    <FooterComponent/>
 </template>
 
 <script setup>
-import AppBar from "@/components/AppBar.vue";
-import FooterComponent from "@/components/FooterComponent.vue";
 import {ref} from "vue";
 import {useUserStore} from "@/stores/userStore";
 import {onBeforeMount} from "vue";

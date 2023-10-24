@@ -1,5 +1,4 @@
 <template>
-    <AppBar/>
     <h1 v-if="isEditing">Editar Rutina</h1>
     <h1 v-else>Crear Rutina</h1>
     <div class="gris">
@@ -395,7 +394,6 @@
 </template>
 
 <script setup>
-import AppBar from "@/components/AppBar.vue";
 import SearchBarExercise from "@/components/SearchBarExercise.vue";
 import ExerciseDetail from "@/components/ExerciseDetail.vue";
 import {ref, provide, onBeforeMount} from 'vue';
