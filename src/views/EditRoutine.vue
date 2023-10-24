@@ -978,7 +978,7 @@ async function agregarEjercicio() {
                 return;
             }
             for (let i = 0; i < ejEntCalor.value.length; i++) {
-                if (ejEntCalor.value[i].id === ejercicioSeleccionado.value.id) {
+                if (ejEntCalor.value[i].name === ejercicioSeleccionado.value.name) {
                     await showErrorAlert2('El ejercicio ya está en la lista, elija otro')
                     return;
                 }
