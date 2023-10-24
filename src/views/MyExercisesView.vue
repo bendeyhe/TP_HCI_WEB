@@ -79,8 +79,8 @@
             </v-dialog>
         </div>
         <div class="fondo">
-            <v-row class="width" justify="start">
-                <v-col v-for="exercise in myExercises">
+            <v-row justify="start">
+                <v-col v-for="exercise in myExercises" sm="6" md="4" lg="3">
                     <ExerciseDetail :exercise="exercise" :myExercises="myExercises" :myPage="true"/>
                 </v-col>
             </v-row>

@@ -1,5 +1,5 @@
 <template>
-    <v-card class="ml-8 my-12" width="280" height="510">
+    <v-card class="ml-8 my-2" width="280" height="510">
         <template v-slot:loader="{ isActive }">
             <v-progress-linear
                 :active="isActive"
@@ -16,12 +16,12 @@
                 height="175"
             />
             <v-card-text class="titulo"> {{ exercise?.name }}</v-card-text>
+            <div class="font-weight-bold tipo-ej">Tipo de Ejercicio: {{ typeToSpanish(exercise?.type) }}</div>
+
             <v-card-text>
                 <v-row allign="center" class="mx-0"></v-row>
                 <div class="overflow2" v-if="myPage == true">{{ exercise?.detail }}</div>
                 <div class="overflow" v-else>{{ exercise?.detail }}</div>
-                <div class="overflow">Tipo de Ejercicio: {{ typeToSpanish(exercise?.type) }}</div>
-
             </v-card-text>
         </div>
         <div v-else>
@@ -338,13 +338,22 @@ async function openConfirmDeleteDialog() {
 .titulo {
     font-size: 20px;
     font-weight: bold;
-    padding-bottom: 25px;
+    padding-bottom: 10px;
     overflow: hidden;
     text-overflow: ellipsis;
     width: 100%;
     display: -webkit-box;
     -webkit-line-clamp: 6; /* number of lines to show */
     -webkit-box-orient: vertical;
+}
+
+.tipo-ej {
+    font-size: 15px;
+    font-weight: bold;
+    padding-bottom: 10px;
+    padding-left:15px;
+    padding-right:15px;
+    width: 100%;
 }
 
 .overflow {

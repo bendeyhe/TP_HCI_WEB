@@ -21,13 +21,6 @@
                     alt="Foto del ejercicio"
                     height="150"
                 />
-
-                <v-btn
-                    class="edit"
-                    icon="mdi-pencil"
-                    @click="edit(exercise)"
-                ></v-btn>
-
             </div>
             <v-card-text class="titulo"> {{ exercise.name }} </v-card-text>
         <v-card-text>
