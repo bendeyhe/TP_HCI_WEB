@@ -526,6 +526,11 @@ const loading = ref(false)
 provide('selectedExercise', ejercicioSeleccionado);
 
 onBeforeMount(async () => {
+    const result = await exerciseStore.getAllExercises()
+    if (result.success) {
+        for (let i = 0; i < result.data.totalCount; i++)
+            exerciseStore.addExerciseSearch(result.data.content[i])
+    }
     if (route.params.id) {
         isEditing.value = true
         let result = await routineStore.getRoutine(route.params.id)

@@ -9,6 +9,7 @@ const EX_B_URL = `${API_BASE_URL}/exercises`;
 export const useExerciseStore = defineStore('exercise', {
     state: () => ({
         exercises: ref([]),
+        exercisesSearch: ref([]),
         apiEndpoints: {
             getExercises: {path: `${EX_B_URL}?size=1000`, requiresAuth: true, method: 'GET'},
             addExercise: {path: `${EX_B_URL}`, requiresAuth: true, method: 'POST'},
@@ -26,9 +27,20 @@ export const useExerciseStore = defineStore('exercise', {
         getAllExercises() {
             return this.exercises.values();
         },
+        getExercisesSearch() {
+            return this.exercisesSearch.values();
+        },
         addExerciseArray(exercise) {
             for(let i = 0; i < this.exercises.length; i++){
                 if(this.exercises[i].id === exercise.id){
+                    return;
+                }
+            }
+            this.exercises.push(exercise);
+        },
+        addExerciseSearch(exercise) {
+            for(let i = 0; i < this.exercisesSearch.length; i++){
+                if(this.exercisesSearch[i].id === exercise.id){
                     return;
                 }
             }
