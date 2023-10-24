@@ -953,7 +953,7 @@ async function addRoutine() {
 }
 
 async function agregarEjercicio() {
-    if (ejercicioSeleccionado.value.name === '' || ejercicioSeleccionado.value.detail === '' || ejercicioSeleccionado.value.url === '') {
+    if (ejercicioSeleccionado.value.name === '') {
         await showErrorAlert2('Debe seleccionar un ejercicio o crear uno nuevo')
     } else {
         if (type.value === 1) {
