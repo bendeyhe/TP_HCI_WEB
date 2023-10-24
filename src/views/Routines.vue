@@ -19,7 +19,6 @@ const route = useRoute();
 const param = "Routs";
 
 onBeforeMount(() => {
-    console.log(route.params.query);
 });
 
 const props = defineProps({

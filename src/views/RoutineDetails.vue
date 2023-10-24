@@ -178,9 +178,6 @@ function updateCiclo() {
             exercises.value = cycles.value[i].exercises
             cicloToShow.value = cycles.value[i]
             return
-        } else{
-            console.log('1 ' + selectedCiclo.value)
-            console.log('2 ' + cycles.value[i].name)
         }
     }
 }

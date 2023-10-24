@@ -22,10 +22,9 @@ const loading = ref(false)
 const searchQuery = ref('')
 
 function onClick() {
-    console.log(searchQuery.value)
-    
-        router.push({ name: 'routines', params: {query: searchQuery.value}})
-    
+
+    router.push({name: 'routines', params: {query: searchQuery.value}})
+
     loading.value = true;
     setTimeout(() => {
         loading.value = false;
