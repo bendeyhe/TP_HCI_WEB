@@ -216,6 +216,11 @@ async function deleteRoutine(routine) {
     }
 }
 
+watch(() => route.params.id, async () => {
+    await getRoutine()
+    window.scrollTo({ top: 0, behavior: 'smooth' }) // Utiliza 'smooth' para un desplazamiento suave
+})
+
 async function editarRoutina() {
     await router.push({name: 'edit-routine', params: {id: route.params.id}});
 }
@@ -225,13 +230,15 @@ const cicloToShow = computed(() => {
 })
 
 async function getRoutine() {
-    // me fijo si el usuario actual es el mismo que el de la rutina, si es asi selfRoutine = true
+    console.log('hola')
     const username = userStore.getUsername()
     const result0 = await routineStore.getRoutine(route.params.id)
     cycles.value = []
     if (result0.success) {
         if (username === result0.data.user?.username)
             selfRoutine.value = true
+        else
+            selfRoutine.value = false
         const newRoutine = {
             id: result0.data.id,
             name: result0.data.name,
