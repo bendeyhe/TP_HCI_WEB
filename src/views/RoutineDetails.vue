@@ -54,9 +54,9 @@
                         <h4>Seleccione el ciclo para ver el detalle en la tabla:</h4>
                     </v-row>
                     <v-row>
-                    <v-autocomplete placeholder="Seleccione el ciclo" variant="outlined"
-                                    v-model="selectedCiclo" @update="updateCiclo"
-                                    :items="Object.values(cycles).map(cycle => cycle.name)"></v-autocomplete>
+                        <v-autocomplete placeholder="Seleccione el ciclo" variant="outlined"
+                                        v-model="selectedCiclo" @update="updateCiclo"
+                                        :items="Object.values(cycles).map(cycle => cycle.name)"></v-autocomplete>
                     </v-row>
                 </v-col>
 
@@ -101,7 +101,12 @@
                     </v-row>
                     <v-row class="fila3">
                         <v-col>
-                            <v-btn class="compartir" @click="shareRoutine"
+                            <v-btn class="eliminar" @click="openDeleteRoutineDialog"
+                                   prepend-icon="mdi-trash-can-outline"> Eliminar Rutina
+                            </v-btn>
+                        </v-col>
+                        <v-col>
+                            <v-btn class="editar" @click="shareRoutine"
                                    prepend-icon="mdi-share-variant"> Compartir
                             </v-btn>
                         </v-col>
@@ -119,10 +124,6 @@
     <RoutineByCategories nombreRutina="Dificultad Media" :favourite="false" dif="medio"/>
     <RoutineByCategories nombreRutina="Dificultad Difícil" :favourite="false" dif="dificil"/>
     <RoutineByCategories nombreRutina="Favoritas" :favourite="true" dif="todas"/>
-    <br>
-    <br>
-
-
 
     <v-dialog v-model="showShareDialog" max-width="400">
         <v-card>
@@ -140,8 +141,46 @@
             </v-card-actions>
         </v-card>
     </v-dialog>
-</template>
 
+
+    <v-dialog width="475" class="mx-auto" v-model="confirmDelete">
+        <template v-slot:activator="{ props }">
+
+        </template>
+        <template v-slot:default="{ isActive }">
+            <v-card>
+                <v-card-title>¿Está seguro/a que desea eliminar la rutina?</v-card-title>
+                <v-card-text>Esta operación no se puede deshacer.</v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+
+                    <v-btn
+                        text="cancelar"
+                        class="cancelar"
+                        prepend-icon="mdi-close"
+                        @click="
+                                        () => {
+                                            isActive.value = false;
+                                        }
+                                    "
+                    ></v-btn>
+                    <v-btn
+                        class="confirmar"
+                        text="Confirmar"
+                        prepend-icon="mdi-check"
+                        @click="
+                                        () => {
+                                            isActive.value = false;
+                                            deleteRoutine(routine);
+                                        }
+                                    "
+                    ></v-btn>
+                </v-card-actions>
+            </v-card>
+        </template>
+    </v-dialog>
+
+</template>
 
 <script setup>
 import {RouterLink, useRoute, useRouter} from "vue-router";
@@ -161,6 +200,7 @@ let routine = ref({})
 let showShareDialog = ref(false);
 const cycles = ref([])
 const selectedCiclo = ref('')
+const confirmDelete = ref(false)
 // let cicloToShow = ref({})
 // const exercises = ref([])
 
@@ -175,6 +215,7 @@ onBeforeMount(async () => {
 async function editarRoutina() {
     await router.push({name: 'edit-routine', params: {id: route.params.id}});
 }
+
 /*function updateCiclo() {
     for (let i = 0; i < cycles.value.length; i++) {
         if (cycles.value[i].name === selectedCiclo.value){
@@ -285,6 +326,10 @@ function formatDuration(durationInSeconds) {
     }
 }
 
+async function openDeleteRoutineDialog() {
+    confirmDelete.value = true;
+}
+
 </script>
 
 <style scoped>
@@ -299,11 +344,9 @@ function formatDuration(durationInSeconds) {
     display: inline-block;
 }
 
-.compartir {
+.eliminar {
     color: #8efd00;
     background-color: #000000;
-    margin-right: 10px;
-    margin-left: 10px;
 }
 
 .cont {
@@ -371,11 +414,8 @@ h3 {
 }
 
 .editar {
-
     color: #000000;
     background-color: #8efd00;
-    margin-right: 10px;
-    margin-left: 10px;
 }
 
 .overflow {
