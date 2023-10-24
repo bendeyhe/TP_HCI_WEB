@@ -27,6 +27,7 @@
             bg-color="secondary"
             align-tabs="center"
             grow="true"
+            @click="resetEjSeleccionado()"
         >
             <v-tab :value="1">Entrada en Calor</v-tab>
             <v-tab :value="2">Principal</v-tab>
@@ -338,21 +339,6 @@
                     counter
                 ></v-text-field>
 
-                <div class="text-subtitle-1">Visibilidad de la rutina</div>
-                <v-radio-group
-                    inline
-                >
-                    <v-radio
-                        label="Rutina privada"
-                        value="radio-1"
-                    ></v-radio>
-                    <v-radio
-                        label="Rutina pública"
-                        v-model="routine.isPublic"
-                        value="radio-2"
-                    ></v-radio>
-                </v-radio-group>
-
                 <div class="text-subtitle-1">Dificultad de la rutina</div>
 
                 <v-autocomplete density="compact" default="1" variant="outlined" v-model="routine.difficulty"
@@ -542,10 +528,28 @@ onBeforeMount(async () => {
         isEditing.value = true
         let result = await routineStore.getRoutine(route.params.id)
         if (result.success) {
-            routine.value = result.data
+            routine.value = {
+                id: result.data.id,
+                name: result.data.name,
+                description: result.data.detail,
+                isPublic: result.data.isPublic,
+                difficulty: result.data.difficulty,
+                img: result.data.metadata?.image,
+                fav: result.data.metadata?.fav
+            }
             result = await routineStore.getCyclesByRoutine(route.params.id)
             if (result.success) {
                 cicloSeleccionado.value = -1
+                repCicloPrincipal.value.push(1)
+                if (!dataPrincipal.value[0])
+                    dataPrincipal.value[0] = []
+                dataPrincipal.value[0].push({
+                    cantSeries: 1,
+                    duracion: 10,
+                    typeDuracion: "segundos",
+                    descanso: 10,
+                    typeDescanso: "segundos"
+                })
                 for (let i = 0; i < result.data.totalCount; i++) {
                     const result2 = await cycleStore.getExercisesByCycle(result.data.content[i].id)
                     if (result2.success) {
@@ -553,6 +557,7 @@ onBeforeMount(async () => {
                             cicloEntCalor.value = result.data.content[i]
                             for (let j = 0; j < result2.data.totalCount; j++) {
                                 const ex = {
+                                    id: result2.data.content[j].exercise.id,
                                     name: result2.data.content[j].exercise.name,
                                     detail: result2.data.content[j].exercise.detail,
                                     url: result2.data.content[j].exercise.metadata?.image,
@@ -564,13 +569,15 @@ onBeforeMount(async () => {
                             }
                         } else if (result.data.content[i].type === 'exercise') {
                             if (cicloSeleccionado.value === -1)
-                                cicloSeleccionado.value = i + 1
+                                cicloSeleccionado.value = i
                             ciclosPrincipal.value.push(result.data.content[i])
-                            cantCiclosPrincipal.value.push(i + 1)
+                            cantCiclosPrincipal.value.push(i)
+                            repCicloPrincipal.value.push(1)
                             for (let j = 0; j < result2.data.totalCount; j++) {
-                                if (!ejPrincipal.value[i + 1])
-                                    ejPrincipal.value[i + 1] = []
+                                if (!ejPrincipal.value[i])
+                                    ejPrincipal.value[i] = []
                                 const ex = {
+                                    id: result2.data.content[j].exercise.id,
                                     name: result2.data.content[j].exercise.name,
                                     detail: result2.data.content[j].exercise.detail,
                                     url: result2.data.content[j].exercise.metadata?.image,
@@ -578,14 +585,22 @@ onBeforeMount(async () => {
                                     number: 1,
                                     index: 0
                                 }
-                                ejPrincipal.value[i + 1].push(ex)
+                                ejPrincipal.value[i].push(ex)
                             }
-                            if (!dataPrincipal.value[i + 1])
-                                dataPrincipal.value[i + 1] = []
+                            if (!dataPrincipal.value[i])
+                                dataPrincipal.value[i] = []
+                            dataPrincipal.value[i].push({
+                                cantSeries: 1,
+                                duracion: 10,
+                                typeDuracion: "segundos",
+                                descanso: 10,
+                                typeDescanso: "segundos"
+                            })
                         } else if (result.data.content[i].type === 'cooldown') {
                             cicloEnfriamiento.value = result.data.content[i]
                             for (let j = 0; j < result2.data.totalCount; j++) {
                                 const ex = {
+                                    id: result2.data.content[j].exercise.id,
                                     name: result2.data.content[j].exercise.name,
                                     detail: result2.data.content[j].exercise.detail,
                                     url: result2.data.content[j].exercise.metadata?.image,
@@ -637,6 +652,17 @@ onBeforeMount(async () => {
     }
 });
 
+function resetEjSeleccionado(){
+    ejercicioSeleccionado.value = {
+        name: '',
+        detail: '',
+        url: '',
+        type: '',
+        number: 0,
+        index: 0
+    }
+}
+
 async function addRoutine() {
     loading.value = true
     if (!route.params.id) {
@@ -648,6 +674,21 @@ async function addRoutine() {
             metadata: {
                 image: routine.value.img
             }
+        }
+        if (!rout.name) {
+            await showErrorAlert('Debe ingresar un nombre para la rutina')
+            loading.value = false
+            return;
+        }
+        if (!rout.difficulty) {
+            await showErrorAlert('Debe seleccionar una dificultad para la rutina')
+            loading.value = false
+            return;
+        }
+        if (!rout.metadata.image) {
+            await showErrorAlert('Debe cargar una imagen para la rutina')
+            loading.value = false
+            return;
         }
         const result = await routineStore.addRoutine(rout)
         if (result.success) {
@@ -708,7 +749,6 @@ async function addRoutine() {
                         const idCiclo = result.data.id
                         // agregar ejercicios principales
                         for (let j = 0; j < ejPrincipal.value[i + 1]?.length; j++) {
-                            console.log(dataPrincipal.value[i + 1][j + 1])
                             const repeticiones = (dataPrincipal.value[i + 1][j + 1].typeDuracion === 'repeticiones' ? dataPrincipal.value[i + 1][j + 1].duracion : 0)
                             const duracion = (repeticiones === 0 ? (dataPrincipal.value[i + 1][j + 1].typeDuracion === 'segundos' ? dataPrincipal.value[i + 1][j + 1].duracion : dataPrincipal.value[i + 1][j + 1].duracion * 60) : 0)
                             const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejPrincipal.value[i + 1][j].id, j + 1, duracion, repeticiones)
@@ -752,8 +792,7 @@ async function addRoutine() {
             finishRoutine.value = false
             await router.push({name: 'my-routines'})
         }
-    }
-    else{
+    } else {
         // en este caso estoy editando una rutina
         // primero tengo que borrar los ciclos de la rutina
         // luego agregar los ciclos a la rutina
@@ -761,15 +800,146 @@ async function addRoutine() {
 
         // primero edito la rutina
         const rout = {
+            id: routine.value.id,
             name: routine.value.name,
-            detail: routine.value.description,
-            isPublic: routine.value.isPublic ? true : false,
+            description: routine.value.description,
+            isPublic: true,
             difficulty: routine.value.difficulty,
-            metadata: {
-                image: routine.value.img
-            }
+            img: routine.value.img,
+            score : 0,
+            fav: routine.value.fav,
+        }
+        if (!rout.name) {
+            await showErrorAlert('Debe ingresar un nombre para la rutina')
+            loading.value = false
+            return;
+        }
+        if (!rout.difficulty) {
+            await showErrorAlert('Debe seleccionar una dificultad para la rutina')
+            loading.value = false
+            return;
+        }
+        if (!rout.img) {
+            await showErrorAlert('Debe cargar una imagen para la rutina')
+            loading.value = false
+            return;
         }
         const result = await routineStore.changeRoutine(rout)
+        if (!result.success) {
+            await showErrorAlert('Error al editar rutina')
+            loading.value = false
+            return;
+        }
+
+        const idRoutine = result.data.id
+        // ahora borro los ciclos de la rutina
+        const result2 = await routineStore.getCyclesByRoutine(route.params.id)
+        if (result2.success) {
+            for (let i = 0; i < result2.data.totalCount; i++) {
+                const result3 = await routineStore.removeCycleFromRoutine(route.params.id, result2.data.content[i].id)
+                if (!result3.success) {
+                    await showErrorAlert('Error al borrar ciclo de rutina')
+                    loading.value = false
+                    return;
+                }
+            }
+        }
+
+        let cantCiclos = 1
+        // agregar ciclo de entrada en calor
+        if (ejEntCalor.value.length > 0) {
+            const ciclo = {
+                name: 'Entrada en calor',
+                detail: 'Entrada en calor',
+                type: 'warmup',
+                order: cantCiclos,
+                repetitions: repCicloEntCalor.value
+            }
+            cantCiclos++
+            const result = await routineStore.addCycleToRoutine(idRoutine, ciclo)
+            if (result.success) {
+                const idCiclo = result.data.id
+                // agregar ejercicios a los ciclos
+                // agregar ejercicios de entrada en calor
+                if (ejEntCalor.value.length > 0) {
+                    for (let i = 0; i < ejEntCalor.value.length; i++) {
+                        const repeticiones = (dataEntCalor.value.typeDuracion === 'repeticiones' ? dataEntCalor.value.duracion : 0)
+                        const duracion = (repeticiones === 0 ? (dataEntCalor.value.typeDuracion === 'segundos' ? dataEntCalor.value.duracion : dataEntCalor.value.duracion * 60) : 0)
+                        const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejEntCalor.value[i].id, i + 1, duracion, repeticiones)
+                        if (!result2.success) {
+                            await showErrorAlert('Error al agregar ejercicio a ciclo en calor')
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+
+        // agregar ciclos principales
+        for (let i = 0; i < ciclosPrincipal.value.length; i++) {
+            const ciclo = {
+                name: 'Principal ' + (i + 1),
+                detail: 'Principal ' + (i + 1),
+                type: 'exercise',
+                order: cantCiclos,
+                repetitions: repCicloPrincipal.value[i + 1]
+            }
+            cantCiclos++
+            //quiero agregar el ciclo si tiene por lo menos un ejercicio adentro
+            let foundExercise = false
+            for (let j = 0; j < ejPrincipal.value[i + 1]?.length; j++) {
+                if (ejPrincipal.value[i + 1][j].id != null) {
+                    foundExercise = true
+                }
+            }
+            if (foundExercise) {
+                const result = await routineStore.addCycleToRoutine(idRoutine, ciclo)
+                if (result.success) {
+                    const idCiclo = result.data.id
+                    // agregar ejercicios principales
+                    for (let j = 0; j < ejPrincipal.value[i + 1]?.length; j++) {
+                        const repeticiones = (dataPrincipal.value[i + 1][j].typeDuracion === 'repeticiones' ? dataPrincipal.value[i + 1][j].duracion : 0)
+                        const duracion = (repeticiones === 0 ? (dataPrincipal.value[i + 1][j].typeDuracion === 'segundos' ? dataPrincipal.value[i + 1][j].duracion : dataPrincipal.value[i + 1][j].duracion * 60) : 0)
+                        const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejPrincipal.value[i + 1][j].id, j + 1, duracion, repeticiones)
+                        if (!result2.success) {
+                            await showErrorAlert('Error al agregar ejercicio a ciclo')
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+
+        // agregar ciclo de enfriamiento
+        if (ejEnfriamiento.value.length > 0) {
+            const ciclo = {
+                name: 'Enfriamiento',
+                detail: 'Enfriamiento',
+                type: 'cooldown',
+                order: cantCiclos,
+                repetitions: repCicloEnfriamiento.value
+            }
+            cantCiclos++
+            const result = await routineStore.addCycleToRoutine(idRoutine, ciclo)
+            if (result.success) {
+                const idCiclo = result.data.id
+                // agregar ejercicios de enfriamiento
+                if (ejEnfriamiento.value.length > 0) {
+                    for (let i = 0; i < ejEnfriamiento.value.length; i++) {
+                        const repeticiones = (dataEnf.value.typeDuracion === 'repeticiones' ? dataEnf.value.duracion : 0)
+                        const duracion = (repeticiones === 0 ? (dataEnf.value.typeDuracion === 'segundos' ? dataEnf.value.duracion : dataEnf.value.duracion * 60) : 0)
+                        const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejEnfriamiento.value[i].id, i + 1, duracion, repeticiones)
+                        if (!result2.success) {
+                            await showErrorAlert('Error al agregar ejercicio a ciclo enfriamiento')
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        loading.value = false
+        finishRoutine.value = false
+        await router.push({name: 'my-routines'})
     }
     loading.value = false
 }
@@ -850,7 +1020,6 @@ async function agregarEjercicio() {
                 descanso: dataPrincipal.value[cicloSeleccionado.value][0]?.descanso,
                 typeDescanso: dataPrincipal.value[cicloSeleccionado.value][0]?.typeDescanso
             })
-            console.log(ejPrincipal.value)
         } else if (type.value === 3) {
             if (dataEnf.value.cantSeries === 0) {
                 await showErrorAlert2('La cantidad de series no puede ser 0')
@@ -918,6 +1087,7 @@ async function saveExercise() {
 }
 
 async function openFinishDialog() {
+    /*
     if (ejEntCalor.value.length === 0) {
         await showErrorAlert('La rutina debe tener al menos un ejercicio en la entrada en calor')
         return;
@@ -934,7 +1104,7 @@ async function openFinishDialog() {
             await showErrorAlert('La rutina debe tener al menos un ejercicio en la parte principal')
             return;
         }
-    }
+    }*/
     finishRoutine.value = true
 }
 
@@ -946,9 +1116,9 @@ function addCycle() {
         number: ciclosPrincipal.value.length + 1,
         index: ciclosPrincipal.value.length + 1
     })
-    if (!dataPrincipal.value[cicloSeleccionado.value + 1])
-        dataPrincipal.value[cicloSeleccionado.value + 1] = []
-    dataPrincipal.value[cicloSeleccionado.value + 1].push({
+    if (!dataPrincipal.value[cicloSeleccionado.value])
+        dataPrincipal.value[cicloSeleccionado.value] = []
+    dataPrincipal.value[cicloSeleccionado.value].push({
         cantSeries: 1,
         duracion: 10,
         typeDuracion: 'segundos',
