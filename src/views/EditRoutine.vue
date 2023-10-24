@@ -810,11 +810,6 @@ async function addRoutine() {
             await router.push({name: 'my-routines'})
         }
     } else {
-        // en este caso estoy editando una rutina
-        // primero tengo que borrar los ciclos de la rutina
-        // luego agregar los ciclos a la rutina
-        // luego agregar los ejercicios a los ciclos
-
         // primero edito la rutina
         const rout = {
             id: routine.value.id,
