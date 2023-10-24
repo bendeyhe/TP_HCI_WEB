@@ -101,17 +101,17 @@
                     </v-row>
                     <v-row class="fila3">
                         <v-col>
-                            <v-btn v-if="selfRoutine" class="eliminar ml-6" @click="openDeleteRoutineDialog"
-                                   prepend-icon="mdi-trash-can-outline"> Eliminar Rutina
+                            <v-btn v-if="selfRoutine" class="eliminar ml-auto" @click="openDeleteRoutineDialog"
+                                   prepend-icon="mdi-trash-can-outline"> Eliminar
                             </v-btn>
                         </v-col>
                         <v-col>
-                            <v-btn class="editar ml-6" @click="shareRoutine"
+                            <v-btn class="editar ml-auto" @click="shareRoutine"
                                    prepend-icon="mdi-share-variant"> Compartir
                             </v-btn>
                         </v-col>
                         <v-col v-if="selfRoutine">
-                            <v-btn class="editar" prepend-icon="mdi-pencil" @click="editarRoutina()"> Editar rutina
+                            <v-btn class="editar" prepend-icon="mdi-pencil" @click="editarRoutina()"> Editar
                             </v-btn>
                         </v-col>
                     </v-row>
