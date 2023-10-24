@@ -162,6 +162,8 @@ async function saveExercise() {
         newEjercicio.value.type = 'rest'
     else
         newEjercicio.value.type = 'exercise'
+    if (newEjercicio.value.url === '')
+        newEjercicio.value.url = 'https://th.bing.com/th/id/OIG.hUKUpOfOW_DIJ924Uky.?pid=ImgGn&w=1024&h=1024&rs=1'
     if (!newEjercicio.value.name) {
         await showErrorAlert('El nombre del ejercicio es obligatorio')
         return false

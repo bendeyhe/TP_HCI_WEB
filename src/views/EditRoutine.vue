@@ -1201,8 +1201,7 @@ async function saveExercise() {
         await showErrorAlert2('Debe ingresar un nombre para el ejercicio')
         return false;
     }
-    if (newEjercicio.value.url === '')
-        newEjercicio.value.url = 'https://th.bing.com/th/id/OIG.hUKUpOfOW_DIJ924Uky.?pid=ImgGn&w=1024&h=1024&rs=1'
+    
     let result = await exerciseStore.addExercise(newEjercicio.value);
     if (result.success) {
         newEjercicio.value.index = result.data.id
@@ -1249,6 +1248,9 @@ async function saveExercise() {
     } else{
         await showErrorAlert('Error al agregar ejercicio')
         return false;
+    }
+    if(newEjercicio.value.type === 'exercise'){
+        // agrego un ejercicio a la lista de ejercicios de la rutina que sea de descanso con la duracion
     }
     return true;
 }
