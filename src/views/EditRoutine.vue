@@ -583,11 +583,14 @@ onBeforeMount(async () => {
                         if (result.data.content[i].type === 'warmup') {
                             cicloEntCalor.value = result.data.content[i]
                             for (let j = 0; j < result2.data.totalCount; j++) {
+                                debugger;
+                                const aux= await exerciseStore.getExerciseImages(result2.data.content[j].exercise.id)
+                                const auximage = aux.data.content[0].url
                                 const ex = {
                                     id: result2.data.content[j].exercise.id,
                                     name: result2.data.content[j].exercise.name,
                                     detail: result2.data.content[j].exercise.detail,
-                                    url: result2.data.content[j].exercise.metadata?.image,
+                                    url: auximage,
                                     type: result2.data.content[j].exercise.type,
                                     number: 1,
                                     index: 0
