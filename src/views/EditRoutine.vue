@@ -2,6 +2,7 @@
     <AppBar/>
     <h1 v-if="isEditing">Editar Rutina</h1>
     <h1 v-else>Crear Rutina</h1>
+    <div class="gris">
     <v-row>
         <v-col>
             <v-btn prepend-icon="mdi-content-save" class="save" @click="openFinishDialog"> Finalizar</v-btn>
@@ -19,6 +20,7 @@
             ></v-alert>
         </v-col>
     </v-row>
+    </div>
 
     <v-card>
         <v-tabs
@@ -1277,6 +1279,11 @@ h2 {
 .agregar-principal {
     background-color: #000000;
     color: #8efd00;
+}
+
+.gris {
+    background-color: gray;
+    border-radius: 20px 20px 0 0;
 }
 
 </style>
