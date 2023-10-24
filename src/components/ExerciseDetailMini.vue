@@ -47,7 +47,7 @@
                     ></v-btn>
                     <v-btn
                         icon="mdi-trash-can-outline"
-                        @click="delete(exercise)"
+                        @click="deleteEx(exercise)"
                         class="red-hover"
                     ></v-btn>
                     <v-btn
