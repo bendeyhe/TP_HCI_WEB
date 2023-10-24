@@ -302,15 +302,15 @@ async function getAllRoutines() {
                 routineStore.addRoutineArray({
                     id: routine.id,
                     name: routine.name,
-                    img: routine.metadata.image,
+                    img: routine.metadata?.image,
                     category: routine.category,
                     description: routine.detail,
                     creator: routine.user,
                     difficulty: routine.difficulty,
                     isPublic: routine.isPublic,
-                    fav: routine.metadata.fav,
+                    fav: routine.metadata?.fav,
                     date: routine.date,
-                    score: routine.metadata.score,
+                    score: routine.metadata?.score,
                 });
             }
         }
