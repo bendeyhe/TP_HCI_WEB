@@ -166,6 +166,12 @@ export const useRoutineStore = defineStore('routine', {
             return await makeApiCall(this.apiEndpoints.changeRoutine(routine.id), data, useUserStore().token);
         },
         async deleteRoutine(routineId) {
+            this.myRoutines.splice(this.myRoutines.findIndex(r => r.id === routineId), 1);
+            this.routines.splice(this.routines.findIndex(r => r.id === routineId), 1);
+            this.favoriteRoutines.splice(this.favoriteRoutines.findIndex(r => r.id === routineId), 1);
+            this.easyRoutines.splice(this.easyRoutines.findIndex(r => r.id === routineId), 1);
+            this.mediumRoutines.splice(this.mediumRoutines.findIndex(r => r.id === routineId), 1);
+            this.dificultRoutines.splice(this.dificultRoutines.findIndex(r => r.id === routineId), 1);
             return await makeApiCall(this.apiEndpoints.deleteRoutine(routineId), null, useUserStore().token);
         },
 
