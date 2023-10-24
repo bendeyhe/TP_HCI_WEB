@@ -5,18 +5,18 @@
     <v-row>
         <v-col>
             <v-btn prepend-icon="mdi-content-save" class="save" @click="openFinishDialog"> Finalizar</v-btn>
-            <v-alert
-                v-if="successAlert"
-                color="success"
-                icon="$success"
-                :text=successMessage
-            ></v-alert>
-            <v-alert
-                v-if="errorAlert"
-                color="error"
-                icon="$error"
-                :text=errorMessage
-            ></v-alert>
+                <v-alert
+                    v-if="successAlert"
+                    color="success"
+                    icon="$success"
+                    :text=successMessage
+                ></v-alert>
+                <v-alert
+                    v-if="errorAlert"
+                    color="error"
+                    icon="$error"
+                    :text=errorMessage
+                ></v-alert>
         </v-col>
     </v-row>
     </div>
@@ -106,6 +106,8 @@
                                                         v-model="newEjercicio.name"
                                                         maxlength="100"
                                                         variant="outlined"
+                                                        :rules="[(v) => !!v || 'Campo requerido']"
+                                                        required
                                                         counter
                                                     ></v-text-field>
                                                     <v-text-field
@@ -122,8 +124,8 @@
                                                         counter
                                                         variant="outlined"
                                                     ></v-text-field>
-                                                </v-card-text>
 
+                                                </v-card-text>
                                                 <v-card-actions>
                                                     <v-spacer></v-spacer>
 
@@ -135,7 +137,7 @@
                                                     <v-btn
                                                         class="confirmar"
                                                         text="Confirmar"
-                                                        @click="() => { isActive.value = false; saveExercise(); }"
+                                                        @click="() => { isActive.value = saveExercise();  }"
                                                     ></v-btn>
                                                 </v-card-actions>
                                             </v-card>
@@ -586,7 +588,6 @@ onBeforeMount(async () => {
                         if (result.data.content[i].type === 'warmup') {
                             cicloEntCalor.value = result.data.content[i]
                             for (let j = 0; j < result2.data.totalCount; j++) {
-                                debugger;
                                 const aux= await exerciseStore.getExerciseImages(result2.data.content[j].exercise.id)
                                 const auximage = aux.data.content[0].url
                                 const ex = {
@@ -850,7 +851,6 @@ async function addRoutine() {
                     }
                 }
             }
-            debugger;
 
             // agregar ciclo de enfriamiento
             if (ejEnfriamiento.value.length > 0) {
@@ -923,7 +923,6 @@ async function addRoutine() {
         const idRoutine = result.data.id
         // ahora borro los ciclos de la rutina
         const result2 = await routineStore.getCyclesByRoutine(route.params.id)
-        debugger;
         const aux = []
         if (result2.success) {
             for (let i = 0; i < result2.data.totalCount; i++) {
@@ -994,7 +993,6 @@ async function addRoutine() {
                 }
             }
             if (foundExercise) {
-                debugger;
                 const result = await routineStore.addCycleToRoutine(idRoutine, ciclo)
                 if (result.success) {
                     const idCiclo = result.data.id
@@ -1116,7 +1114,6 @@ async function agregarEjercicio() {
                     return;
                 }
             }
-            debugger;
             ejEntCalor.value.push(ejercicioSeleccionado.value);
         } else if (type.value === 2) {
             let cantEjs = ejPrincipal.value[cicloSeleccionado.value]?.length
@@ -1200,6 +1197,12 @@ async function saveExercise() {
         newEjercicio.value.type = 'rest'
     else
         newEjercicio.value.type = 'exercise'
+    if (newEjercicio.value.name === '') {
+        await showErrorAlert2('Debe ingresar un nombre para el ejercicio')
+        return false;
+    }
+    if (newEjercicio.value.url === '')
+        newEjercicio.value.url = 'https://th.bing.com/th/id/OIG.hUKUpOfOW_DIJ924Uky.?pid=ImgGn&w=1024&h=1024&rs=1'
     let result = await exerciseStore.addExercise(newEjercicio.value);
     if (result.success) {
         newEjercicio.value.index = result.data.id
@@ -1216,6 +1219,9 @@ async function saveExercise() {
             user.data.metadata.exercises.push(newEjercicio.value)
             await userStore.modifyCurrentUser(user.data.firstName, user.data.lastName, user.data.gender, user.data.metadata)
             myExercises.value = user.data.metadata.exercises
+        } else {
+            await showErrorAlert('Error al obtener usuario')
+            return false;
         }
         result = await exerciseStore.addExerciseImage(result.data.id, newEjercicio.value)
         if (result.success) {
@@ -1236,8 +1242,15 @@ async function saveExercise() {
                 number: myExercises.value.length,
                 index: 0
             }
+        } else {
+            await showErrorAlert('Error al agregar imagen')
+            return false;
         }
+    } else{
+        await showErrorAlert('Error al agregar ejercicio')
+        return false;
     }
+    return true;
 }
 
 async function openFinishDialog() {
