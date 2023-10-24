@@ -2,67 +2,67 @@
     <AppBar v-if="isLogged"/>
     <AppBarWithoutSearch v-else/>
     <div class="gg">
-    <v-app id="inspire">
+        <v-app id="inspire">
 
-        <v-carousel cycle show-arrows="hover" hide-delimiter-background v-if="!loading">
-            <v-carousel-item
-                v-for="routine in topRoutines.values()"
-                :src="routine.metadata.image"
-                cover
-            >
-                <div class="nombre-rutina">
-                    {{ routine.name }}
-                </div>
-                <div class="detalles-rutina">
-                    Creador: {{ routine.user.username }} <br>
-                    Dificultad: {{ routine.difficulty }}
-                </div>
-                <div class="boton-rutina">
-                    <v-btn class="boton" @click="verDetalle(routine)"> Ver Detalle</v-btn>
-                </div>
-            </v-carousel-item>
-        </v-carousel>
-        <v-main>
-
-            <div class="d-flex align-center flex-column pa-6">
-                <v-btn-toggle
-                    v-model="toggle"
-                    divided
-                    variant="outlined"
+            <v-carousel cycle show-arrows="hover" hide-delimiter-background v-if="!loading">
+                <v-carousel-item
+                    v-for="routine in topRoutines.values()"
+                    :src="routine.metadata.image"
+                    cover
                 >
+                    <div class="nombre-rutina">
+                        {{ routine.name }}
+                    </div>
+                    <div class="detalles-rutina">
+                        Creador: {{ routine.user.username }} <br>
+                        Dificultad: {{ traducirDificultadAespanol(routine.difficulty) }}
+                    </div>
+                    <div class="boton-rutina">
+                        <v-btn class="boton" @click="verDetalle(routine)"> Ver Detalle</v-btn>
+                    </div>
+                </v-carousel-item>
+            </v-carousel>
+            <v-main>
 
-                    <RouterLink to="/">
-                        <v-tooltip
-                            :location="location"
-                            :origin="origin"
-                            no-click-animation>
-                            <template v-slot:activator="{ props }">
-                                <v-btn v-bind="props" icon="mdi-view-headline" class="boton-lista"></v-btn>
-                            </template>
-                            <div> Ver rutinas según su dificultad</div>
-                        </v-tooltip>
-                    </RouterLink>
+                <div class="d-flex align-center flex-column pa-6">
+                    <v-btn-toggle
+                        v-model="toggle"
+                        divided
+                        variant="outlined"
+                    >
 
-                    <RouterLink to="/all-routines">
-                        <v-tooltip
-                            :location="location"
-                            :origin="origin"
-                            no-click-animation>
-                            <template v-slot:activator="{ props }">
-                                <v-btn v-bind="props" icon="mdi-view-grid" class="boton-cuadricula"></v-btn>
-                            </template>
-                            <div> Ver todas las rutinas</div>
-                        </v-tooltip>
-                    </RouterLink>
-                </v-btn-toggle>
-            </div>
+                        <RouterLink to="/">
+                            <v-tooltip
+                                :location="location"
+                                :origin="origin"
+                                no-click-animation>
+                                <template v-slot:activator="{ props }">
+                                    <v-btn v-bind="props" icon="mdi-view-headline" class="boton-lista"></v-btn>
+                                </template>
+                                <div> Ver rutinas según su dificultad</div>
+                            </v-tooltip>
+                        </RouterLink>
 
-            <RoutineByCategories :nombreRutina="category1" :favourite="false" dif="facil"/>
-            <RoutineByCategories :nombreRutina="category2" :favourite="false" dif="medio"/>
-            <RoutineByCategories :nombreRutina="category3" :favourite="false" dif="dificil"/>
-            <RoutineByCategories :nombreRutina="category4" :favourite="true" dif="todas"/>
-        </v-main>
-    </v-app>
+                        <RouterLink to="/all-routines">
+                            <v-tooltip
+                                :location="location"
+                                :origin="origin"
+                                no-click-animation>
+                                <template v-slot:activator="{ props }">
+                                    <v-btn v-bind="props" icon="mdi-view-grid" class="boton-cuadricula"></v-btn>
+                                </template>
+                                <div> Ver todas las rutinas</div>
+                            </v-tooltip>
+                        </RouterLink>
+                    </v-btn-toggle>
+                </div>
+
+                <RoutineByCategories :nombreRutina="category1" :favourite="false" dif="facil"/>
+                <RoutineByCategories :nombreRutina="category2" :favourite="false" dif="medio"/>
+                <RoutineByCategories :nombreRutina="category3" :favourite="false" dif="dificil"/>
+                <RoutineByCategories :nombreRutina="category4" :favourite="true" dif="todas"/>
+            </v-main>
+        </v-app>
     </div>
     <footer-component/>
 </template>
@@ -85,6 +85,17 @@ const loading = ref(false);
 
 function isLogged() {
     return userStore.getTokenState() !== null && userStore.getTokenState() !== '';
+}
+
+function traducirDificultadAespanol(dificultadEnIngles) {
+    const traducciones = {
+        'rookie': 'Principiante',
+        'beginner': 'Amateur',
+        'intermediate': 'Intermedio',
+        'advanced': 'Avanzado',
+        'expert': 'Experto'
+    };
+    return traducciones[dificultadEnIngles] || dificultadEnIngles;
 }
 
 onBeforeMount(async () => {
@@ -207,7 +218,7 @@ export default {
 
 }
 
-.gg{
+.gg {
     margin-bottom: 100px;
 }
 

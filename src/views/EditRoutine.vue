@@ -344,7 +344,7 @@
                 <div class="text-subtitle-1">Dificultad de la rutina</div>
 
                 <v-autocomplete density="compact" default="1" variant="outlined" v-model="routine.difficulty"
-                                :items="['rookie', 'beginner', 'intermediate', 'advanced', 'expert']"></v-autocomplete>
+                                :items="['principiante', 'amateur', 'intermedio', 'avanzado', 'experto']"></v-autocomplete>
 
                 <v-text-field label="Imagen" v-model="routine.img" variant="outlined"></v-text-field>
 
@@ -560,7 +560,7 @@ onBeforeMount(async () => {
                 name: result.data.name,
                 description: result.data.detail,
                 isPublic: result.data.isPublic,
-                difficulty: result.data.difficulty,
+                difficulty: diffToSpanish(routine.value.difficulty),
                 img: result.data.metadata?.image,
                 fav: result.data.metadata?.fav
             }
@@ -690,6 +690,40 @@ function resetEjSeleccionado() {
     }
 }
 
+function diffToEnglish(dif) {
+    switch (dif) {
+        case 'principiante':
+            return 'rookie';
+        case 'amateur':
+            return 'beginner';
+        case 'intermedio':
+            return 'intermediate';
+        case 'avanzado':
+            return 'advanced';
+        case 'experto':
+            return 'expert';
+        default:
+            return 'rookie';
+    }
+}
+
+function diffToSpanish(dif) {
+    switch (dif) {
+        case 'rookie':
+            return 'principiante';
+        case 'beginner':
+            return 'amateur';
+        case 'intermediate':
+            return 'intermedio';
+        case 'advanced':
+            return 'avanzado';
+        case 'expert':
+            return 'experto';
+        default:
+            return 'principiante';
+    }
+}
+
 async function addRoutine() {
     loading.value = true
     if (!route.params.id) {
@@ -697,7 +731,7 @@ async function addRoutine() {
             name: routine.value.name,
             detail: routine.value.description,
             isPublic: routine.value.isPublic ? true : false,
-            difficulty: routine.value.difficulty,
+            difficulty: diffToEnglish(routine.value.difficulty),
             metadata: {
                 image: routine.value.img
             }
@@ -835,7 +869,7 @@ async function addRoutine() {
             name: routine.value.name,
             description: routine.value.description,
             isPublic: true,
-            difficulty: routine.value.difficulty,
+            difficulty: diffToEnglish(routine.value.difficulty),
             img: routine.value.img,
             score: 0,
             fav: routine.value.fav,
