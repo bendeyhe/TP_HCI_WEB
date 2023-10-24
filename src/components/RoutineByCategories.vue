@@ -1,5 +1,5 @@
 <template>
-    <v-sheet class="mx-auto" elevation="8">
+    <v-sheet class="mx-auto probando" elevation="8">
         <RouterLink :to="{ name: 'favourite-routines' }" v-if="nombreRutina==='Favoritas'" class="favor">
             <h1 class="titulo">Favoritas</h1>
         </RouterLink>
@@ -279,6 +279,10 @@ async function toggle(routine) {
     overflow: visible;
     white-space: normal;
     max-height: none;
+}
+
+.probando {
+    background-color: rgba(128, 128, 128, 0.30);
 }
 
 </style>

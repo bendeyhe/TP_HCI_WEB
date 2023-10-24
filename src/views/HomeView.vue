@@ -2,7 +2,7 @@
   <div class="gg">
     <v-app id="inspire">
 
-      <v-carousel cycle show-arrows="hover" hide-delimiter-background v-if="!loading">
+      <v-carousel cycle show-arrows="hover" hide-delimiter-background v-if="!loading" height="400px">
         <v-carousel-item
             v-for="routine in topRoutines.values()"
             :src="routine.metadata.image"
