@@ -2,9 +2,9 @@
     <h1 v-if="isEditing">Editar Rutina</h1>
     <h1 v-else>Crear Rutina</h1>
     <div class="gris">
-    <v-row>
-        <v-col>
-            <v-btn prepend-icon="mdi-content-save" class="save" @click="openFinishDialog"> Finalizar</v-btn>
+        <v-row>
+            <v-col>
+                <v-btn prepend-icon="mdi-content-save" class="save" @click="openFinishDialog"> Finalizar</v-btn>
                 <v-alert
                     v-if="successAlert"
                     color="success"
@@ -17,8 +17,8 @@
                     icon="$error"
                     :text=errorMessage
                 ></v-alert>
-        </v-col>
-    </v-row>
+            </v-col>
+        </v-row>
     </div>
 
     <v-card>
@@ -588,7 +588,7 @@ onBeforeMount(async () => {
                         if (result.data.content[i].type === 'warmup') {
                             cicloEntCalor.value = result.data.content[i]
                             for (let j = 0; j < result2.data.totalCount; j++) {
-                                const aux= await exerciseStore.getExerciseImages(result2.data.content[j].exercise.id)
+                                const aux = await exerciseStore.getExerciseImages(result2.data.content[j].exercise.id)
                                 const auximage = aux.data.content[0].url
                                 const ex = {
                                     id: result2.data.content[j].exercise.id,
@@ -747,7 +747,7 @@ async function addRoutine() {
                     return;
                 }
             }
-        } else{
+        } else {
             await showErrorAlert('Error al obtener categorias')
             return;
         }
@@ -953,26 +953,25 @@ async function addRoutine() {
                 // agregar ejercicios de entrada en calor
                 if (ejEntCalor.value.length > 0) {
                     for (let i = 0; i < ejEntCalor.value.length; i++) {
-                        if(i < aux[0].data.content.length ){
+                        if (i < aux[0].data.content.length) {
                             const repeticiones = (aux[0].data.content[i].repetitions)
                             const duracion = (aux[0].data.content[i].duration)
                             const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejEntCalor.value[i].id, i + 1, duracion, repeticiones)
-                        }
-                        else{
-                        const repeticiones = (dataEntCalor.value.typeDuracion === 'repeticiones' ? dataEntCalor.value.duracion : 0)
-                        let repInt = parseInt(repeticiones?.value)
-                        const duracion = (repeticiones === 0 ? (dataEntCalor.value.typeDuracion === 'segundos' ? dataEntCalor.value.duracion : dataEntCalor.value.duracion * 60) : 0)
-                        if (isNaN(repInt))
-                            repInt = 0
-                        const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejEntCalor.value[i].id, i + 1, duracion, repInt)
-                        if (!result2.success) {
-                            await showErrorAlert('Error al agregar ejercicio a ciclo en calor')
-                            return;
+                        } else {
+                            const repeticiones = (dataEntCalor.value.typeDuracion === 'repeticiones' ? dataEntCalor.value.duracion : 0)
+                            let repInt = parseInt(repeticiones?.value)
+                            const duracion = (repeticiones === 0 ? (dataEntCalor.value.typeDuracion === 'segundos' ? dataEntCalor.value.duracion : dataEntCalor.value.duracion * 60) : 0)
+                            if (isNaN(repInt))
+                                repInt = 0
+                            const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejEntCalor.value[i].id, i + 1, duracion, repInt)
+                            if (!result2.success) {
+                                await showErrorAlert('Error al agregar ejercicio a ciclo en calor')
+                                return;
+                            }
                         }
                     }
                 }
             }
-        }
         }
 
         // agregar ciclos principales
@@ -998,39 +997,38 @@ async function addRoutine() {
                     const idCiclo = result.data.id
                     // agregar ejercicios principales
                     for (let j = 0; j < ejPrincipal.value[i + 1]?.length; j++) {
-                        if (i < aux.length-2){
-                            if (j < aux[i].data.content.length){
-                                const repeticiones = (aux[i+1].data.content[j].repetitions)
-                                const duracion = (aux[i+1].data.content[j].duration)
+                        if (i < aux.length - 2) {
+                            if (j < aux[i].data.content.length) {
+                                const repeticiones = (aux[i + 1].data.content[j].repetitions)
+                                const duracion = (aux[i + 1].data.content[j].duration)
                                 const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejPrincipal.value[i + 1][j].id, j + 1, duracion, repeticiones)
                                 if (!result2.success) {
                                     await showErrorAlert('Error al agregar ejercicio a ciclo')
                                     return;
                                 }
                             } else {
-                                const repeticiones = (dataPrincipal.value[i + 1][j - aux[i].data.content.length ].typeDuracion === 'repeticiones' ? dataPrincipal.value[i + 1][j - aux[i].data.content.length ].duracion : 0)
-                                const duracion = (repeticiones === 0 ? (dataPrincipal.value[i + 1][j - aux[i].data.content.length ].typeDuracion === 'segundos' ? dataPrincipal.value[i + 1][j - aux[i].data.content.length ].duracion : dataPrincipal.value[i + 1][j - aux[i].data.content.length + 1].duracion * 60) : 0)
-                                const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejPrincipal.value[i + 1][j].id, j +1, duracion, repeticiones)
+                                const repeticiones = (dataPrincipal.value[i + 1][j - aux[i].data.content.length].typeDuracion === 'repeticiones' ? dataPrincipal.value[i + 1][j - aux[i].data.content.length].duracion : 0)
+                                const duracion = (repeticiones === 0 ? (dataPrincipal.value[i + 1][j - aux[i].data.content.length].typeDuracion === 'segundos' ? dataPrincipal.value[i + 1][j - aux[i].data.content.length].duracion : dataPrincipal.value[i + 1][j - aux[i].data.content.length + 1].duracion * 60) : 0)
+                                const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejPrincipal.value[i + 1][j].id, j + 1, duracion, repeticiones)
                                 if (!result2.success) {
                                     await showErrorAlert('Error al agregar ejercicio a ciclo')
                                     return;
                                 }
                             }
 
-                        }
-                        else{
-                        const repeticiones = (dataPrincipal.value[i + 1][j].typeDuracion === 'repeticiones' ? dataPrincipal.value[i + 1][j].duracion : 0)
-                        let repInt = parseInt(repeticiones?.value)
-                        const duracion = (repeticiones === 0 ? (dataPrincipal.value[i + 1][j].typeDuracion === 'segundos' ? dataPrincipal.value[i + 1][j].duracion : dataPrincipal.value[i + 1][j].duracion * 60) : 0)
-                        if (isNaN(repInt))
-                            repInt = 0
-                        const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejPrincipal.value[i + 1][j].id, j + 1, duracion, repInt)
-                        if (!result2.success) {
-                            await showErrorAlert('Error al agregar ejercicio a ciclo')
-                            return;
+                        } else {
+                            const repeticiones = (dataPrincipal.value[i + 1][j].typeDuracion === 'repeticiones' ? dataPrincipal.value[i + 1][j].duracion : 0)
+                            let repInt = parseInt(repeticiones?.value)
+                            const duracion = (repeticiones === 0 ? (dataPrincipal.value[i + 1][j].typeDuracion === 'segundos' ? dataPrincipal.value[i + 1][j].duracion : dataPrincipal.value[i + 1][j].duracion * 60) : 0)
+                            if (isNaN(repInt))
+                                repInt = 0
+                            const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejPrincipal.value[i + 1][j].id, j + 1, duracion, repInt)
+                            if (!result2.success) {
+                                await showErrorAlert('Error al agregar ejercicio a ciclo')
+                                return;
+                            }
                         }
                     }
-                }
                 }
             }
         }
@@ -1051,7 +1049,7 @@ async function addRoutine() {
                 // agregar ejercicios de enfriamiento
                 if (ejEnfriamiento.value.length > 0) {
                     for (let i = 0; i < ejEnfriamiento.value.length; i++) {
-                        if (i < aux[aux.length - 1].data.content.length){
+                        if (i < aux[aux.length - 1].data.content.length) {
                             const repeticiones = (aux[aux.length - 1].data.content[i].repetitions)
                             const duracion = (aux[aux.length - 1].data.content[i].duration)
                             const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejEnfriamiento.value[i].id, i + 1, duracion, repeticiones)
@@ -1059,20 +1057,19 @@ async function addRoutine() {
                                 await showErrorAlert('Error al agregar ejercicio a ciclo enfriamiento')
                                 return;
                             }
-                        }
-                        else {
-                        const repeticiones = (dataEnf.value.typeDuracion === 'repeticiones' ? dataEnf.value.duracion : 0)
-                        let repInt = parseInt(repeticiones?.value)
-                        const duracion = (repeticiones === 0 ? (dataEnf.value.typeDuracion === 'segundos' ? dataEnf.value.duracion : dataEnf.value.duracion * 60) : 0)
-                        if (isNaN(repInt))
-                            repInt = 0
-                        const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejEnfriamiento.value[i].id, i + 1, duracion, repInt)
-                        if (!result2.success) {
-                            await showErrorAlert('Error al agregar ejercicio a ciclo enfriamiento')
-                            return;
+                        } else {
+                            const repeticiones = (dataEnf.value.typeDuracion === 'repeticiones' ? dataEnf.value.duracion : 0)
+                            let repInt = parseInt(repeticiones?.value)
+                            const duracion = (repeticiones === 0 ? (dataEnf.value.typeDuracion === 'segundos' ? dataEnf.value.duracion : dataEnf.value.duracion * 60) : 0)
+                            if (isNaN(repInt))
+                                repInt = 0
+                            const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejEnfriamiento.value[i].id, i + 1, duracion, repInt)
+                            if (!result2.success) {
+                                await showErrorAlert('Error al agregar ejercicio a ciclo enfriamiento')
+                                return;
+                            }
                         }
                     }
-                }
                 }
             }
         }
@@ -1198,10 +1195,23 @@ async function saveExercise() {
     else
         newEjercicio.value.type = 'exercise'
     if (newEjercicio.value.name === '') {
-        await showErrorAlert2('Debe ingresar un nombre para el ejercicio')
+        await showErrorAlert('Debe ingresar un nombre para el ejercicio')
         return false;
     }
-    
+    for (let i = 0; i < exercisesSearchRest.value.length; i++) {
+        if (exercisesSearchRest.value[i].name === newEjercicio.value.name) {
+            await showErrorAlert('Ya existe un ejercicio con ese nombre')
+            console.log('sodjfods')
+            return false;
+        }
+    }
+    for (let i = 0; i < exercisesSearchEx.value.length; i++) {
+        if (exercisesSearchEx.value[i].name === newEjercicio.value.name) {
+            await showErrorAlert('Ya existe un ejercicio con ese nombre')
+            return false;
+        }
+    }
+
     let result = await exerciseStore.addExercise(newEjercicio.value);
     if (result.success) {
         newEjercicio.value.index = result.data.id
@@ -1245,12 +1255,67 @@ async function saveExercise() {
             await showErrorAlert('Error al agregar imagen')
             return false;
         }
-    } else{
+    } else {
         await showErrorAlert('Error al agregar ejercicio')
         return false;
     }
-    if(newEjercicio.value.type === 'exercise'){
-        // agrego un ejercicio a la lista de ejercicios de la rutina que sea de descanso con la duracion
+    if (newEjercicio.value.type === 'exercise') {
+        // busco el ejercicio de descanso en mis ejercicios
+        const ej = {
+            name: 'Descanso',
+            detail: 'Descanso',
+            url: '',
+            type: 'rest',
+            number: 0,
+            index: 0
+        }
+        let result = await exerciseStore.addExercise(newEjercicio.value);
+        if (result.success) {
+            newEjercicio.value.index = result.data.id
+            if (newEjercicio.value.type === 'exercise')
+                exercisesSearchEx.value.push(newEjercicio.value)
+            else
+                exercisesSearchRest.value.push(newEjercicio.value)
+            const user = await userStore.getCurrentUser()
+            if (user.success) {
+                if (!user.data.metadata)
+                    user.data.metadata = {}
+                if (!user.data.metadata.exercises)
+                    user.data.metadata.exercises = []
+                user.data.metadata.exercises.push(newEjercicio.value)
+                await userStore.modifyCurrentUser(user.data.firstName, user.data.lastName, user.data.gender, user.data.metadata)
+                myExercises.value = user.data.metadata.exercises
+            } else {
+                await showErrorAlert('Error al obtener usuario')
+                return false;
+            }
+            result = await exerciseStore.addExerciseImage(result.data.id, newEjercicio.value)
+            if (result.success) {
+                ejercicioSeleccionado.value = {
+                    id: result.data.id,
+                    name: newEjercicio.value.name,
+                    detail: newEjercicio.value.detail,
+                    url: result.data.url,
+                    type: newEjercicio.value.type,
+                    number: myExercises.value.length,
+                    index: 0
+                }
+                newEjercicio.value = {
+                    name: '',
+                    detail: '',
+                    url: '',
+                    type: '',
+                    number: myExercises.value.length,
+                    index: 0
+                }
+            } else {
+                await showErrorAlert('Error al agregar imagen')
+                return false;
+            }
+        } else {
+            await showErrorAlert('Error al agregar ejercicio')
+            return false;
+        }
     }
     return true;
 }
