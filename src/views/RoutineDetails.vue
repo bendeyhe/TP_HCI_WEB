@@ -263,7 +263,6 @@ async function getRoutine() {
                 cycles.value.push(newCycle)
                 if (i === 0) selectedCiclo.value = newCycle.name
                 let result2 = await cycleStore.getExercisesByCycle(result.data.content[i].id)
-                debugger
                 if (result2.success) {
                     for (let j = 0; j < result2.data.totalCount; j++) {
                         const newExercise = {

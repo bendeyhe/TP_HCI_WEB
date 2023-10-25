@@ -53,8 +53,6 @@
     </v-card>
 </template>
 <script setup>
-//todo hay que hacer la función de delete(exercise)
-//todo tambien estaria bueno que se pueda editar el ejercicio y cambiar el orden de los ejercicios, no se bien cómo hacerlo
 import { toRefs } from 'vue';
 import { defineProps } from 'vue';
 

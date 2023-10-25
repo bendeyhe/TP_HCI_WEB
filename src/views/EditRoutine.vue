@@ -62,7 +62,7 @@
                                     <v-col>
                                         <v-autocomplete density="compact" default="1" variant="outlined"
                                                         v-model="repCicloEntCalor"
-                                                        :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20']"></v-autocomplete>
+                                                        :items="[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]"></v-autocomplete>
                                     </v-col>
                                 </v-row>
                                 <v-row v-if="n===2">
@@ -70,7 +70,7 @@
                                     <v-col>
                                         <v-autocomplete density="compact" default="1" variant="outlined"
                                                         v-model="repCicloPrincipal[cicloSeleccionado]"
-                                                        :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20']"></v-autocomplete>
+                                                        :items="[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]"></v-autocomplete>
                                     </v-col>
                                 </v-row>
                                 <v-row v-if="n===3">
@@ -78,7 +78,7 @@
                                     <v-col>
                                         <v-autocomplete density="compact" default="1" variant="outlined"
                                                         v-model="repCicloEnfriamiento"
-                                                        :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20']"></v-autocomplete>
+                                                        :items="[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]"></v-autocomplete>
                                     </v-col>
                                 </v-row>
                                 <v-divider></v-divider>
@@ -152,7 +152,7 @@
                                     <v-col>
                                         <v-autocomplete density="compact" default="1" variant="outlined"
                                                         v-model="dataEntCalor.cantSeries"
-                                                        :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20']"></v-autocomplete>
+                                                        :items="[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]"></v-autocomplete>
                                     </v-col>
                                 </v-row>
                                 <v-row>
@@ -160,7 +160,7 @@
                                     <v-col cols="2">
                                         <v-autocomplete density="compact" default="1" variant="outlined"
                                                         v-model="dataEntCalor.duracion"
-                                                        :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '61', '62', '63', '64', '65', '66', '67', '68', '69', '70', '71', '72', '73', '74', '75', '76', '77', '78', '79', '80', '81', '82', '83', '84', '85', '86', '87', '88', '89', '90']"></v-autocomplete>
+                                                        :items="[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90]"></v-autocomplete>
                                     </v-col>
                                     <v-col>
                                         <v-autocomplete density="compact" default="repeticiones" variant="outlined"
@@ -173,7 +173,7 @@
                                     <v-col cols="2">
                                         <v-autocomplete density="compact" default="1" variant="outlined"
                                                         v-model="dataEntCalor.descanso"
-                                                        :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '61', '62', '63', '64', '65', '66', '67', '68', '69', '70', '71', '72', '73', '74', '75', '76', '77', '78', '79', '80', '81', '82', '83', '84', '85', '86', '87', '88', '89', '90']"></v-autocomplete>
+                                                        :items="[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90]"></v-autocomplete>
                                     </v-col>
                                     <v-col>
                                         <v-autocomplete density="compact" default="repeticiones" variant="outlined"
@@ -190,7 +190,7 @@
                                         <v-autocomplete density="compact" default="1" variant="outlined"
                                                         v-if="dataPrincipal[cicloSeleccionado][0]"
                                                         v-model="dataPrincipal[cicloSeleccionado][0].cantSeries"
-                                                        :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20']"></v-autocomplete>
+                                                        :items="[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]"></v-autocomplete>
                                     </v-col>
                                 </v-row>
                                 <v-row>
@@ -199,7 +199,7 @@
                                         <v-autocomplete density="compact" default="1" variant="outlined"
                                                         v-if="dataPrincipal[cicloSeleccionado][0]"
                                                         v-model="dataPrincipal[cicloSeleccionado][0].duracion"
-                                                        :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '61', '62', '63', '64', '65', '66', '67', '68', '69', '70', '71', '72', '73', '74', '75', '76', '77', '78', '79', '80', '81', '82', '83', '84', '85', '86', '87', '88', '89', '90']"></v-autocomplete>
+                                                        :items="[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90]"></v-autocomplete>
                                     </v-col>
                                     <v-col>
                                         <v-autocomplete density="compact" default="repeticiones" variant="outlined"
@@ -214,7 +214,7 @@
                                         <v-autocomplete density="compact" default="1" variant="outlined"
                                                         v-if="dataPrincipal[cicloSeleccionado][0]"
                                                         v-model="dataPrincipal[cicloSeleccionado][0].descanso"
-                                                        :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '61', '62', '63', '64', '65', '66', '67', '68', '69', '70', '71', '72', '73', '74', '75', '76', '77', '78', '79', '80', '81', '82', '83', '84', '85', '86', '87', '88', '89', '90']"></v-autocomplete>
+                                                        :items="[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90]"></v-autocomplete>
                                     </v-col>
                                     <v-col>
                                         <v-autocomplete density="compact" default="repeticiones" variant="outlined"
@@ -231,7 +231,7 @@
                                     <v-col>
                                         <v-autocomplete density="compact" default="1" variant="outlined"
                                                         v-model="dataEnf.cantSeries"
-                                                        :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20']"></v-autocomplete>
+                                                        :items="[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]"></v-autocomplete>
                                     </v-col>
                                 </v-row>
                                 <v-row>
@@ -239,7 +239,7 @@
                                     <v-col cols="2">
                                         <v-autocomplete density="compact" default="1" variant="outlined"
                                                         v-model="dataEnf.duracion"
-                                                        :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '61', '62', '63', '64', '65', '66', '67', '68', '69', '70', '71', '72', '73', '74', '75', '76', '77', '78', '79', '80', '81', '82', '83', '84', '85', '86', '87', '88', '89', '90']"></v-autocomplete>
+                                                        :items="[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90]"></v-autocomplete>
                                     </v-col>
                                     <v-col>
                                         <v-autocomplete density="compact" default="repeticiones" variant="outlined"
@@ -252,7 +252,7 @@
                                     <v-col cols="2">
                                         <v-autocomplete density="compact" default="1" variant="outlined"
                                                         v-model="dataEnf.descanso"
-                                                        :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '61', '62', '63', '64', '65', '66', '67', '68', '69', '70', '71', '72', '73', '74', '75', '76', '77', '78', '79', '80', '81', '82', '83', '84', '85', '86', '87', '88', '89', '90']"></v-autocomplete>
+                                                        :items="[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90]"></v-autocomplete>
                                     </v-col>
                                     <v-col>
                                         <v-autocomplete density="compact" default="repeticiones" variant="outlined"
@@ -558,6 +558,7 @@ onBeforeMount(async () => {
     }
     if (route.params.id) {
         isEditing.value = true
+        debugger
         let result = await routineStore.getRoutine(route.params.id)
         if (result.success) {
             routine.value = {
@@ -589,7 +590,8 @@ onBeforeMount(async () => {
                             cicloEntCalor.value = result.data.content[i]
                             for (let j = 0; j < result2.data.totalCount; j++) {
                                 const aux = await exerciseStore.getExerciseImages(result2.data.content[j].exercise.id)
-                                const auximage = aux.data.content[0].url
+                                debugger
+                                const auximage = aux.data.content[0]?.url
                                 const ex = {
                                     id: result2.data.content[j].exercise.id,
                                     name: result2.data.content[j].exercise.name,
@@ -733,6 +735,7 @@ function diffToSpanish(dif) {
 
 async function addRoutine() {
     loading.value = true
+    debugger
     if (!route.params.id) {
         const resultCat = await categoryStore.getCategories()
         if (resultCat.success) {
@@ -800,11 +803,10 @@ async function addRoutine() {
                     if (ejEntCalor.value.length > 0) {
                         for (let i = 0; i < ejEntCalor.value.length; i++) {
                             let repeticiones = (dataEntCalor.value.typeDuracion === 'repeticiones' ? dataEntCalor.value.duracion : 0)
-                            let repInt = parseInt(repeticiones?.value)
-                            const duracion = (repeticiones === 0 ? (dataEntCalor.value.typeDuracion === 'segundos' ? dataEntCalor.value.duracion : dataEntCalor.value.duracion * 60) : 0)
-                            if (isNaN(repInt))
-                                repInt = 0
-                            const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejEntCalor.value[i].id, i + 1, duracion, repInt)
+                            let duracion = (repeticiones === 0 ? (dataEntCalor.value.typeDuracion === 'segundos' ? dataEntCalor.value.duracion : dataEntCalor.value.duracion * 60) : 0)
+                            if (typeof duracion === 'string')
+                                duracion = parseInt(duracion)
+                            const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejEntCalor.value[i].id, i + 1, duracion, repeticiones)
                             if (!result2.success) {
                                 await showErrorAlert('Error al agregar ejercicio a ciclo en calor')
                                 return;
@@ -837,12 +839,13 @@ async function addRoutine() {
                         const idCiclo = result.data.id
                         // agregar ejercicios principales
                         for (let j = 0; j < ejPrincipal.value[i + 1]?.length; j++) {
-                            const repeticiones = (dataPrincipal.value[i + 1][j + 1].typeDuracion === 'repeticiones' ? dataPrincipal.value[i + 1][j + 1].duracion : 0)
-                            let repInt = parseInt(repeticiones?.value)
-                            const duracion = (repeticiones === 0 ? (dataPrincipal.value[i + 1][j + 1].typeDuracion === 'segundos' ? dataPrincipal.value[i + 1][j + 1].duracion : dataPrincipal.value[i + 1][j + 1].duracion * 60) : 0)
-                            if (isNaN(repInt))
-                                repInt = 0
-                            const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejPrincipal.value[i + 1][j].id, j + 1, duracion, repInt)
+                            let repeticiones = (dataPrincipal.value[i + 1][j + 1].typeDuracion === 'repeticiones' ? dataPrincipal.value[i + 1][j + 1].duracion : 0)
+                            let duracion = (repeticiones === 0 ? (dataPrincipal.value[i + 1][j + 1].typeDuracion === 'segundos' ? dataPrincipal.value[i + 1][j + 1].duracion : dataPrincipal.value[i + 1][j + 1].duracion * 60) : 0)
+                            if (typeof duracion === 'string')
+                                duracion = parseInt(duracion)
+                            if (typeof repeticiones === 'string')
+                                repeticiones = parseInt(repeticiones)
+                            const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejPrincipal.value[i + 1][j].id, j + 1, duracion, repeticiones)
                             if (!result2.success) {
                                 await showErrorAlert('Error al agregar ejercicio a ciclo')
                                 return;
@@ -868,12 +871,13 @@ async function addRoutine() {
                     // agregar ejercicios de enfriamiento
                     if (ejEnfriamiento.value.length > 0) {
                         for (let i = 0; i < ejEnfriamiento.value.length; i++) {
-                            const repeticiones = (dataEnf.value.typeDuracion === 'repeticiones' ? dataEnf.value.duracion : 0)
-                            let repInt = parseInt(repeticiones?.value)
-                            const duracion = (repeticiones === 0 ? (dataEnf.value.typeDuracion === 'segundos' ? dataEnf.value.duracion : dataEnf.value.duracion * 60) : 0)
-                            if (isNaN(repInt))
-                                repInt = 0
-                            const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejEnfriamiento.value[i].id, i + 1, duracion, repInt)
+                            let repeticiones = (dataEnf.value.typeDuracion === 'repeticiones' ? dataEnf.value.duracion : 0)
+                            let duracion = (repeticiones === 0 ? (dataEnf.value.typeDuracion === 'segundos' ? dataEnf.value.duracion : dataEnf.value.duracion * 60) : 0)
+                            if (typeof duracion === 'string')
+                                duracion = parseInt(duracion)
+                            if (typeof repeticiones === 'string')
+                                repeticiones = parseInt(repeticiones)
+                            const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejEnfriamiento.value[i].id, i + 1, duracion, repeticiones)
                             if (!result2.success) {
                                 await showErrorAlert('Error al agregar ejercicio a ciclo enfriamiento')
                                 return;
@@ -954,16 +958,21 @@ async function addRoutine() {
                 if (ejEntCalor.value.length > 0) {
                     for (let i = 0; i < ejEntCalor.value.length; i++) {
                         if (i < aux[0].data.content.length) {
-                            const repeticiones = (aux[0].data.content[i].repetitions)
-                            const duracion = (aux[0].data.content[i].duration)
+                            let repeticiones = (aux[0].data.content[i].repetitions)
+                            let duracion = (aux[0].data.content[i].duration)
+                            if (typeof duracion === 'string')
+                                duracion = parseInt(duracion)
+                            if (typeof repeticiones === 'string')
+                                repeticiones = parseInt(repeticiones)
                             const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejEntCalor.value[i].id, i + 1, duracion, repeticiones)
                         } else {
-                            const repeticiones = (dataEntCalor.value.typeDuracion === 'repeticiones' ? dataEntCalor.value.duracion : 0)
-                            let repInt = parseInt(repeticiones?.value)
-                            const duracion = (repeticiones === 0 ? (dataEntCalor.value.typeDuracion === 'segundos' ? dataEntCalor.value.duracion : dataEntCalor.value.duracion * 60) : 0)
-                            if (isNaN(repInt))
-                                repInt = 0
-                            const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejEntCalor.value[i].id, i + 1, duracion, repInt)
+                            let repeticiones = (dataEntCalor.value.typeDuracion === 'repeticiones' ? dataEntCalor.value.duracion : 0)
+                            let duracion = (repeticiones === 0 ? (dataEntCalor.value.typeDuracion === 'segundos' ? dataEntCalor.value.duracion : dataEntCalor.value.duracion * 60) : 0)
+                            if (typeof duracion === 'string')
+                                duracion = parseInt(duracion)
+                            if (typeof repeticiones === 'string')
+                                repeticiones = parseInt(repeticiones)
+                            const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejEntCalor.value[i].id, i + 1, duracion, repeticiones)
                             if (!result2.success) {
                                 await showErrorAlert('Error al agregar ejercicio a ciclo en calor')
                                 return;
@@ -999,16 +1008,24 @@ async function addRoutine() {
                     for (let j = 0; j < ejPrincipal.value[i + 1]?.length; j++) {
                         if (i < aux.length - 2) {
                             if (j < aux[i].data.content.length) {
-                                const repeticiones = (aux[i + 1].data.content[j].repetitions)
-                                const duracion = (aux[i + 1].data.content[j].duration)
+                                let repeticiones = (aux[i + 1].data.content[j].repetitions)
+                                let duracion = (aux[i + 1].data.content[j].duration)
+                                if (typeof duracion === 'string')
+                                    duracion = parseInt(duracion)
+                                if (typeof repeticiones === 'string')
+                                    repeticiones = parseInt(repeticiones)
                                 const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejPrincipal.value[i + 1][j].id, j + 1, duracion, repeticiones)
                                 if (!result2.success) {
                                     await showErrorAlert('Error al agregar ejercicio a ciclo')
                                     return;
                                 }
                             } else {
-                                const repeticiones = (dataPrincipal.value[i + 1][j - aux[i].data.content.length].typeDuracion === 'repeticiones' ? dataPrincipal.value[i + 1][j - aux[i].data.content.length].duracion : 0)
-                                const duracion = (repeticiones === 0 ? (dataPrincipal.value[i + 1][j - aux[i].data.content.length].typeDuracion === 'segundos' ? dataPrincipal.value[i + 1][j - aux[i].data.content.length].duracion : dataPrincipal.value[i + 1][j - aux[i].data.content.length + 1].duracion * 60) : 0)
+                                let repeticiones = (dataPrincipal.value[i + 1][j - aux[i].data.content.length].typeDuracion === 'repeticiones' ? dataPrincipal.value[i + 1][j - aux[i].data.content.length].duracion : 0)
+                                let duracion = (repeticiones === 0 ? (dataPrincipal.value[i + 1][j - aux[i].data.content.length].typeDuracion === 'segundos' ? dataPrincipal.value[i + 1][j - aux[i].data.content.length].duracion : dataPrincipal.value[i + 1][j - aux[i].data.content.length + 1].duracion * 60) : 0)
+                                if (typeof duracion === 'string')
+                                    duracion = parseInt(duracion)
+                                if (typeof repeticiones === 'string')
+                                    repeticiones = parseInt(repeticiones)
                                 const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejPrincipal.value[i + 1][j].id, j + 1, duracion, repeticiones)
                                 if (!result2.success) {
                                     await showErrorAlert('Error al agregar ejercicio a ciclo')
@@ -1017,12 +1034,13 @@ async function addRoutine() {
                             }
 
                         } else {
-                            const repeticiones = (dataPrincipal.value[i + 1][j].typeDuracion === 'repeticiones' ? dataPrincipal.value[i + 1][j].duracion : 0)
-                            let repInt = parseInt(repeticiones?.value)
-                            const duracion = (repeticiones === 0 ? (dataPrincipal.value[i + 1][j].typeDuracion === 'segundos' ? dataPrincipal.value[i + 1][j].duracion : dataPrincipal.value[i + 1][j].duracion * 60) : 0)
-                            if (isNaN(repInt))
-                                repInt = 0
-                            const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejPrincipal.value[i + 1][j].id, j + 1, duracion, repInt)
+                            let repeticiones = (dataPrincipal.value[i + 1][j].typeDuracion === 'repeticiones' ? dataPrincipal.value[i + 1][j].duracion : 0)
+                            let duracion = (repeticiones === 0 ? (dataPrincipal.value[i + 1][j].typeDuracion === 'segundos' ? dataPrincipal.value[i + 1][j].duracion : dataPrincipal.value[i + 1][j].duracion * 60) : 0)
+                            if (typeof duracion === 'string')
+                                duracion = parseInt(duracion)
+                            if (typeof repeticiones === 'string')
+                                repeticiones = parseInt(repeticiones)
+                            const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejPrincipal.value[i + 1][j].id, j + 1, duracion, repeticiones)
                             if (!result2.success) {
                                 await showErrorAlert('Error al agregar ejercicio a ciclo')
                                 return;
@@ -1050,20 +1068,25 @@ async function addRoutine() {
                 if (ejEnfriamiento.value.length > 0) {
                     for (let i = 0; i < ejEnfriamiento.value.length; i++) {
                         if (i < aux[aux.length - 1].data.content.length) {
-                            const repeticiones = (aux[aux.length - 1].data.content[i].repetitions)
-                            const duracion = (aux[aux.length - 1].data.content[i].duration)
+                            let repeticiones = (aux[aux.length - 1].data.content[i].repetitions)
+                            let duracion = (aux[aux.length - 1].data.content[i].duration)
+                            if (typeof duracion === 'string')
+                                duracion = parseInt(duracion)
+                            if (typeof repeticiones === 'string')
+                                repeticiones = parseInt(repeticiones)
                             const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejEnfriamiento.value[i].id, i + 1, duracion, repeticiones)
                             if (!result2.success) {
                                 await showErrorAlert('Error al agregar ejercicio a ciclo enfriamiento')
                                 return;
                             }
                         } else {
-                            const repeticiones = (dataEnf.value.typeDuracion === 'repeticiones' ? dataEnf.value.duracion : 0)
-                            let repInt = parseInt(repeticiones?.value)
-                            const duracion = (repeticiones === 0 ? (dataEnf.value.typeDuracion === 'segundos' ? dataEnf.value.duracion : dataEnf.value.duracion * 60) : 0)
-                            if (isNaN(repInt))
-                                repInt = 0
-                            const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejEnfriamiento.value[i].id, i + 1, duracion, repInt)
+                            let repeticiones = (dataEnf.value.typeDuracion === 'repeticiones' ? dataEnf.value.duracion : 0)
+                            let duracion = (repeticiones === 0 ? (dataEnf.value.typeDuracion === 'segundos' ? dataEnf.value.duracion : dataEnf.value.duracion * 60) : 0)
+                            if (typeof duracion === 'string')
+                                duracion = parseInt(duracion)
+                            if (typeof repeticiones === 'string')
+                                repeticiones = parseInt(repeticiones)
+                            const result2 = await cycleStore.addExerciseToCycle(idCiclo, ejEnfriamiento.value[i].id, i + 1, duracion, repeticiones)
                             if (!result2.success) {
                                 await showErrorAlert('Error al agregar ejercicio a ciclo enfriamiento')
                                 return;
@@ -1201,7 +1224,6 @@ async function saveExercise() {
     for (let i = 0; i < exercisesSearchRest.value.length; i++) {
         if (exercisesSearchRest.value[i].name === newEjercicio.value.name) {
             await showErrorAlert('Ya existe un ejercicio con ese nombre')
-            console.log('sodjfods')
             return false;
         }
     }
@@ -1258,64 +1280,6 @@ async function saveExercise() {
     } else {
         await showErrorAlert('Error al agregar ejercicio')
         return false;
-    }
-    if (newEjercicio.value.type === 'exercise') {
-        // busco el ejercicio de descanso en mis ejercicios
-        const ej = {
-            name: 'Descanso',
-            detail: 'Descanso',
-            url: '',
-            type: 'rest',
-            number: 0,
-            index: 0
-        }
-        let result = await exerciseStore.addExercise(newEjercicio.value);
-        if (result.success) {
-            newEjercicio.value.index = result.data.id
-            if (newEjercicio.value.type === 'exercise')
-                exercisesSearchEx.value.push(newEjercicio.value)
-            else
-                exercisesSearchRest.value.push(newEjercicio.value)
-            const user = await userStore.getCurrentUser()
-            if (user.success) {
-                if (!user.data.metadata)
-                    user.data.metadata = {}
-                if (!user.data.metadata.exercises)
-                    user.data.metadata.exercises = []
-                user.data.metadata.exercises.push(newEjercicio.value)
-                await userStore.modifyCurrentUser(user.data.firstName, user.data.lastName, user.data.gender, user.data.metadata)
-                myExercises.value = user.data.metadata.exercises
-            } else {
-                await showErrorAlert('Error al obtener usuario')
-                return false;
-            }
-            result = await exerciseStore.addExerciseImage(result.data.id, newEjercicio.value)
-            if (result.success) {
-                ejercicioSeleccionado.value = {
-                    id: result.data.id,
-                    name: newEjercicio.value.name,
-                    detail: newEjercicio.value.detail,
-                    url: result.data.url,
-                    type: newEjercicio.value.type,
-                    number: myExercises.value.length,
-                    index: 0
-                }
-                newEjercicio.value = {
-                    name: '',
-                    detail: '',
-                    url: '',
-                    type: '',
-                    number: myExercises.value.length,
-                    index: 0
-                }
-            } else {
-                await showErrorAlert('Error al agregar imagen')
-                return false;
-            }
-        } else {
-            await showErrorAlert('Error al agregar ejercicio')
-            return false;
-        }
     }
     return true;
 }

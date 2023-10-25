@@ -28,7 +28,6 @@ export const useCycleStore = defineStore('cycles', {
             return await makeApiCall(this.apiEndpoints.getExByCycle(cycleId, exerciseId), null, useUserStore().token);
         },
         async addExerciseToCycle(cycleId, exerciseId, order, duration, repetitions){
-            debugger
             const data = {'order': order, 'duration': duration, 'repetitions': repetitions};
             return await makeApiCall(this.apiEndpoints.addExToCycle(cycleId, exerciseId), data, useUserStore().token);
         },
