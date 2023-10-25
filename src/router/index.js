@@ -1,7 +1,6 @@
 import {createRouter, createWebHistory} from 'vue-router'
 /* aca importar para carga estática*/
 import HomeView from '@/views/HomeView.vue'
-import storage from '../storage/storage.js'
 import {useUserStore} from "@/stores/userStore.js";
 import {useRoutineStore} from "@/stores/routineStore";
 
@@ -11,13 +10,6 @@ const routes = [
         name: 'home',
         meta: {requiresAuth: false},
         component: HomeView
-    },
-    {
-        path: '/example',
-        name: 'example',
-        meta: {requiresAuth: true},
-        component: () => import('@/components/ExampleComponent.vue')
-        /* de esta manera se carga dinámicamente, bajo demanda */
     },
     {
         path: '/my-profile',
@@ -104,7 +96,7 @@ const routes = [
                 }
             } catch (error) {
                 console.error("Error en la solicitud API:", error);
-                next({name: "not-found"}); //todo hacer una pantallita de error o algo? o dejar el not found?
+                next({name: "not-found"});
             }
         }
     },

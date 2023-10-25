@@ -1,9 +1,3 @@
-<!--
-todo chequear si las alrtas del código las podemos llevar a que
-usen este componente y así no tener que repetir código, no se bien
-como hacerlo, pero creo que se puede.
--->
-
 <template>
     <v-alert
         v-if="successAlert"

@@ -126,7 +126,6 @@
 
 <script setup>
 import {ref, onBeforeMount} from "vue";
-import storage from "@/storage/storage";
 import {RouterLink, useRouter} from "vue-router";
 import {useUserStore} from "@/stores/userStore.js";
 
@@ -176,7 +175,6 @@ async function getUserData() {
 
 async function logoutUser() {
     loading.value = true
-    //await userStore.logout(); todo ver porque esto no funciona y si es necesario
     await userStore.removeToken();
     await router.push({path: '/login'});
 }

@@ -206,7 +206,6 @@ async function toggle(routine) {
     const result = await routineStore.changeRoutine(routine);
     if (!result.success) {
         routine.fav = !routine.fav;
-        // todo tirar error
     }
 }
 </script>
