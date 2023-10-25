@@ -137,7 +137,7 @@
                                                     <v-btn
                                                         class="confirmar"
                                                         text="Confirmar"
-                                                        @click="() => { isActive.value = saveExercise();  }"
+                                                        @click=" async () => { isActive.value = await saveExercise()  }"
                                                     ></v-btn>
                                                 </v-card-actions>
                                             </v-card>
@@ -558,7 +558,6 @@ onBeforeMount(async () => {
     }
     if (route.params.id) {
         isEditing.value = true
-        debugger
         let result = await routineStore.getRoutine(route.params.id)
         if (result.success) {
             routine.value = {
@@ -590,7 +589,6 @@ onBeforeMount(async () => {
                             cicloEntCalor.value = result.data.content[i]
                             for (let j = 0; j < result2.data.totalCount; j++) {
                                 const aux = await exerciseStore.getExerciseImages(result2.data.content[j].exercise.id)
-                                debugger
                                 const auximage = aux.data.content[0]?.url
                                 const ex = {
                                     id: result2.data.content[j].exercise.id,
@@ -735,7 +733,6 @@ function diffToSpanish(dif) {
 
 async function addRoutine() {
     loading.value = true
-    debugger
     if (!route.params.id) {
         const resultCat = await categoryStore.getCategories()
         if (resultCat.success) {
@@ -1213,27 +1210,29 @@ async function agregarEjercicio() {
 }
 
 async function saveExercise() {
+    debugger
     if (type.value === 3)
         newEjercicio.value.type = 'rest'
     else
         newEjercicio.value.type = 'exercise'
     if (newEjercicio.value.name === '') {
         await showErrorAlert('Debe ingresar un nombre para el ejercicio')
-        return false;
+        return true;
     }
     for (let i = 0; i < exercisesSearchRest.value.length; i++) {
         if (exercisesSearchRest.value[i].name === newEjercicio.value.name) {
             await showErrorAlert('Ya existe un ejercicio con ese nombre')
-            return false;
+            return true;
         }
     }
     for (let i = 0; i < exercisesSearchEx.value.length; i++) {
         if (exercisesSearchEx.value[i].name === newEjercicio.value.name) {
             await showErrorAlert('Ya existe un ejercicio con ese nombre')
-            return false;
+            return true;
         }
     }
 
+    debugger
     let result = await exerciseStore.addExercise(newEjercicio.value);
     if (result.success) {
         newEjercicio.value.index = result.data.id
@@ -1252,7 +1251,7 @@ async function saveExercise() {
             myExercises.value = user.data.metadata.exercises
         } else {
             await showErrorAlert('Error al obtener usuario')
-            return false;
+            return true;
         }
         result = await exerciseStore.addExerciseImage(result.data.id, newEjercicio.value)
         if (result.success) {
@@ -1275,13 +1274,13 @@ async function saveExercise() {
             }
         } else {
             await showErrorAlert('Error al agregar imagen')
-            return false;
+            return true;
         }
     } else {
         await showErrorAlert('Error al agregar ejercicio')
-        return false;
+        return true;
     }
-    return true;
+    return false;
 }
 
 async function openFinishDialog() {
