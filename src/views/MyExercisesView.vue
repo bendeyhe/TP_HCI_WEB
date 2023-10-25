@@ -141,10 +141,9 @@ const newEjercicio = ref({
 onBeforeMount(async () => {
     const user = await userStore.getCurrentUser();
     if (user.success) {
-        if (user.data.metadata.exercises) {
+        if (user.data.metadata?.exercises) {
             myExercises.value = user.data.metadata.exercises;
         }
-
     }
 });
 

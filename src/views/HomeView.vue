@@ -1,5 +1,5 @@
 <template>
-  <div >
+  <div>
     <v-app id="inspire">
 
       <v-carousel cycle show-arrows="hover" hide-delimiter-background v-if="!loading" height="400px">
@@ -13,7 +13,7 @@
           </div>
           <div class="detalles-rutina">
             Creador: {{ routine.user.username }} <br>
-            Dificultad: {{  traducirDificultadAespanol(routine.difficulty)  }}
+            Dificultad: {{ traducirDificultadAespanol(routine.difficulty) }}
           </div>
           <div class="boton-rutina">
             <v-btn class="boton" @click="verDetalle(routine)"> Ver Detalle</v-btn>

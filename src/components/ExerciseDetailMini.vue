@@ -72,7 +72,6 @@ const props = defineProps({
 
 onBeforeMount(async () => {
         exercise.url = await exerciseStore.getExerciseImage(exercise, 1);
-        console.log(exercise);
     }
 )
 

@@ -610,7 +610,6 @@ onBeforeMount(async () => {
                             for (let j = 0; j < result2.data.totalCount; j++) {
                                 const aux = await exerciseStore.getExerciseImages(result2.data.content[j].exercise.id)
                                 const auximage = aux.data.content[0]?.url
-                                debugger
                                 if (!ejPrincipal.value[i])
                                     ejPrincipal.value[i] = []
                                 const ex = {
@@ -1136,7 +1135,6 @@ async function agregarEjercicio() {
                     return;
                 }
             }
-            debugger
             ejEntCalor.value.push(ejercicioSeleccionado.value);
         } else if (type.value === 2) {
             let cantEjs = ejPrincipal.value[cicloSeleccionado.value]?.length
@@ -1256,9 +1254,7 @@ async function saveExercise() {
             await showErrorAlert('Error al obtener usuario')
             return true;
         }
-        debugger
         result = await exerciseStore.addExerciseImage(result.data.id, newEjercicio.value)
-        debugger
         if (result.success) {
             ejercicioSeleccionado.value = {
                 id: result.data.id,
