@@ -274,7 +274,7 @@ h2 {
 .fondo {
     background-color: lightgray;
     border-radius: 20px;
-    margin: 30px;
+    margin: 10px;
     padding-right: 20px;
 }
 </style>
