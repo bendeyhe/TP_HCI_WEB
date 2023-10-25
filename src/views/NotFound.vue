@@ -3,6 +3,7 @@
         <div class="image-container">
             <img :src="getImageUrl('unauthorized.jpg')" alt="Unauthorized" class="image" />
         </div>
+        <h2 class="center-button">No se ha encontrado esa página.</h2>
         <RouterLink to="/">
             <v-btn class="center-button">Volver a TooBIG</v-btn>
         </RouterLink>
@@ -19,10 +20,9 @@ function getImageUrl(name){
 
 <style scoped>
 .v-btn{
-  color: #8efd00;
-  background-color: #000000;
-  margin-right : 10px;
-  margin-left : 10px;
+  color: #000000;
+  background-color: #8efd00;
+
 }
 
 .image {
