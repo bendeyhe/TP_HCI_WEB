@@ -15,7 +15,7 @@
                 </div>
                 <div class="detalles-rutina">
                     Creador: {{ routine.user.username }} <br>
-                    Dificultad: {{ routine.difficulty }}
+                    Dificultad: {{  traducirDificultadAespanol(routine.difficulty)  }}
                 </div>
                 <div class="boton-rutina">
                     <v-btn class="boton" @click="verDetalle(routine)"> Ver Detalle</v-btn>
@@ -492,6 +492,16 @@ watch(() => route.params.query, (newQuery) => {
     query.value = newQuery;
     updateVisibleRoutines()
 })
+function traducirDificultadAespanol(dificultadEnIngles) {
+    const traducciones = {
+        'rookie': 'principiante',
+        'beginner': 'amateur',
+        'intermediate': 'intermedio',
+        'advanced': 'avanzado',
+        'expert': 'experto'
+    };
+    return traducciones[dificultadEnIngles] || dificultadEnIngles;
+}
 
 </script>
 
