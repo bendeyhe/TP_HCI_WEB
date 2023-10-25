@@ -608,13 +608,16 @@ onBeforeMount(async () => {
                             cantCiclosPrincipal.value.push(i)
                             repCicloPrincipal.value.push(1)
                             for (let j = 0; j < result2.data.totalCount; j++) {
+                                const aux = await exerciseStore.getExerciseImages(result2.data.content[j].exercise.id)
+                                const auximage = aux.data.content[0]?.url
+                                debugger
                                 if (!ejPrincipal.value[i])
                                     ejPrincipal.value[i] = []
                                 const ex = {
                                     id: result2.data.content[j].exercise.id,
                                     name: result2.data.content[j].exercise.name,
                                     detail: result2.data.content[j].exercise.detail,
-                                    url: result2.data.content[j].exercise.metadata?.image,
+                                    url: auximage,
                                     type: result2.data.content[j].exercise.type,
                                     number: 1,
                                     index: 0
@@ -633,11 +636,13 @@ onBeforeMount(async () => {
                         } else if (result.data.content[i].type === 'cooldown') {
                             cicloEnfriamiento.value = result.data.content[i]
                             for (let j = 0; j < result2.data.totalCount; j++) {
+                                const aux = await exerciseStore.getExerciseImages(result2.data.content[j].exercise.id)
+                                const auximage = aux.data.content[0]?.url
                                 const ex = {
                                     id: result2.data.content[j].exercise.id,
                                     name: result2.data.content[j].exercise.name,
                                     detail: result2.data.content[j].exercise.detail,
-                                    url: result2.data.content[j].exercise.metadata?.image,
+                                    url: auximage,
                                     type: result2.data.content[j].exercise.type,
                                     number: 1,
                                     index: 0
@@ -1131,6 +1136,7 @@ async function agregarEjercicio() {
                     return;
                 }
             }
+            debugger
             ejEntCalor.value.push(ejercicioSeleccionado.value);
         } else if (type.value === 2) {
             let cantEjs = ejPrincipal.value[cicloSeleccionado.value]?.length
@@ -1210,7 +1216,6 @@ async function agregarEjercicio() {
 }
 
 async function saveExercise() {
-    debugger
     if (type.value === 3)
         newEjercicio.value.type = 'rest'
     else
@@ -1231,8 +1236,6 @@ async function saveExercise() {
             return true;
         }
     }
-
-    debugger
     let result = await exerciseStore.addExercise(newEjercicio.value);
     if (result.success) {
         newEjercicio.value.index = result.data.id
@@ -1253,7 +1256,9 @@ async function saveExercise() {
             await showErrorAlert('Error al obtener usuario')
             return true;
         }
+        debugger
         result = await exerciseStore.addExerciseImage(result.data.id, newEjercicio.value)
+        debugger
         if (result.success) {
             ejercicioSeleccionado.value = {
                 id: result.data.id,

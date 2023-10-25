@@ -14,22 +14,22 @@
             ></v-progress-linear>
         </template>
 
-            <div class="cont">
-                <img
-                    class="image"
-                    :src="exercise.url"
-                    alt="Foto del ejercicio"
-                    height="150"
-                />
-            </div>
-            <v-card-text class="titulo"> {{ exercise.name }} </v-card-text>
+        <div class="cont">
+            <img
+                class="image"
+                :src="exercise.url"
+                alt="Foto del ejercicio"
+                height="150"
+            />
+        </div>
+        <v-card-text class="titulo"> {{ exercise.name }}</v-card-text>
         <v-card-text>
             <v-row allign="center" class="mx-0">
 
             </v-row>
             <div class="creator my-4 text-subtitle-1">
             </div>
-            <div class="overflow"> {{ exercise.detail }} </div>
+            <div class="overflow"> {{ exercise.detail }}</div>
         </v-card-text>
         <div class="detail">
             <v-card-actions>
@@ -53,8 +53,11 @@
     </v-card>
 </template>
 <script setup>
-import { toRefs } from 'vue';
-import { defineProps } from 'vue';
+import {onBeforeMount, toRefs} from 'vue';
+import {defineProps} from 'vue';
+import {useExerciseStore} from "@/stores/exerciseStore";
+
+const exerciseStore = useExerciseStore();
 
 const props = defineProps({
     exercise: {
@@ -67,17 +70,23 @@ const props = defineProps({
     },
 });
 
-function moveLeft(){
+onBeforeMount(async () => {
+        exercise.url = await exerciseStore.getExerciseImage(exercise, 1);
+        console.log(exercise);
+    }
+)
+
+function moveLeft() {
     let index
     for (let i = 0; i < ejArray.value.length; i++) {
         if (ejArray.value[i].id === exercise.value.id) {
             index = i;
         }
     }
-    if (index !== undefined && index > 0){
+    if (index !== undefined && index > 0) {
         let aux = ejArray.value[index];
-        ejArray.value[index] = ejArray.value[index-1];
-        ejArray.value[index-1] = aux;
+        ejArray.value[index] = ejArray.value[index - 1];
+        ejArray.value[index - 1] = aux;
     }
 }
 
@@ -88,7 +97,7 @@ function deleteEx() {
             index = i;
         }
     }
-    if (index !== undefined){
+    if (index !== undefined) {
         ejArray.value.splice(index, 1);
     }
 }
@@ -100,15 +109,16 @@ function moveRight() {
             index = i;
         }
     }
-    if (index !== undefined && index < ejArray.value.length - 1){
+    if (index !== undefined && index < ejArray.value.length - 1) {
         let aux = ejArray.value[index];
-        ejArray.value[index] = ejArray.value[index+1];
-        ejArray.value[index+1] = aux;
+        ejArray.value[index] = ejArray.value[index + 1];
+        ejArray.value[index + 1] = aux;
     }
 }
 
+
 const {ejArray} = toRefs(props);
-const { exercise } = toRefs(props);
+const {exercise} = toRefs(props);
 </script>
 
 <style scoped>
@@ -129,7 +139,7 @@ const { exercise } = toRefs(props);
     text-align: center;
     width: 100%;
     bottom: 1%;
-    position:absolute;
+    position: absolute;
 }
 
 .cont {
